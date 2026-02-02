@@ -1,0 +1,2609 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PACIFIK'AI - Script Vidéo Loom ATN</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2CCCD4;
+            --primary-dark: #1aa3aa;
+            --gold: #C9A84C;
+            --gold-light: #d4b35a;
+            --purple: #8B5CF6;
+            --orange: #FF6B00;
+            --success: #10B981;
+            --danger: #EF4444;
+            --blue: #3B82F6;
+            --pink: #EC4899;
+            --gray-50: #F9FAFB;
+            --gray-100: #F3F4F6;
+            --gray-200: #E5E7EB;
+            --gray-300: #D1D5DB;
+            --gray-500: #6B7280;
+            --gray-700: #374151;
+            --gray-900: #111827;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--gray-900);
+            line-height: 1.6;
+            background: var(--gray-50);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--gray-900) 0%, #1a1a2e 100%);
+            color: white;
+            padding: 60px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 60%;
+            height: 200%;
+            background: linear-gradient(135deg, rgba(255,107,0,0.15) 0%, rgba(201,168,76,0.1) 100%);
+            transform: rotate(-12deg);
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--danger) 0%, #f87171 100%);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .header h1 {
+            font-size: 42px;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 16px;
+        }
+
+        .header h1 span {
+            background: linear-gradient(135deg, var(--orange) 0%, var(--gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            font-size: 18px;
+            opacity: 0.8;
+            max-width: 600px;
+        }
+
+        .header-meta {
+            display: flex;
+            gap: 32px;
+            margin-top: 24px;
+        }
+
+        .header-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .header-meta-item .icon {
+            font-size: 20px;
+        }
+
+        /* Sections */
+        section {
+            padding: 60px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .section-title h2 {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+
+        .section-title p {
+            font-size: 16px;
+            color: var(--gray-500);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Checklist Section */
+        .checklist-section {
+            background: white;
+        }
+
+        .checklist-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .checklist-card {
+            background: var(--gray-50);
+            border-radius: 16px;
+            padding: 28px;
+            border: 2px solid var(--gray-200);
+        }
+
+        .checklist-card h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .checklist-item:last-child {
+            border-bottom: none;
+        }
+
+        .checklist-item .check {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            border: 2px solid var(--gray-300);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 14px;
+            color: transparent;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .checklist-item .check:hover {
+            border-color: var(--success);
+        }
+
+        .checklist-item .check.done {
+            background: var(--success);
+            border-color: var(--success);
+            color: white;
+        }
+
+        .checklist-item .content {
+            flex: 1;
+        }
+
+        .checklist-item .content strong {
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .checklist-item .content span {
+            font-size: 13px;
+            color: var(--gray-500);
+        }
+
+        .checklist-item .content code {
+            background: var(--gray-200);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-family: monospace;
+        }
+
+        /* View Toggle Tabs */
+        .view-tabs {
+            display: flex;
+            gap: 8px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+
+        .view-tab {
+            padding: 12px 24px;
+            border: 2px solid var(--gray-200);
+            background: white;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .view-tab:hover {
+            border-color: var(--primary);
+        }
+
+        .view-tab.active {
+            background: var(--gray-900);
+            border-color: var(--gray-900);
+            color: white;
+        }
+
+        .view-tab .icon {
+            font-size: 16px;
+        }
+
+        /* Teleprompter View */
+        .teleprompter-view {
+            display: none;
+            max-width: 800px;
+            margin: 0 auto;
+            background: #000;
+            color: #fff;
+            padding: 60px 40px;
+            border-radius: 20px;
+            font-size: 28px;
+            line-height: 1.8;
+            font-weight: 400;
+            letter-spacing: 0.02em;
+        }
+
+        .teleprompter-view.active {
+            display: block;
+        }
+
+        .teleprompter-view .section-marker {
+            color: var(--primary);
+            font-size: 16px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin: 60px 0 30px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary);
+            opacity: 0.8;
+        }
+
+        .teleprompter-view .section-marker:first-child {
+            margin-top: 0;
+        }
+
+        .teleprompter-view .action {
+            color: var(--gold);
+            font-size: 18px;
+            font-style: italic;
+            margin: 30px 0;
+            padding: 15px 20px;
+            background: rgba(201,168,76,0.1);
+            border-radius: 8px;
+            border-left: 4px solid var(--gold);
+        }
+
+        .teleprompter-view p {
+            margin-bottom: 25px;
+        }
+
+        .teleprompter-view .copy-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .teleprompter-view .copy-header h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.6);
+        }
+
+        .teleprompter-view .copy-btn-top {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.2s;
+        }
+
+        .teleprompter-view .copy-btn-top:hover {
+            background: var(--primary-dark);
+            transform: scale(1.02);
+        }
+
+        .teleprompter-view .copy-btn-top.copied {
+            background: var(--success);
+        }
+
+        .teleprompter-view .copy-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 18px 32px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 8px 30px rgba(44,204,212,0.4);
+            transition: all 0.2s;
+            z-index: 100;
+        }
+
+        .teleprompter-view .copy-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(44,204,212,0.5);
+        }
+
+        .teleprompter-view .copy-btn.copied {
+            background: var(--success);
+        }
+
+        .timeline-view {
+            display: block;
+        }
+
+        .timeline-view.hidden {
+            display: none;
+        }
+
+        /* Timeline Section */
+        .timeline-section {
+            background: var(--gray-50);
+        }
+
+        .timeline {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 80px;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(to bottom, var(--orange), var(--primary), var(--purple), var(--success));
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 32px;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .timeline-time {
+            width: 80px;
+            text-align: right;
+            flex-shrink: 0;
+        }
+
+        .timeline-time .start {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--gray-900);
+        }
+
+        .timeline-time .duration {
+            font-size: 12px;
+            color: var(--gray-500);
+            margin-top: 4px;
+        }
+
+        .timeline-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: white;
+            border: 4px solid var(--orange);
+            position: absolute;
+            left: 72px;
+            top: 8px;
+            z-index: 1;
+        }
+
+        .timeline-item:nth-child(2) .timeline-dot { border-color: var(--blue); }
+        .timeline-item:nth-child(3) .timeline-dot { border-color: var(--pink); }
+        .timeline-item:nth-child(4) .timeline-dot { border-color: var(--primary); }
+        .timeline-item:nth-child(5) .timeline-dot { border-color: var(--purple); }
+        .timeline-item:nth-child(6) .timeline-dot { border-color: var(--gold); }
+        .timeline-item:nth-child(7) .timeline-dot { border-color: var(--success); }
+
+        .timeline-content {
+            flex: 1;
+            background: white;
+            border-radius: 16px;
+            padding: 28px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin-left: 20px;
+        }
+
+        .timeline-content h3 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .timeline-content h3 .badge {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 20px;
+            background: var(--gray-100);
+            color: var(--gray-600);
+        }
+
+        .timeline-content h3 .badge.hook { background: rgba(255,107,0,0.1); color: var(--orange); }
+        .timeline-content h3 .badge.demo { background: rgba(59,130,246,0.1); color: var(--blue); }
+        .timeline-content h3 .badge.price { background: rgba(201,168,76,0.1); color: var(--gold); }
+        .timeline-content h3 .badge.cta { background: rgba(16,185,129,0.1); color: var(--success); }
+
+        .script-block {
+            background: var(--gray-50);
+            border-left: 4px solid var(--primary);
+            padding: 20px;
+            border-radius: 0 12px 12px 0;
+            margin-bottom: 20px;
+        }
+
+        .script-block h4 {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--gray-500);
+            margin-bottom: 12px;
+        }
+
+        .script-block p {
+            font-size: 15px;
+            line-height: 1.8;
+            font-style: italic;
+        }
+
+        .script-block .highlight {
+            background: rgba(44, 204, 212, 0.2);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: var(--primary-dark);
+            font-weight: 600;
+        }
+
+        .screen-action {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 16px;
+            background: rgba(139, 92, 246, 0.05);
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .screen-action:last-child {
+            margin-bottom: 0;
+        }
+
+        .screen-action .icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: rgba(139, 92, 246, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .screen-action .text {
+            font-size: 14px;
+        }
+
+        .screen-action .text strong {
+            color: var(--purple);
+        }
+
+        /* Comparison Section */
+        .comparison-section {
+            background: white;
+        }
+
+        .comparison-table {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .comparison-header {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            background: var(--gray-900);
+            color: white;
+            padding: 20px 24px;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .comparison-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--gray-200);
+            align-items: center;
+        }
+
+        .comparison-row:last-child {
+            border-bottom: none;
+        }
+
+        .comparison-row:hover {
+            background: var(--gray-50);
+        }
+
+        .comparison-row .feature {
+            font-weight: 600;
+        }
+
+        .comparison-row .plan {
+            color: var(--gray-500);
+        }
+
+        .comparison-row .actual {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .comparison-row .improvement {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(16,185,129,0.1);
+            color: var(--success);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        /* URLs Section */
+        .urls-section {
+            background: linear-gradient(135deg, var(--gray-900) 0%, #1a1a2e 100%);
+            color: white;
+        }
+
+        .urls-section .section-title h2 {
+            color: white;
+        }
+
+        .urls-section .section-title p {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .url-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .url-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+
+        .url-card:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateY(-2px);
+        }
+
+        .url-card h4 {
+            font-size: 14px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .url-card .url {
+            font-family: monospace;
+            font-size: 12px;
+            background: rgba(0,0,0,0.3);
+            padding: 10px 14px;
+            border-radius: 8px;
+            word-break: break-all;
+            color: var(--primary);
+        }
+
+        .url-card .url a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .url-card .url a:hover {
+            text-decoration: underline;
+        }
+
+        /* Email Section */
+        .email-section {
+            background: var(--gray-50);
+        }
+
+        .email-template {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .email-header {
+            background: linear-gradient(135deg, var(--gray-100) 0%, var(--gray-200) 100%);
+            padding: 20px 28px;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .email-field {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+
+        .email-field:last-child {
+            margin-bottom: 0;
+        }
+
+        .email-field .label {
+            font-weight: 600;
+            color: var(--gray-500);
+            width: 60px;
+        }
+
+        .email-field .value {
+            color: var(--gray-900);
+        }
+
+        .email-body {
+            padding: 32px;
+            font-size: 15px;
+            line-height: 1.8;
+        }
+
+        .email-body p {
+            margin-bottom: 16px;
+        }
+
+        .email-body .signature {
+            margin-top: 32px;
+            padding-top: 20px;
+            border-top: 1px solid var(--gray-200);
+            color: var(--gray-700);
+        }
+
+        .email-body .cta-link {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            margin: 16px 0;
+        }
+
+        /* Tips Section */
+        .tips-section {
+            background: white;
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .tip-card {
+            background: var(--gray-50);
+            border-radius: 16px;
+            padding: 28px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .tip-card.warning {
+            border-left-color: var(--orange);
+            background: rgba(255,107,0,0.05);
+        }
+
+        .tip-card.success {
+            border-left-color: var(--success);
+            background: rgba(16,185,129,0.05);
+        }
+
+        .tip-card h3 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tip-card ul {
+            list-style: none;
+            font-size: 14px;
+        }
+
+        .tip-card li {
+            padding: 8px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .tip-card li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .tip-card.warning li::before { color: var(--orange); }
+        .tip-card.success li::before { color: var(--success); }
+
+        /* Footer */
+        .footer {
+            background: var(--gray-900);
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .footer-logo span {
+            color: var(--primary);
+        }
+
+        .footer p {
+            font-size: 13px;
+            opacity: 0.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .checklist-grid { grid-template-columns: 1fr; }
+            .url-grid { grid-template-columns: 1fr; }
+            .tips-grid { grid-template-columns: 1fr; }
+            .comparison-header, .comparison-row { grid-template-columns: 1fr; gap: 8px; }
+        }
+
+        @media (max-width: 768px) {
+            .timeline::before { left: 20px; }
+            .timeline-time { width: 40px; font-size: 12px; }
+            .timeline-time .start { font-size: 16px; }
+            .timeline-dot { left: 12px; }
+            .timeline-content { margin-left: 10px; }
+            .header h1 { font-size: 28px; }
+            .header-meta { flex-direction: column; gap: 12px; }
+        }
+
+        /* Print styles */
+        @media print {
+            .header { background: white; color: black; }
+            .urls-section { background: white; color: black; }
+            .footer { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <span class="header-badge">Action Finale</span>
+                <h1>Script Vidéo <span>Loom</span></h1>
+                <p>Déroulé complet de la vidéo de présentation pour Air Tahiti Nui - 3:30 à 4 min de Proof of Asset</p>
+                <div class="header-meta">
+                    <div class="header-meta-item">
+                        <span class="icon">⏱️</span>
+                        <span><strong>Durée:</strong> 3:30 - 4 min</span>
+                    </div>
+                    <div class="header-meta-item">
+                        <span class="icon">🎯</span>
+                        <span><strong>Cibles:</strong> Équipe Marketing ATN</span>
+                    </div>
+                    <div class="header-meta-item">
+                        <span class="icon">📅</span>
+                        <span><strong>Date:</strong> Janvier 2026</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Arguments de Vente - Structure: Problèmes d'abord -->
+    <section style="background: linear-gradient(135deg, rgba(255,107,0,0.05) 0%, rgba(201,168,76,0.05) 100%); padding: 60px 0; border-bottom: 1px solid var(--gray-200);">
+        <div class="container">
+            <div class="section-title">
+                <h2>🎯 Arguments de Vente - Approche Problèmes/Solutions</h2>
+                <p>L'argument principal: tu réponds aux besoins qu'ILS ont exprimés dans leur offre d'emploi</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px;">
+                <!-- Argument 1: Les 4 besoins de l'offre -->
+                <div style="background: white; border-radius: 16px; padding: 28px; border-left: 4px solid var(--primary); box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                    <h3 style="font-size: 18px; margin-bottom: 16px; display: flex; align-items: center; gap: 10px;">
+                        <span style="font-size: 24px;">📋</span> Les 4 besoins de leur offre d'emploi
+                    </h3>
+                    <div style="font-size: 14px; line-height: 1.8;">
+                        <div style="display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--gray-200);">
+                            <span style="background: var(--blue); color: white; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 700;">1</span>
+                            <div>
+                                <strong>"Intégrer l'IA dans l'e-marketing"</strong><br>
+                                <span style="color: var(--gray-600);">→ Build 1: Concierge IA</span>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--gray-200);">
+                            <span style="background: var(--purple); color: white; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 700;">2</span>
+                            <div>
+                                <strong>"Personnalisation + Conversion"</strong><br>
+                                <span style="color: var(--gray-600);">→ Build 2: Newsletter Hyper-Personnalisée</span>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--gray-200);">
+                            <span style="background: var(--gold); color: white; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 700;">3</span>
+                            <div>
+                                <strong>"Génération de contenus + Trafic qualifié"</strong><br>
+                                <span style="color: var(--gray-600);">→ Build 3: Content Factory SEO + GEO 2026</span>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: flex-start; gap: 12px; padding: 12px 0;">
+                            <span style="background: var(--primary); color: white; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 700;">4</span>
+                            <div>
+                                <strong>"Logique ROIste, data-driven"</strong><br>
+                                <span style="color: var(--gray-600);">→ Build 4: Dashboard ROI temps réel</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Argument 2: Compagnies concurrentes -->
+                <div style="background: white; border-radius: 16px; padding: 28px; border-left: 4px solid var(--danger); box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                    <h3 style="font-size: 18px; margin-bottom: 16px; display: flex; align-items: center; gap: 10px;">
+                        <span style="font-size: 24px;">✈️</span> Vos concurrents y sont déjà
+                    </h3>
+                    <div style="font-size: 14px; line-height: 1.8;">
+                        <div style="display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--gray-200);">
+                            <strong style="min-width: 120px;">Air France-KLM</strong>
+                            <span style="color: var(--gray-600);">Chatbot IA "Louis" + dynamic pricing IA</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--gray-200);">
+                            <strong style="min-width: 120px;">Lufthansa</strong>
+                            <span style="color: var(--gray-600);">Assistant IA multilingue + yield management</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--gray-200);">
+                            <strong style="min-width: 120px;">Singapore Airlines</strong>
+                            <span style="color: var(--gray-600);">Personnalisation IA du parcours client</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px; padding: 10px 0;">
+                            <strong style="min-width: 120px;">Emirates</strong>
+                            <span style="color: var(--gray-600);">Contenu SEO/GEO automatisé + chatbot 24/7</span>
+                        </div>
+                    </div>
+                    <div style="background: rgba(239,68,68,0.1); border-radius: 8px; padding: 12px; margin-top: 16px;">
+                        <p style="font-size: 13px; color: var(--danger); margin: 0;"><strong>🚨 À dire dans la vidéo:</strong> "Air France, Lufthansa, Emirates font déjà ça."</p>
+                    </div>
+                </div>
+
+                <!-- Argument 3: ROI immédiat en XPF -->
+                <div style="background: white; border-radius: 16px; padding: 28px; border-left: 4px solid var(--success); box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                    <h3 style="font-size: 18px; margin-bottom: 16px; display: flex; align-items: center; gap: 10px;">
+                        <span style="font-size: 24px;">💰</span> ROI prouvé par les chiffres (XPF)
+                    </h3>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
+                        <div style="text-align: center; background: var(--gray-50); border-radius: 10px; padding: 16px;">
+                            <div style="font-size: 24px; font-weight: 800; color: var(--success);">30-40M XPF</div>
+                            <div style="font-size: 12px; color: var(--gray-500);">Économies/an</div>
+                        </div>
+                        <div style="text-align: center; background: var(--gray-50); border-radius: 10px; padding: 16px;">
+                            <div style="font-size: 28px; font-weight: 800; color: var(--primary);">70%</div>
+                            <div style="font-size: 12px; color: var(--gray-500);">Réduction coûts</div>
+                        </div>
+                        <div style="text-align: center; background: var(--gray-50); border-radius: 10px; padding: 16px;">
+                            <div style="font-size: 28px; font-weight: 800; color: var(--purple);">+45%</div>
+                            <div style="font-size: 12px; color: var(--gray-500);">Taux ouverture</div>
+                        </div>
+                        <div style="text-align: center; background: var(--gray-50); border-radius: 10px; padding: 16px;">
+                            <div style="font-size: 28px; font-weight: 800; color: var(--gold);">2 mois</div>
+                            <div style="font-size: 12px; color: var(--gray-500);">ROI atteint</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Argument 4: BONUS - Remplacement (secondaire) -->
+                <div style="background: white; border-radius: 16px; padding: 28px; border-left: 4px solid var(--purple); box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                    <h3 style="font-size: 18px; margin-bottom: 16px; display: flex; align-items: center; gap: 10px;">
+                        <span style="font-size: 24px;">🎁</span> LE BONUS (argument secondaire)
+                    </h3>
+                    <div style="font-size: 14px; line-height: 2;">
+                        <div style="padding: 8px 0; border-bottom: 1px solid var(--gray-200);">
+                            <span style="color: var(--success);">✓</span> "Ces solutions tournent 24/7"
+                        </div>
+                        <div style="padding: 8px 0; border-bottom: 1px solid var(--gray-200);">
+                            <span style="color: var(--success);">✓</span> "Sans congés, sans charges sociales"
+                        </div>
+                        <div style="padding: 8px 0; border-bottom: 1px solid var(--gray-200);">
+                            <span style="color: var(--success);">✓</span> "Sans risque Shadow AI (ChatGPT en cachette)"
+                        </div>
+                        <div style="padding: 8px 0;">
+                            <span style="color: var(--success);">✓</span> "Une équipe = plus de 50M XPF/an. Ça = 4,8M setup + 360K/mois"
+                        </div>
+                    </div>
+                    <div style="background: rgba(139,92,246,0.1); border-radius: 8px; padding: 12px; margin-top: 16px;">
+                        <p style="font-size: 12px; color: var(--purple); margin: 0;"><strong>⚠️ IMPORTANT:</strong> Le "remplacement" est un BONUS, pas l'argument principal. L'argument principal = tu résous LEURS problèmes (cités dans leur offre).</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pre-Recording Checklist -->
+    <section class="checklist-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Checklist Avant Enregistrement</h2>
+                <p>Vérifie ces éléments avant de lancer Loom</p>
+            </div>
+
+            <div class="checklist-grid">
+                <div class="checklist-card">
+                    <h3>💻 Environnement</h3>
+                    <div class="checklist-item">
+                        <div class="check done">✓</div>
+                        <div class="content">
+                            <strong>Onglets ouverts dans l'ordre</strong>
+                            <span>index.html, dashboard.html, builds-presentation.html, blog.html</span>
+                        </div>
+                    </div>
+                    <div class="checklist-item">
+                        <div class="check">✓</div>
+                        <div class="content">
+                            <strong>Notifications désactivées</strong>
+                            <span>Mode Ne Pas Déranger sur Mac</span>
+                        </div>
+                    </div>
+                    <div class="checklist-item">
+                        <div class="check">✓</div>
+                        <div class="content">
+                            <strong>Résolution écran</strong>
+                            <span>1920x1080 recommandé pour Loom</span>
+                        </div>
+                    </div>
+                    <div class="checklist-item">
+                        <div class="check">✓</div>
+                        <div class="content">
+                            <strong>Micro testé</strong>
+                            <span>Airpods ou micro externe, pas le micro intégré</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="checklist-card">
+                    <h3>🌐 URLs à montrer</h3>
+                    <div class="checklist-item">
+                        <div class="check done">✓</div>
+                        <div class="content">
+                            <strong>Site Demo ATN</strong>
+                            <span><code>Air Tahiti Nui/demo-site/index.html</code></span>
+                        </div>
+                    </div>
+                    <div class="checklist-item">
+                        <div class="check done">✓</div>
+                        <div class="content">
+                            <strong>Dashboard temps réel</strong>
+                            <span><code>Air Tahiti Nui/demo-site/dashboard.html</code></span>
+                        </div>
+                    </div>
+                    <div class="checklist-item">
+                        <div class="check done">✓</div>
+                        <div class="content">
+                            <strong>Document commercial</strong>
+                            <span><code>Air Tahiti Nui/demo-site/builds-presentation.html</code></span>
+                        </div>
+                    </div>
+                    <div class="checklist-item">
+                        <div class="check done">✓</div>
+                        <div class="content">
+                            <strong>Blog SEO/GEO</strong>
+                            <span><code>Air Tahiti Nui/demo-site/blog.html</code></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="checklist-card">
+                    <h3>🤖 Workflows n8n</h3>
+                    <div class="checklist-item">
+                        <div class="check done">✓</div>
+                        <div class="content">
+                            <strong>Build 1 - Concierge IA</strong>
+                            <span>ID: <code>je438i45tMSWsl5T</code> - Multilingue actif</span>
+                        </div>
+                    </div>
+                    <div class="checklist-item">
+                        <div class="check done">✓</div>
+                        <div class="content">
+                            <strong>Build 2 - Newsletter</strong>
+                            <span>Webhook: <code>/atn-newsletter-demo</code></span>
+                        </div>
+                    </div>
+                    <div class="checklist-item">
+                        <div class="check done">✓</div>
+                        <div class="content">
+                            <strong>Build 3 - SEO+GEO</strong>
+                            <span>Webhook: <code>/atn-seo-content</code></span>
+                        </div>
+                    </div>
+                    <div class="checklist-item">
+                        <div class="check done">✓</div>
+                        <div class="content">
+                            <strong>Build 4 - ROI Analyst</strong>
+                            <span>Webhook: <code>/atn-roi-analyst</code></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="checklist-card">
+                    <h3>📝 Points clés à retenir (XPF)</h3>
+                    <div class="checklist-item">
+                        <div class="check">✓</div>
+                        <div class="content">
+                            <strong>Chiffre ROI</strong>
+                            <span>30-40M XPF/an d'économies (65-75% réduction)</span>
+                        </div>
+                    </div>
+                    <div class="checklist-item">
+                        <div class="check">✓</div>
+                        <div class="content">
+                            <strong>Pack complet</strong>
+                            <span>4,8M XPF setup + 360K XPF/mois</span>
+                        </div>
+                    </div>
+                    <div class="checklist-item">
+                        <div class="check">✓</div>
+                        <div class="content">
+                            <strong>Coût équipe équivalente</strong>
+                            <span>45-55M XPF/an (source ISPF)</span>
+                        </div>
+                    </div>
+                    <div class="checklist-item">
+                        <div class="check">✓</div>
+                        <div class="content">
+                            <strong>Langues testées</strong>
+                            <span>5 langues: FR, EN, ES, JP, CN</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Video Timeline -->
+    <section class="timeline-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Déroulé de la Vidéo</h2>
+                <p>Script minute par minute avec actions à l'écran</p>
+
+                <!-- View Toggle Tabs -->
+                <div class="view-tabs">
+                    <button class="view-tab active" onclick="switchView('timeline')">
+                        <span class="icon">📋</span>
+                        Vue Détaillée
+                    </button>
+                    <button class="view-tab" onclick="switchView('teleprompter')">
+                        <span class="icon">📺</span>
+                        Téléprompter
+                    </button>
+                </div>
+            </div>
+
+            <!-- TELEPROMPTER VIEW -->
+            <div class="teleprompter-view" id="teleprompterView">
+                <div class="copy-header">
+                    <h3>📺 Mode Téléprompter - Script complet</h3>
+                    <button class="copy-btn-top" onclick="copyTeleprompter(this)">
+                        <span>📋</span> Copier tout le texte
+                    </button>
+                </div>
+
+                <div class="section-marker">0:00 - HOOK</div>
+
+                <div class="action">ÉCRAN: Offre d'emploi ATN - Surligne avec la souris</div>
+
+                <p>Ia ora na Torea, je m'appelle Jordy de PACIFIK'AI, spécialisé dans l'automatisation des processus marketing et CRM pour les entreprises polynésiennes.</p>
+
+                <p>J'ai vu votre offre pour le poste de Chargé E-marketing.</p>
+
+                <p>Je me rapproche de vous parce que je sais que je peux automatiser l'ensemble de votre processus marketing : acquisition, nurturing, fidélisation, analytics.</p>
+
+                <p>Les missions de l'offre m'ont interpellé.</p>
+
+                <p>Intégrer l'IA dans vos dispositifs.<br>
+                Personnalisation.<br>
+                Génération de contenus.<br>
+                Analyse de données.<br>
+                Logique ROIste.</p>
+
+                <p>Chaque aspect peut être automatisé par l'IA.</p>
+
+                <p>Plutôt que d'envoyer un CV, j'ai décidé de vous montrer directement ce que ça pourrait donner.</p>
+
+                <p>J'ai construit 4 automatisations concrètes, avec vos vraies données.</p>
+
+                <p>Mais ce n'est qu'un aperçu. Je peux aller beaucoup plus loin selon vos besoins spécifiques.</p>
+
+                <p>Ils tournent sur mon infrastructure sécurisée.</p>
+
+                <p>Ce que vous allez voir n'est pas une maquette.</p>
+
+                <p>C'est une démonstration de ce que votre équipe marketing pourrait utiliser dès demain.</p>
+
+                <div class="section-marker">0:45 - BUILD 1: CONCIERGE IA</div>
+
+                <div class="action">ÉCRAN: demo-site/index.html - Chatbot</div>
+
+                <p>Premier défi : le décalage horaire avec vos marchés clés.</p>
+
+                <p>USA, Japon, France.</p>
+
+                <p>Quand vos bureaux ferment à Tahiti... vous perdez des ventes.</p>
+
+                <p>J'ai construit ce Concierge Agentique.</p>
+
+                <p>Je vais lui poser une question en anglais.</p>
+
+                <div class="action">COLLE: What are the baggage allowances for Business Class on the Los Angeles to Papeete route?</div>
+
+                <div class="action">ATTENDS la réponse</div>
+
+                <p>Il a détecté la langue automatiquement, interrogé vos conditions générales, et répondu en anglais avec les informations exactes de votre FAQ.</p>
+
+                <div class="action">ÉCRAN: n8n-visualizer.html → Onglet Build 1</div>
+
+                <p>Regardez l'architecture derrière.</p>
+
+                <div class="action">CLIQUE "Exécuter" - les nodes s'animent</div>
+
+                <p>Le Chat Trigger reçoit la question.<br>
+                L'AI Agent ATN avec Claude Sonnet 4 la traite.<br>
+                Le Supabase Vector Store interroge votre FAQ officielle.<br>
+                34 documents indexés : bagages, classes, destinations, Club Tiare.</p>
+
+                <p>Contrairement à un ChatGPT public qui hallucine, ce système est verrouillé sur VOTRE documentation.</p>
+
+                <div class="action">ÉCRAN: Scrolle vers le panel Impact - 4 cartes s'affichent</div>
+
+                <p>Qu'est-ce que ça change concrètement ?</p>
+
+                <div class="action">POINTE les cartes une par une</div>
+
+                <p>Moins 99% sur le coût par interaction.<br>
+                Ticket humain : environ 200 XPF.<br>
+                L'IA : moins de 1 XPF.</p>
+
+                <p>Service client 24/7 sans heures de nuit.<br>
+                Tokyo +19h, Los Angeles -12h.<br>
+                Le chatbot répond dans le fuseau du client.</p>
+
+                <p>Plus 35% de taux de conversion visiteur vers lead.<br>
+                Un chatbot qui répond instantanément capture 3 fois plus de prospects qu'un formulaire classique.</p>
+
+                <p>Et surtout : zéro hallucination.<br>
+                Le système n'utilise QUE vos documents officiels.</p>
+
+                <div class="action">POINTE la barre de comparaison en bas</div>
+
+                <p>Équipe nuit et weekend : 12 à 18 millions XPF par an.<br>
+                Ma solution Concierge IA : 4,3 millions par an, tout compris.<br>
+                Économies : environ 10 millions XPF.</p>
+
+                <div class="section-marker">1:30 - BUILD 2: NEWSLETTER HYPER-PERSONNALISÉE</div>
+
+                <div class="action">ÉCRAN: dashboard.html → Section "Déclencher les Workflows"</div>
+
+                <p>Deuxième défi : la personnalisation.</p>
+
+                <p>Votre future recrue va passer des heures à rédiger des emails génériques.</p>
+
+                <div class="action">CLIQUE sur le bouton "Build 2 - Newsletter"</div>
+
+                <p>Regardez... J'envoie une demande pour Marie, segment Lune de miel.</p>
+
+                <div class="action">ATTENDS le résultat</div>
+
+                <p>En 10 secondes :<br>
+                Email personnalisé avec le prénom.<br>
+                Mention de Bora Bora, pas Moorea qui est pour les familles.<br>
+                Score de personnalisation : 94 sur 100.</p>
+
+                <div class="action">ÉCRAN: n8n-visualizer.html → Onglet Build 2</div>
+
+                <p>Ce workflow fait de la micro-segmentation.</p>
+
+                <div class="action">CLIQUE "Exécuter" - animation des nodes</div>
+
+                <p>Enrichir et Micro-Segmenter détecte le profil.<br>
+                Router par Segment avec 5 branches : Famille, Lune de miel, Plongeurs, Business, General.<br>
+                Claude Honeymoon rédige avec le ton romantique.<br>
+                Formater et Scorer calcule un score de personnalisation.</p>
+
+                <div class="action">SCROLLE vers le panel Impact Build 2</div>
+
+                <p>Taux d'ouverture : 35 à 45% au lieu de 15 à 20% standard.<br>
+                C'est le double.</p>
+
+                <p>Plus 40% de taux de clic vers la réservation.<br>
+                Un email "Lune de miel à Bora Bora" convertit 2,5 fois mieux qu'un email générique.</p>
+
+                <div class="action">POINTE la barre de comparaison</div>
+
+                <p>Rédacteur newsletter : 25 000 XPF par article.<br>
+                IA : 200 XPF par email.<br>
+                Économies annuelles : environ 5 millions XPF.</p>
+
+                <div class="section-marker">2:00 - BUILD 3: USINE CONTENU SEO + GEO</div>
+
+                <div class="action">ÉCRAN: blog.html</div>
+
+                <p>Troisième défi : le référencement.</p>
+
+                <p>Voici les articles générés automatiquement par le Build 3.</p>
+
+                <div class="action">MONTRE les cartes d'articles avec scores SEO/GEO</div>
+
+                <p>Le GEO, c'est le Generative Engine Optimization.</p>
+
+                <p>Quand quelqu'un demande à ChatGPT ou Perplexity "meilleure compagnie pour Tahiti"...<br>
+                Air Tahiti Nui apparaît en premier.</p>
+
+                <div class="action">ÉCRAN: n8n-visualizer.html → Onglet Build 3</div>
+
+                <div class="action">CLIQUE "Exécuter" - animation des nodes</div>
+
+                <div class="action">SCROLLE vers le panel Impact Build 3</div>
+
+                <p>40% des recherches passent par IA en 2026 selon Gartner.<br>
+                Le GEO, c'est être visible dans les réponses IA.</p>
+
+                <p>Plus 25% de conversion trafic organique vers réservation.<br>
+                Un article "Meilleure période pour Tahiti" capte les recherches ET redirige vers la page de réservation.</p>
+
+                <p>12 à 20 articles par mois possibles.<br>
+                Score SEO garanti 90 et plus.</p>
+
+                <div class="action">POINTE la barre de comparaison</div>
+
+                <p>Article SEO agence : 50 à 100 000 XPF.<br>
+                Article IA avec image : 500 XPF.<br>
+                Économies annuelles : environ 8 millions XPF.</p>
+
+                <div class="section-marker">2:30 - BUILD 4: ANALYSTE ROI & SÉCURITÉ</div>
+
+                <div class="action">ÉCRAN: dashboard.html</div>
+
+                <p>Enfin, la logique ROIste que vous mentionnez dans l'offre.</p>
+
+                <div class="action">APPUIE sur D pour activer le mode démo - les chiffres s'animent</div>
+
+                <p>Voici le tableau de bord temps réel.</p>
+
+                <p>Toutes les métriques des 4 Builds remontent ici automatiquement.</p>
+
+                <div class="action">CLIQUE sur le bouton "Build 4 - Analyse ROI"</div>
+
+                <div class="action">ATTENDS le résultat avec alertes</div>
+
+                <p>Regardez les alertes générées.</p>
+
+                <p>Tokyo moins 15% : Alerte critique.<br>
+                Auckland plus 7% : Opportunité de croissance.<br>
+                3 recommandations stratégiques générées.</p>
+
+                <div class="action">ÉCRAN: n8n-visualizer.html → Onglet Build 4</div>
+
+                <p>Ce workflow analyse vos données commerciales en temps réel.</p>
+
+                <div class="action">CLIQUE "Exécuter" - animation des nodes</div>
+
+                <p>Analyse Avancée avec calcul Z-Score sur 4 mois.<br>
+                Analyste IA Expert avec Claude qui génère des recommandations.<br>
+                Log to Airtable pour l'historique des alertes.</p>
+
+                <div class="action">SCROLLE vers le panel Impact Build 4</div>
+
+                <p>Détection en temps réel au lieu de 24 à 48 heures.<br>
+                Plus 15% de ROI sur les campagnes marketing.</p>
+
+                <p>Alerte "Tokyo moins 15%" signifie réallocation budget vers Auckland plus 7% en 24 heures.<br>
+                Au lieu de 2 semaines de latence. Réactivité égale conversion.</p>
+
+                <div class="action">POINTE la barre de comparaison</div>
+
+                <p>Analyste données temps plein : 400 000 XPF par mois.<br>
+                Analyste IA automatisé : 120 000 XPF par mois.<br>
+                Économies annuelles : environ 3 millions XPF.</p>
+
+                <div class="action">SCROLLE vers le panel rouge "Argument Sécurité n8n"</div>
+
+                <p>Mais voici le point critique pour vous.</p>
+
+                <div class="action">PAUSE - Regarde la caméra</div>
+
+                <p>Vous voyez cette architecture ?</p>
+
+                <p>Ce n'est pas un logiciel SaaS classique.</p>
+
+                <p>C'est du n8n.</p>
+
+                <p>Pourquoi c'est important ?</p>
+
+                <p>Parce que les données ne sortent pas.</p>
+
+                <div class="action">POINTE les 4 cartes sécurité</div>
+
+                <p>70% des entreprises craignent le Shadow AI selon Gartner 2024.<br>
+                Avec n8n : infrastructure contrôlée.</p>
+
+                <p>Hébergement privé possible.<br>
+                Critique pour une compagnie aérienne.</p>
+
+                <p>Open-source.<br>
+                Pas de vendor lock-in, pas d'abonnement qui explose.</p>
+
+                <p>Zéro données vers des serveurs tiers.<br>
+                Vos clients, vos prix, vos performances... rien ne sort.</p>
+
+                <p>Tout ceci peut être hébergé sur VOS serveurs privés.<br>
+                Vos données clients, vos performances commerciales.<br>
+                Rien ne transite par des serveurs tiers non contrôlés.</p>
+
+                <p>Je vous propose une infrastructure souveraine.</p>
+
+                <div class="section-marker">3:30 - CLOSING & PRIX</div>
+
+                <div class="action">ÉCRAN: n8n-visualizer.html → Onglet "Conclusion"</div>
+
+                <p>Pour résumer.</p>
+
+                <div class="action">POINTE les 4 cartes des Builds en haut</div>
+
+                <p>Ce que vous venez de voir, c'est 4 automatisations marketing déjà fonctionnelles : chatbot, newsletters, contenu SEO, analytics.</p>
+
+                <p>Chaque Build résout un problème de votre offre d'emploi.</p>
+
+                <div class="action">PAUSE - Regarde la caméra</div>
+
+                <p>Mais ce n'est que le début.</p>
+
+                <p>Je peux automatiser bien plus : votre CRM complet, le scoring de leads, les campagnes retargeting, l'onboarding client, les enquêtes satisfaction, le reporting automatique...</p>
+
+                <p>Chaque processus répétitif dans votre marketing peut être automatisé.</p>
+
+                <div class="action">POINTE le comparatif de coûts au centre</div>
+
+                <p>Équipe humaine 24/7 multilingue : 45 à 55 millions XPF par an.<br>
+                Solution PACIFIK'AI : environ 15 millions XPF par an.</p>
+
+                <div class="action">POINTE la box verte "Économies"</div>
+
+                <p>Économies annuelles : 30 à 40 millions XPF.</p>
+
+                <div class="action">SCROLLE vers "Le Bonus"</div>
+
+                <p>Et le bonus : 24/7 sans congés, 5 langues instantanément, zéro fuite de données, scalable.</p>
+
+                <div class="action">SCROLLE vers "Évolutions possibles"</div>
+
+                <p>Tout est personnalisable.</p>
+
+                <p>Gestion des réclamations, social media, pricing dynamique, CRM automation, lead nurturing...</p>
+
+                <p>Je vous propose un call de 30 minutes pour auditer vos besoins et voir ensemble tout ce qu'on peut optimiser.</p>
+
+                <div class="action">SCROLLE vers "Investissement & ROI"</div>
+
+                <p>Setup initial : 4,8 millions XPF.<br>
+                Coût mensuel : environ 360 000 XPF.<br>
+                ROI atteint en moins de 2 mois.</p>
+
+                <div class="action">PAUSE - Regarde la caméra</div>
+
+                <div class="action">TON CALME, CONFIANT</div>
+
+                <p>Je ne cherche pas à vous vendre du rêve.<br>
+                Je vous propose une infrastructure.</p>
+
+                <div class="action">POINTE les 2 options en bas</div>
+
+                <p>Si ce n'est pas le bon moment, gardez cette vidéo.<br>
+                L'idée est à vous.</p>
+
+                <p>Mais si vous voulez activer ce pilote pour sécuriser votre haute saison, contactez-moi directement par mail ou par téléphone.</p>
+
+                <p>Je serais ravi de discuter et de me déplacer pour en parler de vive voix.</p>
+
+                <div class="action">SOURIS</div>
+
+                <p>Mauruuru.</p>
+
+                <button class="copy-btn" onclick="copyTeleprompter()">
+                    <span>📋</span> Copier le texte
+                </button>
+            </div>
+
+            <!-- TIMELINE VIEW (existing) -->
+            <div class="timeline-view" id="timelineView">
+            <div class="timeline">
+                <!-- 0:00 - Hook -->
+                <div class="timeline-item">
+                    <div class="timeline-time">
+                        <div class="start">0:00</div>
+                        <div class="duration">30 sec</div>
+                    </div>
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <h3>
+                            J'ai Vu Votre Offre
+                            <span class="badge hook">HOOK</span>
+                        </h3>
+                        <div class="script-block">
+                            <h4>Ce que tu dis</h4>
+                            <p>"<span class="highlight">Ia ora na</span> Torea, je m'appelle Jordy de PACIFIK'AI, spécialisé dans <span class="highlight">l'automatisation des processus marketing et CRM</span> pour les entreprises polynésiennes. J'ai vu votre offre pour le poste de <span class="highlight">Chargé E-marketing</span>. Je me rapproche de vous parce que je sais que je peux <span class="highlight">automatiser l'ensemble de votre processus marketing</span> : acquisition, nurturing, fidélisation, analytics. Les missions m'ont interpellé. <span class="highlight">Intégrer l'IA</span>. Personnalisation. <span class="highlight">Génération de contenus</span>. Analyse de données. <span class="highlight">Logique ROIste</span>. Chaque aspect peut être automatisé. Plutôt que d'envoyer un CV, j'ai décidé de vous montrer directement ce que ça pourrait donner. J'ai construit <span class="highlight">4 automatisations concrètes</span>, avec vos vraies données. Mais ce n'est qu'un aperçu - je peux aller <span class="highlight">beaucoup plus loin</span> selon vos besoins. Ce que vous allez voir n'est pas une maquette. C'est une démonstration de ce que votre équipe marketing pourrait utiliser dès demain."</p>
+                        </div>
+
+                        <!-- Bullet points détaillés -->
+                        <div style="background: rgba(255,107,0,0.08); border-radius: 12px; padding: 20px; margin: 16px 0;">
+                            <h4 style="font-size: 13px; color: var(--orange); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;">📋 Checklist Moment par Moment</h4>
+                            <ul style="list-style: none; font-size: 14px; line-height: 2;">
+                                <li>☐ <strong>0:00</strong> - Affiche l'offre d'emploi ATN, surligne avec la souris</li>
+                                <li>☐ <strong>0:03</strong> - "Ia ora na Torea..." (salutation + expertise marketing automation)</li>
+                                <li>☐ <strong>0:08</strong> - "Je peux automatiser l'ensemble..." (positionnement expert)</li>
+                                <li>☐ <strong>0:12</strong> - "Les missions m'ont interpellé..." (cite les missions de l'offre)</li>
+                                <li>☐ <strong>0:18</strong> - "Intégrer l'IA... Personnalisation... Génération..."</li>
+                                <li>☐ <strong>0:22</strong> - "Chaque aspect peut être automatisé"</li>
+                                <li>☐ <strong>0:25</strong> - "Plutôt que d'envoyer un CV..."</li>
+                                <li>☐ <strong>0:30</strong> - "4 automatisations concrètes, vos vraies données"</li>
+                                <li>☐ <strong>0:35</strong> - "Mais ce n'est qu'un aperçu - je peux aller beaucoup plus loin"</li>
+                                <li>☐ <strong>0:40</strong> - "Ce n'est pas une maquette... dès demain"</li>
+                                <li>☐ <strong>0:45</strong> - Transition vers le chatbot</li>
+                            </ul>
+                        </div>
+
+                        <div class="screen-action">
+                            <div class="icon">🖥️</div>
+                            <div class="text"><strong>À l'écran:</strong> Ta webcam en haut à droite, le site index.html en fond avec le chatbot visible</div>
+                        </div>
+
+                        <!-- Argument de vente: Expert Marketing Automation + Offre d'emploi -->
+                        <div style="background: rgba(201,168,76,0.1); border-left: 3px solid var(--gold); padding: 12px 16px; margin-top: 12px; border-radius: 0 8px 8px 0;">
+                            <strong style="color: var(--gold); font-size: 12px;">🎯 ARGUMENT PRINCIPAL</strong>
+                            <p style="font-size: 13px; margin-top: 6px; opacity: 0.9;">Tu te positionnes comme <strong>expert en automatisation marketing</strong> qui peut automatiser TOUT leur processus (CRM, acquisition, nurturing...). Les 4 builds sont des exemples, mais tu peux faire <strong>beaucoup plus</strong>. Tu cites leur offre d'emploi pour montrer que tu comprends leurs besoins spécifiques.</p>
+                        </div>
+
+                        <div style="background: rgba(16,185,129,0.08); border-left: 3px solid var(--success); padding: 12px 16px; margin-top: 12px; border-radius: 0 8px 8px 0;">
+                            <strong style="color: var(--success); font-size: 12px;">💡 CONSEIL COACH</strong>
+                            <p style="font-size: 13px; margin-top: 6px; opacity: 0.9;">Surligne avec la souris les mots-clés de l'offre ("Logique ROIste", "Génération de contenus") pendant que tu parles. L'écran affiche l'offre ATN pendant tout le hook.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 0:30 - Build 1 -->
+                <div class="timeline-item">
+                    <div class="timeline-time">
+                        <div class="start">0:45</div>
+                        <div class="duration">45 sec</div>
+                    </div>
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <h3>
+                            Build 1: Concierge IA Multilingue
+                            <span class="badge demo">DÉMO LIVE</span>
+                        </h3>
+
+                        <!-- Lien avec l'offre d'emploi -->
+                        <div style="background: rgba(59,130,246,0.08); border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 16px;">📋</span>
+                            <span style="font-size: 13px;"><strong>VOUS VOULEZ:</strong> "Optimiser les parcours clients" → Voici la solution</span>
+                        </div>
+
+                        <!-- ÉTAPE 1: UI DEMO -->
+                        <div style="background: linear-gradient(135deg, rgba(59,130,246,0.15) 0%, rgba(59,130,246,0.05) 100%); border-radius: 12px; padding: 20px; margin: 16px 0; border-left: 4px solid var(--blue);">
+                            <h4 style="font-size: 14px; color: var(--blue); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                                <span style="background: var(--blue); color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px;">1</span>
+                                🖥️ ÉTAPE 1: Démonstration UI
+                            </h4>
+                            <p style="font-size: 13px; margin-bottom: 12px;"><strong>Fichier:</strong> <code>demo-site/index.html</code> (chatbot)</p>
+                            <div class="script-block" style="margin: 0;">
+                                <p>"Premier défi : le <span class="highlight">décalage horaire</span> avec vos marchés clés. USA, Japon, France. Quand vos bureaux ferment à Tahiti... vous perdez des ventes. J'ai construit ce <span class="highlight">Concierge Agentique</span>. Je vais lui poser une question en anglais..."</p>
+                            </div>
+                            <div style="margin-top: 12px; font-size: 12px; color: var(--gray-500);">
+                                <strong>Action:</strong> Colle <code style="background: #1a1a2e; padding: 2px 6px; border-radius: 4px;">What are the baggage allowances for Business Class on the Los Angeles to Papeete route?</code> → Attends la réponse
+                            </div>
+                        </div>
+
+                        <!-- ÉTAPE 2: VISUALIZER -->
+                        <div style="background: linear-gradient(135deg, rgba(139,92,246,0.15) 0%, rgba(139,92,246,0.05) 100%); border-radius: 12px; padding: 20px; margin: 16px 0; border-left: 4px solid var(--purple);">
+                            <h4 style="font-size: 14px; color: var(--purple); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                                <span style="background: var(--purple); color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px;">2</span>
+                                ⚙️ ÉTAPE 2: Visualizer (Comment ça marche)
+                            </h4>
+                            <p style="font-size: 13px; margin-bottom: 12px;"><strong>Fichier:</strong> <code>demo-site/n8n-visualizer.html</code> → Onglet Build 1</p>
+                            <div class="script-block" style="margin: 0;">
+                                <p>"Regardez l'architecture derrière... <span class="highlight">Chat Trigger</span> → <span class="highlight">AI Agent ATN</span> avec Claude Sonnet 4 → <span class="highlight">Supabase Vector Store</span> avec 34 documents indexés. Contrairement à ChatGPT public qui hallucine, ce système est <span class="highlight">verrouillé sur VOTRE documentation</span>."</p>
+                            </div>
+                            <div style="margin-top: 12px; font-size: 12px; color: var(--gray-500);">
+                                <strong>Action:</strong> Clique "▶ Exécuter" → Les nodes s'animent avec les logs
+                            </div>
+                        </div>
+
+                        <!-- ÉTAPE 3: IMPACT ATN -->
+                        <div style="background: linear-gradient(135deg, rgba(16,185,129,0.15) 0%, rgba(16,185,129,0.05) 100%); border-radius: 12px; padding: 20px; margin: 16px 0; border-left: 4px solid var(--success);">
+                            <h4 style="font-size: 14px; color: var(--success); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                                <span style="background: var(--success); color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px;">3</span>
+                                📊 ÉTAPE 3: Impact concret pour ATN
+                            </h4>
+                            <p style="font-size: 13px; margin-bottom: 12px;"><strong>Action:</strong> Scrolle vers le panel Impact (4 cartes vertes) dans <code>n8n-visualizer.html</code></p>
+
+                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 16px;">
+                                <div style="background: rgba(16,185,129,0.1); padding: 12px; border-radius: 8px; text-align: center;">
+                                    <div style="font-size: 22px; font-weight: 800; color: var(--success);">-99%</div>
+                                    <div style="font-size: 11px; opacity: 0.8;">Coût par interaction</div>
+                                    <div style="font-size: 10px; opacity: 0.6;">200 XPF → &lt;1 XPF</div>
+                                </div>
+                                <div style="background: rgba(59,130,246,0.1); padding: 12px; border-radius: 8px; text-align: center;">
+                                    <div style="font-size: 22px; font-weight: 800; color: var(--blue);">24/7</div>
+                                    <div style="font-size: 11px; opacity: 0.8;">Service client</div>
+                                    <div style="font-size: 10px; opacity: 0.6;">Tokyo +19h, LA -12h</div>
+                                </div>
+                                <div style="background: rgba(139,92,246,0.1); padding: 12px; border-radius: 8px; text-align: center;">
+                                    <div style="font-size: 22px; font-weight: 800; color: var(--purple);">70%</div>
+                                    <div style="font-size: 11px; opacity: 0.8;">Questions automatisées</div>
+                                    <div style="font-size: 10px; opacity: 0.6;">Zendesk 2024</div>
+                                </div>
+                                <div style="background: rgba(201,168,76,0.1); padding: 12px; border-radius: 8px; text-align: center;">
+                                    <div style="font-size: 22px; font-weight: 800; color: var(--gold);">0</div>
+                                    <div style="font-size: 11px; opacity: 0.8;">Hallucination</div>
+                                    <div style="font-size: 10px; opacity: 0.6;">Docs officiels uniquement</div>
+                                </div>
+                            </div>
+
+                            <div style="background: rgba(0,0,0,0.1); padding: 12px; border-radius: 8px;">
+                                <div style="font-size: 11px; font-weight: 600; margin-bottom: 8px; opacity: 0.7;">📊 BARRE DE COMPARAISON (pointer en bas du panel)</div>
+                                <div style="display: flex; justify-content: space-between; font-size: 12px;">
+                                    <span><strong>Équipe nuit/weekend:</strong> 12-18M XPF/an</span>
+                                    <span><strong>Concierge IA:</strong> 4,3M XPF</span>
+                                    <span style="color: var(--success); font-weight: 700;">≈ 10M XPF économisés</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="background: rgba(16,185,129,0.08); border-left: 3px solid var(--success); padding: 12px 16px; margin-top: 12px; border-radius: 0 8px 8px 0;">
+                            <strong style="color: var(--success); font-size: 12px;">💡 CONSEIL</strong>
+                            <p style="font-size: 13px; margin-top: 6px; opacity: 0.9;">L'anglais = compréhensible par tous. Pointe chaque carte une par une, puis la barre de comparaison.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 1:30 - Build 2 -->
+                <div class="timeline-item">
+                    <div class="timeline-time">
+                        <div class="start">1:30</div>
+                        <div class="duration">40 sec</div>
+                    </div>
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <h3>
+                            Build 2: Newsletter Hyper-Personnalisée
+                            <span class="badge demo">DÉMO LIVE</span>
+                        </h3>
+
+                        <!-- Lien avec l'offre d'emploi -->
+                        <div style="background: rgba(139,92,246,0.08); border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 16px;">📋</span>
+                            <span style="font-size: 13px;"><strong>VOUS VOULEZ:</strong> "Personnalisation et maximiser la conversion" → Voici la solution</span>
+                        </div>
+
+                        <!-- ÉTAPE 1: UI DEMO -->
+                        <div style="background: linear-gradient(135deg, rgba(59,130,246,0.15) 0%, rgba(59,130,246,0.05) 100%); border-radius: 12px; padding: 20px; margin: 16px 0; border-left: 4px solid var(--blue);">
+                            <h4 style="font-size: 14px; color: var(--blue); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                                <span style="background: var(--blue); color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px;">1</span>
+                                🖥️ ÉTAPE 1: Démonstration UI
+                            </h4>
+                            <p style="font-size: 13px; margin-bottom: 12px;"><strong>Fichier:</strong> <code>demo-site/dashboard.html</code> → Section "Déclencher les Workflows"</p>
+                            <div class="script-block" style="margin: 0;">
+                                <p>"Deuxième défi : la <span class="highlight">production de contenu</span>. Votre future recrue va passer 20 heures par semaine à rédiger. Regardez... J'envoie une demande pour 'Marie, segment Lune de miel'..."</p>
+                            </div>
+                            <div style="margin-top: 12px; font-size: 12px; color: var(--gray-500);">
+                                <strong>Action:</strong> Clique bouton "Build 2 - Newsletter" → Loader → Résultat avec score 94/100
+                            </div>
+                        </div>
+
+                        <!-- ÉTAPE 2: VISUALIZER -->
+                        <div style="background: linear-gradient(135deg, rgba(139,92,246,0.15) 0%, rgba(139,92,246,0.05) 100%); border-radius: 12px; padding: 20px; margin: 16px 0; border-left: 4px solid var(--purple);">
+                            <h4 style="font-size: 14px; color: var(--purple); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                                <span style="background: var(--purple); color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px;">2</span>
+                                ⚙️ ÉTAPE 2: Visualizer (Comment ça marche)
+                            </h4>
+                            <p style="font-size: 13px; margin-bottom: 12px;"><strong>Fichier:</strong> <code>demo-site/n8n-visualizer.html</code> → Onglet Build 2 (2 sous-onglets: Segmentation + Welcome Email)</p>
+                            <div class="script-block" style="margin: 0;">
+                                <p>"Ce workflow fait de la <span class="highlight">micro-segmentation</span>. <span class="highlight">Enrichir</span> → <span class="highlight">Router</span> (5 segments) → <span class="highlight">Claude personnalisé</span> par segment → <span class="highlight">Scorer</span>. Et j'ai aussi un workflow <span class="highlight">Welcome Email avec FAL AI</span> pour générer des images."</p>
+                            </div>
+                            <div style="margin-top: 12px; font-size: 12px; color: var(--gray-500);">
+                                <strong>Action:</strong> Clique "▶ Exécuter" sur 2a puis montre le sous-onglet 2b (Welcome Email + FAL AI)
+                            </div>
+                        </div>
+
+                        <!-- ÉTAPE 3: IMPACT ATN -->
+                        <div style="background: linear-gradient(135deg, rgba(16,185,129,0.15) 0%, rgba(16,185,129,0.05) 100%); border-radius: 12px; padding: 20px; margin: 16px 0; border-left: 4px solid var(--success);">
+                            <h4 style="font-size: 14px; color: var(--success); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                                <span style="background: var(--success); color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px;">3</span>
+                                📊 ÉTAPE 3: Impact concret pour ATN
+                            </h4>
+                            <p style="font-size: 13px; margin-bottom: 12px;"><strong>Action:</strong> Scrolle vers le panel Impact Build 2 dans <code>n8n-visualizer.html</code></p>
+
+                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 16px;">
+                                <div style="background: rgba(16,185,129,0.1); padding: 12px; border-radius: 8px; text-align: center;">
+                                    <div style="font-size: 22px; font-weight: 800; color: var(--success);">+125%</div>
+                                    <div style="font-size: 11px; opacity: 0.8;">Taux d'ouverture</div>
+                                    <div style="font-size: 10px; opacity: 0.6;">15-20% → 35-45%</div>
+                                </div>
+                                <div style="background: rgba(59,130,246,0.1); padding: 12px; border-radius: 8px; text-align: center;">
+                                    <div style="font-size: 22px; font-weight: 800; color: var(--blue);">10s</div>
+                                    <div style="font-size: 11px; opacity: 0.8;">Temps génération</div>
+                                    <div style="font-size: 10px; opacity: 0.6;">vs 2-4h humain</div>
+                                </div>
+                                <div style="background: rgba(139,92,246,0.1); padding: 12px; border-radius: 8px; text-align: center;">
+                                    <div style="font-size: 22px; font-weight: 800; color: var(--purple);">5</div>
+                                    <div style="font-size: 11px; opacity: 0.8;">Segments auto</div>
+                                    <div style="font-size: 10px; opacity: 0.6;">Famille, Honeymoon...</div>
+                                </div>
+                                <div style="background: rgba(201,168,76,0.1); padding: 12px; border-radius: 8px; text-align: center;">
+                                    <div style="font-size: 22px; font-weight: 800; color: var(--gold);">FAL AI</div>
+                                    <div style="font-size: 11px; opacity: 0.8;">Images générées</div>
+                                    <div style="font-size: 10px; opacity: 0.6;">Welcome Email</div>
+                                </div>
+                            </div>
+
+                            <div style="background: rgba(0,0,0,0.1); padding: 12px; border-radius: 8px;">
+                                <div style="font-size: 11px; font-weight: 600; margin-bottom: 8px; opacity: 0.7;">📊 BARRE DE COMPARAISON (pointer en bas)</div>
+                                <div style="display: flex; justify-content: space-between; font-size: 12px;">
+                                    <span><strong>Rédacteur:</strong> 25K XPF/article</span>
+                                    <span><strong>IA:</strong> 200 XPF/email</span>
+                                    <span style="color: var(--success); font-weight: 700;">≈ 5M XPF/an économisés</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="background: rgba(16,185,129,0.08); border-left: 3px solid var(--success); padding: 12px 16px; margin-top: 12px; border-radius: 0 8px 8px 0;">
+                            <strong style="color: var(--success); font-size: 12px;">💡 CONSEIL</strong>
+                            <p style="font-size: 13px; margin-top: 6px; opacity: 0.9;">Les exemples "lune de miel, famille" sont parlants pour ATN. Pointe les 4 cartes puis la barre.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2:10 - Build 3 -->
+                <div class="timeline-item">
+                    <div class="timeline-time">
+                        <div class="start">2:10</div>
+                        <div class="duration">30 sec</div>
+                    </div>
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <h3>
+                            Build 3: Content Factory SEO + GEO 2026
+                            <span class="badge demo">DÉMO LIVE</span>
+                        </h3>
+
+                        <!-- Lien avec l'offre d'emploi -->
+                        <div style="background: rgba(201,168,76,0.08); border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 16px;">📋</span>
+                            <span style="font-size: 13px;"><strong>VOUS VOULEZ:</strong> "Générer du contenu et augmenter le trafic qualifié" → Voici la solution</span>
+                        </div>
+
+                        <!-- ÉTAPE 1: UI DEMO -->
+                        <div style="background: linear-gradient(135deg, rgba(59,130,246,0.15) 0%, rgba(59,130,246,0.05) 100%); border-radius: 12px; padding: 20px; margin: 16px 0; border-left: 4px solid var(--blue);">
+                            <h4 style="font-size: 14px; color: var(--blue); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                                <span style="background: var(--blue); color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px;">1</span>
+                                🖥️ ÉTAPE 1: Démonstration UI
+                            </h4>
+                            <p style="font-size: 13px; margin-bottom: 12px;"><strong>Fichier:</strong> <code>demo-site/blog.html</code></p>
+                            <div class="script-block" style="margin: 0;">
+                                <p>"Voici les articles générés automatiquement... Le <span class="highlight">GEO</span>, c'est le Generative Engine Optimization. Quand quelqu'un demande à ChatGPT ou Perplexity 'meilleure compagnie pour Tahiti'... <span class="highlight">Air Tahiti Nui apparaît en premier</span>."</p>
+                            </div>
+                            <div style="margin-top: 12px; font-size: 12px; color: var(--gray-500);">
+                                <strong>Action:</strong> Scroll pour montrer les articles avec les badges Score SEO/GEO
+                            </div>
+                        </div>
+
+                        <!-- ÉTAPE 2: VISUALIZER -->
+                        <div style="background: linear-gradient(135deg, rgba(139,92,246,0.15) 0%, rgba(139,92,246,0.05) 100%); border-radius: 12px; padding: 20px; margin: 16px 0; border-left: 4px solid var(--purple);">
+                            <h4 style="font-size: 14px; color: var(--purple); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                                <span style="background: var(--purple); color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px;">2</span>
+                                ⚙️ ÉTAPE 2: Visualizer (Comment ça marche)
+                            </h4>
+                            <p style="font-size: 13px; margin-bottom: 12px;"><strong>Fichier:</strong> <code>demo-site/n8n-visualizer.html</code> → Onglet Build 3</p>
+                            <div class="script-block" style="margin: 0;">
+                                <p>"<span class="highlight">Claude SEO Expert</span> génère l'article → <span class="highlight">Analyse SEO+GEO</span> → <span class="highlight">FAL AI</span> génère une image → <span class="highlight">Airtable</span> stocke tout."</p>
+                            </div>
+                            <div style="margin-top: 12px; font-size: 12px; color: var(--gray-500);">
+                                <strong>Action:</strong> Clique "▶ Exécuter" → Animation avec génération image FAL AI (Wait 10s)
+                            </div>
+                        </div>
+
+                        <!-- ÉTAPE 3: IMPACT ATN -->
+                        <div style="background: linear-gradient(135deg, rgba(16,185,129,0.15) 0%, rgba(16,185,129,0.05) 100%); border-radius: 12px; padding: 20px; margin: 16px 0; border-left: 4px solid var(--success);">
+                            <h4 style="font-size: 14px; color: var(--success); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                                <span style="background: var(--success); color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px;">3</span>
+                                📊 ÉTAPE 3: Impact concret pour ATN
+                            </h4>
+                            <p style="font-size: 13px; margin-bottom: 12px;"><strong>Action:</strong> Scrolle vers le panel Impact Build 3 dans <code>n8n-visualizer.html</code></p>
+
+                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 16px;">
+                                <div style="background: rgba(16,185,129,0.1); padding: 12px; border-radius: 8px; text-align: center;">
+                                    <div style="font-size: 22px; font-weight: 800; color: var(--success);">40%</div>
+                                    <div style="font-size: 11px; opacity: 0.8;">Recherches via IA</div>
+                                    <div style="font-size: 10px; opacity: 0.6;">Gartner 2026</div>
+                                </div>
+                                <div style="background: rgba(59,130,246,0.1); padding: 12px; border-radius: 8px; text-align: center;">
+                                    <div style="font-size: 22px; font-weight: 800; color: var(--blue);">1 min</div>
+                                    <div style="font-size: 11px; opacity: 0.8;">Temps génération</div>
+                                    <div style="font-size: 10px; opacity: 0.6;">vs 2 jours rédaction</div>
+                                </div>
+                                <div style="background: rgba(139,92,246,0.1); padding: 12px; border-radius: 8px; text-align: center;">
+                                    <div style="font-size: 22px; font-weight: 800; color: var(--purple);">12-20</div>
+                                    <div style="font-size: 11px; opacity: 0.8;">Articles/mois</div>
+                                    <div style="font-size: 10px; opacity: 0.6;">vs 2-4 humain</div>
+                                </div>
+                                <div style="background: rgba(201,168,76,0.1); padding: 12px; border-radius: 8px; text-align: center;">
+                                    <div style="font-size: 22px; font-weight: 800; color: var(--gold);">90+</div>
+                                    <div style="font-size: 11px; opacity: 0.8;">Score SEO garanti</div>
+                                    <div style="font-size: 10px; opacity: 0.6;">+ Score GEO</div>
+                                </div>
+                            </div>
+
+                            <div style="background: rgba(0,0,0,0.1); padding: 12px; border-radius: 8px;">
+                                <div style="font-size: 11px; font-weight: 600; margin-bottom: 8px; opacity: 0.7;">📊 BARRE DE COMPARAISON (pointer en bas)</div>
+                                <div style="display: flex; justify-content: space-between; font-size: 12px;">
+                                    <span><strong>Article agence:</strong> 50-100K XPF</span>
+                                    <span><strong>Article IA + image:</strong> 500 XPF</span>
+                                    <span style="color: var(--success); font-weight: 700;">≈ 8M XPF/an économisés</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="background: rgba(16,185,129,0.08); border-left: 3px solid var(--success); padding: 12px 16px; margin-top: 12px; border-radius: 0 8px 8px 0;">
+                            <strong style="color: var(--success); font-size: 12px;">💡 CONSEIL</strong>
+                            <p style="font-size: 13px; margin-top: 6px; opacity: 0.9;">"GEO" est nouveau. "Quand quelqu'un demande à ChatGPT..." rend ça concret. Pointe les 4 cartes puis la barre.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2:40 - Build 4 -->
+                <div class="timeline-item">
+                    <div class="timeline-time">
+                        <div class="start">2:40</div>
+                        <div class="duration">50 sec</div>
+                    </div>
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <h3>
+                            Build 4: Dashboard ROI Temps Réel
+                            <span class="badge demo">DÉMO LIVE</span>
+                        </h3>
+
+                        <!-- Lien avec l'offre d'emploi -->
+                        <div style="background: rgba(44,204,212,0.08); border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 16px;">📋</span>
+                            <span style="font-size: 13px;"><strong>VOUS VOULEZ:</strong> "Une logique ROIste et data-driven" → Voici la solution</span>
+                        </div>
+
+                        <!-- ÉTAPE 1: UI DEMO -->
+                        <div style="background: linear-gradient(135deg, rgba(59,130,246,0.15) 0%, rgba(59,130,246,0.05) 100%); border-radius: 12px; padding: 20px; margin: 16px 0; border-left: 4px solid var(--blue);">
+                            <h4 style="font-size: 14px; color: var(--blue); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                                <span style="background: var(--blue); color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px;">1</span>
+                                🖥️ ÉTAPE 1: Démonstration UI
+                            </h4>
+                            <p style="font-size: 13px; margin-bottom: 12px;"><strong>Fichier:</strong> <code>demo-site/dashboard.html</code> (appuie D pour mode démo)</p>
+                            <div class="script-block" style="margin: 0;">
+                                <p>"Enfin, la '<span class="highlight">logique ROIste</span>' que vous mentionnez dans l'offre. Voici le tableau de bord temps réel. Toutes les métriques des 4 Builds remontent ici automatiquement."</p>
+                            </div>
+                            <div style="margin-top: 12px; font-size: 12px; color: var(--gray-500);">
+                                <strong>Action:</strong> Appuie D → Chiffres s'animent → Clique "Build 4 - Analyse ROI" → Alertes s'affichent
+                            </div>
+                        </div>
+
+                        <!-- ÉTAPE 2: VISUALIZER -->
+                        <div style="background: linear-gradient(135deg, rgba(139,92,246,0.15) 0%, rgba(139,92,246,0.05) 100%); border-radius: 12px; padding: 20px; margin: 16px 0; border-left: 4px solid var(--purple);">
+                            <h4 style="font-size: 14px; color: var(--purple); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                                <span style="background: var(--purple); color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px;">2</span>
+                                ⚙️ ÉTAPE 2: Visualizer (Comment ça marche)
+                            </h4>
+                            <p style="font-size: 13px; margin-bottom: 12px;"><strong>Fichier:</strong> <code>demo-site/n8n-visualizer.html</code> → Onglet Build 4</p>
+                            <div class="script-block" style="margin: 0;">
+                                <p>"<span class="highlight">Analyse Avancée</span> → calcul Z-Score sur 4 mois → <span class="highlight">Claude Analyste</span> génère des recommandations → <span class="highlight">Airtable</span> pour l'historique."</p>
+                            </div>
+                            <div style="margin-top: 12px; font-size: 12px; color: var(--gray-500);">
+                                <strong>Action:</strong> Clique "▶ Exécuter" → Logs montrent "Tokyo -15% ALERTE" et "Auckland +7%"
+                            </div>
+                        </div>
+
+                        <!-- ÉTAPE 3: IMPACT ATN + SÉCURITÉ -->
+                        <div style="background: linear-gradient(135deg, rgba(16,185,129,0.15) 0%, rgba(16,185,129,0.05) 100%); border-radius: 12px; padding: 20px; margin: 16px 0; border-left: 4px solid var(--success);">
+                            <h4 style="font-size: 14px; color: var(--success); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                                <span style="background: var(--success); color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px;">3</span>
+                                📊 ÉTAPE 3: Impact + Sécurité n8n
+                            </h4>
+                            <p style="font-size: 13px; margin-bottom: 12px;"><strong>Action:</strong> Scrolle vers le panel Impact Build 4 dans <code>n8n-visualizer.html</code></p>
+
+                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 16px;">
+                                <div style="background: rgba(16,185,129,0.1); padding: 12px; border-radius: 8px; text-align: center;">
+                                    <div style="font-size: 22px; font-weight: 800; color: var(--success);">⚡</div>
+                                    <div style="font-size: 11px; opacity: 0.8;">Détection temps réel</div>
+                                    <div style="font-size: 10px; opacity: 0.6;">vs 24-48h manuel</div>
+                                </div>
+                                <div style="background: rgba(59,130,246,0.1); padding: 12px; border-radius: 8px; text-align: center;">
+                                    <div style="font-size: 22px; font-weight: 800; color: var(--blue);">-5h</div>
+                                    <div style="font-size: 11px; opacity: 0.8;">Reporting/semaine</div>
+                                    <div style="font-size: 10px; opacity: 0.6;">Plus d'Excel</div>
+                                </div>
+                                <div style="background: rgba(139,92,246,0.1); padding: 12px; border-radius: 8px; text-align: center;">
+                                    <div style="font-size: 22px; font-weight: 800; color: var(--purple);">4</div>
+                                    <div style="font-size: 11px; opacity: 0.8;">Marchés surveillés</div>
+                                    <div style="font-size: 10px; opacity: 0.6;">TYO, PAR, LAX, AKL</div>
+                                </div>
+                                <div style="background: rgba(201,168,76,0.1); padding: 12px; border-radius: 8px; text-align: center;">
+                                    <div style="font-size: 22px; font-weight: 800; color: var(--gold);">Z-Score</div>
+                                    <div style="font-size: 11px; opacity: 0.8;">Analyse statistique</div>
+                                    <div style="font-size: 10px; opacity: 0.6;">4 mois de données</div>
+                                </div>
+                            </div>
+
+                            <div style="background: rgba(0,0,0,0.1); padding: 12px; border-radius: 8px; margin-bottom: 16px;">
+                                <div style="font-size: 11px; font-weight: 600; margin-bottom: 8px; opacity: 0.7;">📊 BARRE DE COMPARAISON (pointer en bas)</div>
+                                <div style="display: flex; justify-content: space-between; font-size: 12px;">
+                                    <span><strong>Analyste temps plein:</strong> 400K XPF/mois</span>
+                                    <span><strong>Analyste IA:</strong> 120K XPF/mois</span>
+                                    <span style="color: var(--success); font-weight: 700;">≈ 3M XPF/an économisés</span>
+                                </div>
+                            </div>
+
+                            <!-- PANEL SÉCURITÉ ROUGE -->
+                            <div style="background: linear-gradient(135deg, rgba(239,68,68,0.15) 0%, rgba(239,68,68,0.05) 100%); padding: 16px; border-radius: 12px; border: 1px solid rgba(239,68,68,0.3);">
+                                <div style="font-size: 12px; font-weight: 700; color: var(--danger); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                                    🔒 BONUS SÉCURITÉ n8n - Scrolle vers le panel rouge
+                                </div>
+                                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;">
+                                    <div style="background: rgba(239,68,68,0.08); padding: 10px; border-radius: 6px; text-align: center;">
+                                        <div style="font-size: 18px; font-weight: 800; color: var(--danger);">70%</div>
+                                        <div style="font-size: 10px;">craignent Shadow AI</div>
+                                        <div style="font-size: 9px; opacity: 0.6;">Gartner 2024</div>
+                                    </div>
+                                    <div style="background: rgba(239,68,68,0.08); padding: 10px; border-radius: 6px; text-align: center;">
+                                        <div style="font-size: 18px; font-weight: 800; color: var(--danger);">🏠</div>
+                                        <div style="font-size: 10px;">Hébergement privé</div>
+                                        <div style="font-size: 9px; opacity: 0.6;">Vos serveurs</div>
+                                    </div>
+                                    <div style="background: rgba(239,68,68,0.08); padding: 10px; border-radius: 6px; text-align: center;">
+                                        <div style="font-size: 18px; font-weight: 800; color: var(--danger);">💻</div>
+                                        <div style="font-size: 10px;">Open-source</div>
+                                        <div style="font-size: 9px; opacity: 0.6;">Pas de lock-in</div>
+                                    </div>
+                                    <div style="background: rgba(239,68,68,0.08); padding: 10px; border-radius: 6px; text-align: center;">
+                                        <div style="font-size: 18px; font-weight: 800; color: var(--danger);">0</div>
+                                        <div style="font-size: 10px;">Données vers tiers</div>
+                                        <div style="font-size: 9px; opacity: 0.6;">Souveraineté</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3:15 - LE BONUS -->
+                <div class="timeline-item">
+                    <div class="timeline-time">
+                        <div class="start">3:15</div>
+                        <div class="duration">30 sec</div>
+                    </div>
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <h3>
+                            Le Bonus + Pricing
+                            <span class="badge price">PRICING</span>
+                        </h3>
+                        <div class="script-block">
+                            <h4>Ce que tu dis</h4>
+                            <p>"Maintenant, le bonus. Ces 4 solutions... elles tournent <span class="highlight">24/7</span>. Sans congés. Sans charges sociales. Et sans risque qu'un employé utilise ChatGPT en cachette avec vos données confidentielles. <span class="highlight">[PAUSE]</span> Une équipe qui ferait ce travail coûterait <span class="highlight">plus de 50 millions de francs par an</span>. Ces automatisations : <span class="highlight">4,8 millions en setup... plus 360 000 francs par mois</span>. Soit une économie d'<span class="highlight">environ 35 millions de francs dès la première année</span>."</p>
+                        </div>
+
+                        <!-- Bullet points détaillés -->
+                        <div style="background: rgba(201,168,76,0.08); border-radius: 12px; padding: 20px; margin: 16px 0;">
+                            <h4 style="font-size: 13px; color: var(--gold); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;">📋 Déroulé Étape par Étape</h4>
+                            <ul style="list-style: none; font-size: 14px; line-height: 2;">
+                                <li>☐ <strong>3:15</strong> - Regarde la caméra - "Maintenant, le bonus"</li>
+                                <li>☐ <strong>3:18</strong> - "24/7, sans congés, sans charges..." (avantages machine)</li>
+                                <li>☐ <strong>3:22</strong> - "Sans risque ChatGPT en cachette" (argument Shadow AI)</li>
+                                <li>☐ <strong>3:28</strong> - Pause importante avant les chiffres</li>
+                                <li>☐ <strong>3:30</strong> - "50 millions de francs par an" (ancrage haut)</li>
+                                <li>☐ <strong>3:35</strong> - "4,8 millions setup + 360 000/mois" (ton prix)</li>
+                                <li>☐ <strong>3:40</strong> - "environ 35 millions d'économies" (la punchline)</li>
+                            </ul>
+                        </div>
+
+                        <div class="screen-action">
+                            <div class="icon">💰</div>
+                            <div class="text"><strong>À l'écran:</strong> builds-presentation.html section ROI avec les cards "Avant/Après"</div>
+                        </div>
+
+                        <div style="background: rgba(16,185,129,0.08); border-left: 3px solid var(--success); padding: 12px 16px; margin-top: 12px; border-radius: 0 8px 8px 0;">
+                            <strong style="color: var(--success); font-size: 12px;">💡 CONSEIL COACH</strong>
+                            <p style="font-size: 13px; margin-top: 6px; opacity: 0.9;">L'ancrage "50M XPF" avant de donner ton prix crée un contraste psychologique. Ne dis JAMAIS ton prix en premier.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3:30 - CLOSING & PRIX -->
+                <div class="timeline-item">
+                    <div class="timeline-time">
+                        <div class="start">3:30</div>
+                        <div class="duration">45 sec</div>
+                    </div>
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <h3>
+                            Conclusion & Appel à l'Action
+                            <span class="badge cta">CLOSING</span>
+                        </h3>
+
+                        <div class="screen-action" style="margin-bottom: 16px;">
+                            <div class="icon">🖥️</div>
+                            <div class="text"><strong>Support visuel:</strong> <code>demo-site/n8n-visualizer.html</code> → Onglet "Conclusion" (5ème onglet vert)</div>
+                        </div>
+
+                        <div class="script-block">
+                            <h4>Ce que tu dis</h4>
+                            <p>"Pour résumer. Chaque Build résout un <span class="highlight">problème de votre offre d'emploi</span>."</p>
+                            <p style="margin-top: 8px;">"Équipe humaine 24/7 multilingue: <span class="highlight">45 à 55 millions XPF</span> par an. Solution PACIFIK'AI: environ <span class="highlight">15 millions XPF</span>. Économies: <span class="highlight">30 à 40 millions XPF</span>."</p>
+                            <p style="margin-top: 8px;">"Et le bonus: 24/7 sans congés, 5 langues instantanément, zéro fuite de données, scalable."</p>
+                        </div>
+
+                        <!-- Évolutions possibles -->
+                        <div style="background: rgba(139,92,246,0.08); border-radius: 12px; padding: 16px; margin: 16px 0; border-left: 4px solid var(--purple);">
+                            <h4 style="font-size: 13px; color: var(--purple); margin-bottom: 8px;">🔮 Évolutions possibles</h4>
+                            <div class="script-block" style="margin: 0; background: transparent; padding: 0;">
+                                <p>"Et ce n'est que le début. <span class="highlight">Tout est personnalisable</span>. Vous avez un autre process manuel répétitif? Gestion des réclamations, social media, pricing dynamique... Je suis à l'écoute de vos besoins spécifiques."</p>
+                            </div>
+                        </div>
+
+                        <!-- Investissement -->
+                        <div style="background: rgba(16,185,129,0.08); border-radius: 12px; padding: 16px; margin: 16px 0; border-left: 4px solid var(--success);">
+                            <h4 style="font-size: 13px; color: var(--success); margin-bottom: 8px;">📊 Investissement & ROI</h4>
+                            <div class="script-block" style="margin: 0; background: transparent; padding: 0;">
+                                <p>"Setup initial: <span class="highlight">4,8 millions XPF</span>. Coût mensuel: environ <span class="highlight">360 000 XPF</span>. ROI atteint en <span class="highlight">moins de 2 mois</span>."</p>
+                            </div>
+                        </div>
+
+                        <!-- CTA Final -->
+                        <div style="background: rgba(201,168,76,0.08); border-radius: 12px; padding: 16px; margin: 16px 0; border-left: 4px solid var(--gold);">
+                            <h4 style="font-size: 13px; color: var(--gold); margin-bottom: 8px;">🎯 Appel à l'action</h4>
+                            <div class="script-block" style="margin: 0; background: transparent; padding: 0;">
+                                <p>"Je ne cherche pas à vous vendre du rêve. Je vous propose une <span class="highlight">infrastructure</span>."</p>
+                                <p style="margin-top: 8px;">"Si ce n'est pas le bon moment, gardez cette vidéo. L'idée est à vous."</p>
+                                <p style="margin-top: 8px;">"Mais si vous voulez activer ce pilote pour sécuriser votre haute saison, <span class="highlight">contactez-moi directement par mail ou par téléphone</span>."</p>
+                                <p style="margin-top: 8px;">"Je serais ravi de discuter et de <span class="highlight">me déplacer</span> pour en parler de vive voix."</p>
+                                <p style="margin-top: 12px; font-size: 18px; text-align: center;"><strong>Mauruuru 🌺</strong></p>
+                            </div>
+                        </div>
+
+                        <!-- Bullet points détaillés -->
+                        <div style="background: rgba(16,185,129,0.08); border-radius: 12px; padding: 20px; margin: 16px 0;">
+                            <h4 style="font-size: 13px; color: var(--success); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;">📋 Déroulé Étape par Étape</h4>
+                            <ul style="list-style: none; font-size: 14px; line-height: 2;">
+                                <li>☐ <strong>3:30</strong> - Clique onglet "Conclusion" → Pointe les 4 cartes des Builds</li>
+                                <li>☐ <strong>3:35</strong> - Pointe le comparatif coûts au centre (45-55M → 15M)</li>
+                                <li>☐ <strong>3:40</strong> - Pointe la box verte "Économies" (30-40M XPF)</li>
+                                <li>☐ <strong>3:45</strong> - Scrolle vers "Le Bonus" → 24/7, 5 langues, 0 fuite, scalable</li>
+                                <li>☐ <strong>3:50</strong> - Scrolle vers "Évolutions possibles" → Personnalisable</li>
+                                <li>☐ <strong>3:55</strong> - Scrolle vers "Investissement & ROI" → 4,8M / 360K / &lt;2 mois</li>
+                                <li>☐ <strong>4:00</strong> - PAUSE → Regarde la caméra, ton calme et confiant</li>
+                                <li>☐ <strong>4:05</strong> - Pointe les 2 options en bas</li>
+                                <li>☐ <strong>4:10</strong> - "Contactez-moi... Je me déplace volontiers"</li>
+                                <li>☐ <strong>4:15</strong> - Souris naturellement → "Mauruuru" 🌺</li>
+                            </ul>
+                        </div>
+
+                        <div class="screen-action">
+                            <div class="icon">👋</div>
+                            <div class="text"><strong>Fin:</strong> Regarde la caméra, souris naturellement, "Mauruuru"</div>
+                        </div>
+
+                        <div style="background: rgba(139,92,246,0.08); border-left: 3px solid var(--purple); padding: 12px 16px; margin-top: 12px; border-radius: 0 8px 8px 0;">
+                            <strong style="color: var(--purple); font-size: 12px;">🧠 PSYCHOLOGIE</strong>
+                            <p style="font-size: 13px; margin-top: 6px; opacity: 0.9;">La "porte de sortie" ("gardez cette vidéo, l'idée est à vous") AUGMENTE le taux de réponse. Ça enlève la pression. L'offre de se déplacer montre ton engagement local.</p>
+                        </div>
+
+                        <div style="background: rgba(16,185,129,0.08); border-left: 3px solid var(--success); padding: 12px 16px; margin-top: 12px; border-radius: 0 8px 8px 0;">
+                            <strong style="color: var(--success); font-size: 12px;">💡 CONSEIL COACH</strong>
+                            <p style="font-size: 13px; margin-top: 6px; opacity: 0.9;">"Mauruuru" en tahitien = local touch. "Me déplacer" montre que tu es DU TERRITOIRE, pas un prestataire distant. Différenciateur clé.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Plan vs Reality Comparison -->
+    <section class="comparison-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Plan Initial vs Réalisations</h2>
+                <p>Ce qui était prévu dans le plan d'action vs ce qu'on a livré (avec améliorations)</p>
+            </div>
+
+            <div class="comparison-table">
+                <div class="comparison-header">
+                    <div>Fonctionnalité</div>
+                    <div>Plan Initial</div>
+                    <div>Livré</div>
+                    <div>Amélioration</div>
+                </div>
+
+                <div class="comparison-row">
+                    <div class="feature">Build 1 - Chatbot</div>
+                    <div class="plan">24/7 basique</div>
+                    <div class="actual">Multilingue 5 langues</div>
+                    <div><span class="improvement">+400%</span></div>
+                </div>
+
+                <div class="comparison-row">
+                    <div class="feature">Langues supportées</div>
+                    <div class="plan">Français + Anglais</div>
+                    <div class="actual">FR, EN, ES, JP, CN</div>
+                    <div><span class="improvement">+3 langues</span></div>
+                </div>
+
+                <div class="comparison-row">
+                    <div class="feature">Build 3 - SEO</div>
+                    <div class="plan">SEO classique</div>
+                    <div class="actual">SEO + GEO 2026</div>
+                    <div><span class="improvement">+GEO</span></div>
+                </div>
+
+                <div class="comparison-row">
+                    <div class="feature">Dashboard</div>
+                    <div class="plan">Métriques statiques</div>
+                    <div class="actual">Temps réel + Mode Démo</div>
+                    <div><span class="improvement">Live</span></div>
+                </div>
+
+                <div class="comparison-row">
+                    <div class="feature">Connexion Airtable</div>
+                    <div class="plan">Non prévu</div>
+                    <div class="actual">API live (refresh 30s)</div>
+                    <div><span class="improvement">Bonus</span></div>
+                </div>
+
+                <div class="comparison-row">
+                    <div class="feature">Automatisations futures</div>
+                    <div class="plan">4 Builds</div>
+                    <div class="actual">4 Builds + 12 opportunités</div>
+                    <div><span class="improvement">+12</span></div>
+                </div>
+
+                <div class="comparison-row">
+                    <div class="feature">Page Blog</div>
+                    <div class="plan">Non prévu</div>
+                    <div class="actual">11 articles + newsletter</div>
+                    <div><span class="improvement">Bonus</span></div>
+                </div>
+
+                <div class="comparison-row">
+                    <div class="feature">Stratégie Pricing</div>
+                    <div class="plan">Simple</div>
+                    <div class="actual">Analyse complète France vs PF</div>
+                    <div><span class="improvement">Pro</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- URLs Reference -->
+    <section class="urls-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>URLs de Référence</h2>
+                <p>Liens à inclure dans la description Loom</p>
+            </div>
+
+            <div class="url-grid">
+                <div class="url-card">
+                    <h4>🏠 Hub Démo (Page d'accueil)</h4>
+                    <div class="url"><a href="https://atn-demo-pacifikai.vercel.app" target="_blank">atn-demo-pacifikai.vercel.app</a></div>
+                </div>
+                <div class="url-card">
+                    <h4>🌐 Site Démo + Chatbot</h4>
+                    <div class="url"><a href="https://atn-demo-pacifikai.vercel.app/index.html" target="_blank">atn-demo-pacifikai.vercel.app/index.html</a></div>
+                </div>
+                <div class="url-card">
+                    <h4>📊 Dashboard ROI</h4>
+                    <div class="url"><a href="https://atn-demo-pacifikai.vercel.app/dashboard.html" target="_blank">atn-demo-pacifikai.vercel.app/dashboard.html</a></div>
+                </div>
+                <div class="url-card">
+                    <h4>📄 Présentation Commerciale</h4>
+                    <div class="url"><a href="https://atn-demo-pacifikai.vercel.app/builds-presentation.html" target="_blank">atn-demo-pacifikai.vercel.app/builds-presentation.html</a></div>
+                </div>
+                <div class="url-card">
+                    <h4>📝 Blog SEO/GEO</h4>
+                    <div class="url"><a href="https://atn-demo-pacifikai.vercel.app/blog.html" target="_blank">atn-demo-pacifikai.vercel.app/blog.html</a></div>
+                </div>
+                <div class="url-card">
+                    <h4>📧 Mon Contact</h4>
+                    <div class="url"><a href="mailto:jordy@pacifikai.com">jordy@pacifikai.com</a></div>
+                </div>
+            </div>
+
+            <!-- Contacts ATN -->
+            <div style="margin-top: 40px; background: rgba(255,255,255,0.08); border-radius: 16px; padding: 32px;">
+                <h3 style="font-size: 20px; margin-bottom: 24px; display: flex; align-items: center; gap: 10px;">
+                    🎯 Contacts Air Tahiti Nui - Équipe Marketing
+                </h3>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px;">
+
+                    <!-- Torea Colas -->
+                    <div style="background: rgba(0,0,0,0.2); border-radius: 12px; padding: 20px;">
+                        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                            <div style="width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--gold)); display: flex; align-items: center; justify-content: center; font-size: 20px;">TC</div>
+                            <div>
+                                <h4 style="font-size: 16px; margin: 0;">Torea Colas</h4>
+                                <span style="font-size: 12px; opacity: 0.7;">Directeur Marketing & Communication</span>
+                            </div>
+                        </div>
+                        <div style="font-size: 13px; opacity: 0.9;">
+                            <div style="margin-bottom: 8px;">📧 <strong>Email:</strong> tcolas@airtahitinui.pf</div>
+                            <div style="margin-bottom: 8px;">📞 <strong>Tél:</strong> +689 87 72 1xxx (partiel)</div>
+                            <div>🔗 <a href="https://www.linkedin.com/in/torea-colas-1083346a/" target="_blank" style="color: var(--primary);">LinkedIn</a></div>
+                        </div>
+                        <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 11px; opacity: 0.6;">
+                            Depuis 2007 • Ex-Tahiti Tourisme • IUP Annecy
+                        </div>
+                    </div>
+
+                    <!-- Lou Leopold -->
+                    <div style="background: rgba(0,0,0,0.2); border-radius: 12px; padding: 20px;">
+                        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                            <div style="width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, var(--purple), var(--pink)); display: flex; align-items: center; justify-content: center; font-size: 20px;">LL</div>
+                            <div>
+                                <h4 style="font-size: 16px; margin: 0;">Lou Leopold</h4>
+                                <span style="font-size: 12px; opacity: 0.7;">Vice President Marketing</span>
+                            </div>
+                        </div>
+                        <div style="font-size: 13px; opacity: 0.9;">
+                            <div style="margin-bottom: 8px;">📧 <strong>Email:</strong> lleopold@airtahitinui.com</div>
+                            <div style="margin-bottom: 8px;">📞 <strong>Tél:</strong> (310) xxx-xxxx (Los Angeles)</div>
+                            <div>📍 <strong>Base:</strong> Papeete + LA</div>
+                        </div>
+                        <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 11px; opacity: 0.6;">
+                            Manage l'équipe Marketing (12 personnes)
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Contact général -->
+                <div style="margin-top: 24px; background: rgba(44,204,212,0.1); border: 1px solid rgba(44,204,212,0.3); border-radius: 12px; padding: 20px;">
+                    <h4 style="font-size: 14px; color: var(--primary); margin-bottom: 12px;">📞 Siège Papeete - Contact Direct</h4>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; font-size: 13px;">
+                        <div>
+                            <strong>Téléphone:</strong><br>
+                            +689 40 47 67 87
+                        </div>
+                        <div>
+                            <strong>Adresse:</strong><br>
+                            Immeuble Dexter, Rue Gauguin<br>
+                            BP 1673, 98713 Papeete
+                        </div>
+                        <div>
+                            <strong>Horaires:</strong><br>
+                            Lun-Jeu: 8h-12h / 13h-16h30<br>
+                            Ven: 8h-12h / 13h-16h15
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stratégie de contact -->
+                <div style="margin-top: 24px; padding: 16px; background: rgba(255,107,0,0.1); border-left: 4px solid var(--orange); border-radius: 0 8px 8px 0;">
+                    <h4 style="font-size: 14px; color: var(--orange); margin-bottom: 8px;">💡 Stratégie recommandée</h4>
+                    <ol style="font-size: 13px; margin: 0; padding-left: 20px; opacity: 0.9;">
+                        <li><strong>Torea Colas</strong> = Cible principale (basé à Papeete, décideur local)</li>
+                        <li>Envoie la vidéo Loom + email à <code>tcolas@airtahitinui.pf</code></li>
+                        <li>CC <strong>Lou Leopold</strong> pour visibilité US (si besoin budget corporate)</li>
+                        <li>Follow-up par téléphone +689 40 47 67 87 après 48h si pas de réponse</li>
+                    </ol>
+                </div>
+            </div>
+            </div><!-- End timeline-view -->
+        </div>
+    </section>
+
+    <!-- Email Template -->
+    <section class="email-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Email de Prospection</h2>
+                <p>À envoyer avec le lien Loom après l'enregistrement</p>
+            </div>
+
+            <div class="email-template">
+                <div class="email-header">
+                    <div class="email-field">
+                        <span class="label">À:</span>
+                        <span class="value">tcolas@airtahitinui.pf (Torea Colas - Dir. Marketing)</span>
+                    </div>
+                    <div class="email-field">
+                        <span class="label">Objet:</span>
+                        <span class="value">Candidature ? Non. Infrastructure IA pour Air Tahiti Nui (Démo incluse)</span>
+                    </div>
+                </div>
+                <div class="email-body">
+                    <p>Bonjour Torea,</p>
+
+                    <p>J'ai vu votre offre pour le poste de Chargé E-marketing. Vous cherchez à allier <strong>ROI</strong>, <strong>Contenu</strong> et <strong>IA</strong>.</p>
+
+                    <p>Recruter est une option. Mais pour assurer un service 24/7 en 5 langues sans exploser la masse salariale, l'automatisation est la seule voie réaliste.</p>
+
+                    <p>Au lieu de postuler, j'ai construit un <strong>prototype fonctionnel</strong> sur vos données (Chatbot multilingue, Analyse ROI, SEO).</p>
+
+                    <p><strong>J'ai enregistré une vidéo de 4 minutes pour vous montrer le système en action :</strong></p>
+
+                    <a href="https://atn-demo-pacifikai.vercel.app" class="cta-link" target="_blank">👉 Voir la démo →</a>
+
+                    <p style="font-size: 13px; color: #6B7280; margin-top: 8px;"><em>Spoiler : Je vous montre comment économiser 40M XPF par an par rapport à une structuration classique.</em></p>
+
+                    <p>Si l'approche vous parle, on peut en discuter 15 min jeudi matin.</p>
+
+                    <div class="signature">
+                        <strong>Jordy Banks</strong><br>
+                        Fondateur, PACIFIK'AI<br>
+                        Automatisation IA pour les entreprises polynésiennes<br>
+                        jordy@pacifikai.com
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technical Recording Checklist -->
+    <section class="checklist-section" style="background: linear-gradient(135deg, #1a1a2e 0%, var(--gray-900) 100%); color: white;">
+        <div class="container">
+            <div class="section-title">
+                <h2 style="color: white;">Checklist Technique Enregistrement</h2>
+                <p style="color: rgba(255,255,255,0.7);">Recommandations expert pour une vidéo pro</p>
+            </div>
+
+            <div class="checklist-grid">
+                <div class="checklist-card" style="background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1);">
+                    <h3 style="color: white;">🖥️ Préparation Écran</h3>
+                    <div class="checklist-item" style="border-color: rgba(255,255,255,0.1);">
+                        <div class="check">✓</div>
+                        <div class="content">
+                            <strong style="color: white;">Nettoyer le bureau</strong>
+                            <span style="color: rgba(255,255,255,0.6);">Ferme les apps inutiles, vide le dock, cache les fichiers perso</span>
+                        </div>
+                    </div>
+                    <div class="checklist-item" style="border-color: rgba(255,255,255,0.1);">
+                        <div class="check">✓</div>
+                        <div class="content">
+                            <strong style="color: white;">Zoom navigateur à 110%</strong>
+                            <span style="color: rgba(255,255,255,0.6);">Les textes seront plus lisibles sur mobile</span>
+                        </div>
+                    </div>
+                    <div class="checklist-item" style="border-color: rgba(255,255,255,0.1);">
+                        <div class="check">✓</div>
+                        <div class="content">
+                            <strong style="color: white;">Mode Focus activé</strong>
+                            <span style="color: rgba(255,255,255,0.6);">Zéro notification pendant l'enregistrement</span>
+                        </div>
+                    </div>
+                    <div class="checklist-item" style="border-color: transparent;">
+                        <div class="check">✓</div>
+                        <div class="content">
+                            <strong style="color: white;">Onglets pré-chargés</strong>
+                            <span style="color: rgba(255,255,255,0.6);">Évite les temps de chargement visibles</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="checklist-card" style="background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1);">
+                    <h3 style="color: white;">🎙️ Audio & Voix</h3>
+                    <div class="checklist-item" style="border-color: rgba(255,255,255,0.1);">
+                        <div class="check">✓</div>
+                        <div class="content">
+                            <strong style="color: white;">Test micro avant</strong>
+                            <span style="color: rgba(255,255,255,0.6);">Enregistre 10 sec et réécoute</span>
+                        </div>
+                    </div>
+                    <div class="checklist-item" style="border-color: rgba(255,255,255,0.1);">
+                        <div class="check">✓</div>
+                        <div class="content">
+                            <strong style="color: white;">Airpods ou micro externe</strong>
+                            <span style="color: rgba(255,255,255,0.6);">Jamais le micro intégré du Mac</span>
+                        </div>
+                    </div>
+                    <div class="checklist-item" style="border-color: rgba(255,255,255,0.1);">
+                        <div class="check">✓</div>
+                        <div class="content">
+                            <strong style="color: white;">Parle normalement</strong>
+                            <span style="color: rgba(255,255,255,0.6);">Pas de voix "présentation" artificielle</span>
+                        </div>
+                    </div>
+                    <div class="checklist-item" style="border-color: transparent;">
+                        <div class="check">✓</div>
+                        <div class="content">
+                            <strong style="color: white;">Silences OK</strong>
+                            <span style="color: rgba(255,255,255,0.6);">1-2 sec de pause = naturel, pas besoin de couper</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="checklist-card" style="background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1);">
+                    <h3 style="color: white;">📸 Visuel & Cadrage</h3>
+                    <div class="checklist-item" style="border-color: rgba(255,255,255,0.1);">
+                        <div class="check">✓</div>
+                        <div class="content">
+                            <strong style="color: white;">Lumière devant toi</strong>
+                            <span style="color: rgba(255,255,255,0.6);">Fenêtre ou lampe face au visage</span>
+                        </div>
+                    </div>
+                    <div class="checklist-item" style="border-color: rgba(255,255,255,0.1);">
+                        <div class="check">✓</div>
+                        <div class="content">
+                            <strong style="color: white;">Webcam au niveau des yeux</strong>
+                            <span style="color: rgba(255,255,255,0.6);">Suréléve le laptop si nécessaire</span>
+                        </div>
+                    </div>
+                    <div class="checklist-item" style="border-color: rgba(255,255,255,0.1);">
+                        <div class="check">✓</div>
+                        <div class="content">
+                            <strong style="color: white;">Fond neutre</strong>
+                            <span style="color: rgba(255,255,255,0.6);">Pas de bazar visible derrière</span>
+                        </div>
+                    </div>
+                    <div class="checklist-item" style="border-color: transparent;">
+                        <div class="check">✓</div>
+                        <div class="content">
+                            <strong style="color: white;">Bulle Loom en haut à droite</strong>
+                            <span style="color: rgba(255,255,255,0.6);">Ne cache pas le contenu important</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="checklist-card" style="background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1);">
+                    <h3 style="color: white;">🎨 Post-Production Loom</h3>
+                    <div class="checklist-item" style="border-color: rgba(255,255,255,0.1);">
+                        <div class="check">✓</div>
+                        <div class="content">
+                            <strong style="color: white;">Thumbnail custom</strong>
+                            <span style="color: rgba(255,255,255,0.6);">Screenshot du chatbot avec réponse anglaise = pro</span>
+                        </div>
+                    </div>
+                    <div class="checklist-item" style="border-color: rgba(255,255,255,0.1);">
+                        <div class="check">✓</div>
+                        <div class="content">
+                            <strong style="color: white;">Titre clair</strong>
+                            <span style="color: rgba(255,255,255,0.6);">"Air Tahiti Nui - 4 Outils IA Prêts à l'Emploi"</span>
+                        </div>
+                    </div>
+                    <div class="checklist-item" style="border-color: rgba(255,255,255,0.1);">
+                        <div class="check">✓</div>
+                        <div class="content">
+                            <strong style="color: white;">Chapitres ajoutés</strong>
+                            <span style="color: rgba(255,255,255,0.6);">Intro / Build 1 / Build 2 / Build 3 / Build 4 / Pricing / CTA</span>
+                        </div>
+                    </div>
+                    <div class="checklist-item" style="border-color: transparent;">
+                        <div class="check">✓</div>
+                        <div class="content">
+                            <strong style="color: white;">CTA Button ajouté</strong>
+                            <span style="color: rgba(255,255,255,0.6);">"Réserver un call" → lien Calendly</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tips -->
+    <section class="tips-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Conseils pour l'Enregistrement</h2>
+                <p>Maximise l'impact de ta vidéo</p>
+            </div>
+
+            <div class="tips-grid">
+                <div class="tip-card">
+                    <h3>🎬 Technique</h3>
+                    <ul>
+                        <li>Lumière naturelle devant toi (pas derrière)</li>
+                        <li>Cadrage serré sur le visage pour l'intro</li>
+                        <li>Utilise les CTA Loom pour les liens</li>
+                        <li>Ajoute des chapitres dans Loom</li>
+                    </ul>
+                </div>
+
+                <div class="tip-card warning">
+                    <h3>⚠️ À éviter</h3>
+                    <ul>
+                        <li>Ne pas lire un script mot à mot</li>
+                        <li>Évite les "euh" et silences trop longs</li>
+                        <li>Pas de jargon technique excessif</li>
+                        <li>Ne pas dépasser 4 minutes</li>
+                    </ul>
+                </div>
+
+                <div class="tip-card success">
+                    <h3>✅ Points forts</h3>
+                    <ul>
+                        <li>Commence par le WOW (chatbot multilingue)</li>
+                        <li>Montre les chiffres en gros à l'écran</li>
+                        <li>Termine par "Mauruuru" (local touch)</li>
+                        <li>Souris et regarde la caméra au closing</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-logo">PACIFIK'<span>AI</span></div>
+            <p>Script vidéo pour prospection Air Tahiti Nui • Janvier 2026</p>
+            <p style="margin-top: 12px;">Basé sur le Plan d'Action Opérationnel v1</p>
+        </div>
+    </footer>
+
+    <script>
+        // Interactive checklist
+        document.querySelectorAll('.checklist-item .check').forEach(check => {
+            check.addEventListener('click', () => {
+                check.classList.toggle('done');
+                if (check.classList.contains('done')) {
+                    check.textContent = '✓';
+                } else {
+                    check.textContent = '';
+                }
+            });
+        });
+
+        // View Toggle (Timeline / Teleprompter)
+        function switchView(view) {
+            const timelineView = document.getElementById('timelineView');
+            const teleprompterView = document.getElementById('teleprompterView');
+            const tabs = document.querySelectorAll('.view-tab');
+
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            if (view === 'teleprompter') {
+                timelineView.classList.add('hidden');
+                teleprompterView.classList.add('active');
+                tabs[1].classList.add('active');
+            } else {
+                timelineView.classList.remove('hidden');
+                teleprompterView.classList.remove('active');
+                tabs[0].classList.add('active');
+            }
+        }
+
+        // Copy teleprompter text
+        function copyTeleprompter(clickedBtn) {
+            const teleprompter = document.getElementById('teleprompterView');
+            const btnFixed = teleprompter.querySelector('.copy-btn');
+            const btnTop = teleprompter.querySelector('.copy-btn-top');
+
+            // Get all text content, preserving structure
+            let text = '';
+            teleprompter.querySelectorAll('.section-marker, .action, p').forEach(el => {
+                if (el.classList.contains('section-marker')) {
+                    text += '\n\n---\n' + el.textContent.toUpperCase() + '\n---\n\n';
+                } else if (el.classList.contains('action')) {
+                    text += '[' + el.textContent.trim() + ']\n\n';
+                } else {
+                    text += el.textContent.trim() + '\n\n';
+                }
+            });
+
+            navigator.clipboard.writeText(text.trim()).then(() => {
+                // Update both buttons
+                [btnFixed, btnTop].forEach(btn => {
+                    if (btn) {
+                        const originalText = btn === btnFixed ? '<span>📋</span> Copier le texte' : '<span>📋</span> Copier tout le texte';
+                        btn.innerHTML = '<span>✅</span> Copié !';
+                        btn.classList.add('copied');
+                        setTimeout(() => {
+                            btn.innerHTML = originalText;
+                            btn.classList.remove('copied');
+                        }, 2000);
+                    }
+                });
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,1531 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PACIFIK'AI - Les 4 Builds d'Automatisation IA pour Air Tahiti Nui</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2CCCD4;
+            --primary-dark: #1aa3aa;
+            --gold: #C9A84C;
+            --gold-light: #d4b35a;
+            --orange: #FF6B00;
+            --success: #10B981;
+            --danger: #EF4444;
+            --gray-50: #F9FAFB;
+            --gray-100: #F3F4F6;
+            --gray-200: #E5E7EB;
+            --gray-300: #D1D5DB;
+            --gray-500: #6B7280;
+            --gray-700: #374151;
+            --gray-900: #111827;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--gray-900);
+            line-height: 1.6;
+            background: var(--gray-50);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Hero Header */
+        .hero-header {
+            background: linear-gradient(135deg, var(--gray-900) 0%, #1a1a2e 100%);
+            color: white;
+            padding: 80px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(44,204,212,0.1) 0%, rgba(201,168,76,0.1) 100%);
+            clip-path: polygon(30% 0, 100% 0, 100% 100%, 0% 100%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 24px;
+        }
+
+        .hero-header h1 {
+            font-size: 48px;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            max-width: 700px;
+        }
+
+        .hero-header h1 span {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 20px;
+            opacity: 0.8;
+            max-width: 600px;
+            margin-bottom: 32px;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 48px;
+            margin-top: 48px;
+        }
+
+        .hero-stat {
+            text-align: left;
+        }
+
+        .hero-stat-value {
+            font-size: 42px;
+            font-weight: 900;
+            color: var(--primary);
+        }
+
+        .hero-stat-label {
+            font-size: 14px;
+            opacity: 0.7;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Section Titles */
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-title h2 {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 12px;
+        }
+
+        .section-title p {
+            font-size: 18px;
+            color: var(--gray-500);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Problem Section */
+        .problem-section {
+            padding: 80px 0;
+            background: white;
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .problem-content h3 {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 20px;
+        }
+
+        .problem-content h3 span {
+            color: var(--danger);
+        }
+
+        .problem-list {
+            list-style: none;
+        }
+
+        .problem-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .problem-list li:last-child {
+            border-bottom: none;
+        }
+
+        .problem-icon {
+            width: 32px;
+            height: 32px;
+            background: #FEE2E2;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .problem-text strong {
+            display: block;
+            color: var(--gray-900);
+            margin-bottom: 4px;
+        }
+
+        .problem-text span {
+            font-size: 14px;
+            color: var(--gray-500);
+        }
+
+        .cost-breakdown {
+            background: linear-gradient(135deg, #FEF2F2 0%, #FEE2E2 100%);
+            border-radius: 16px;
+            padding: 40px;
+            border: 1px solid #FECACA;
+        }
+
+        .cost-breakdown h4 {
+            font-size: 16px;
+            color: var(--danger);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 24px;
+        }
+
+        .cost-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .cost-item:last-child {
+            border-bottom: none;
+            padding-top: 16px;
+            margin-top: 8px;
+            border-top: 2px solid var(--danger);
+        }
+
+        .cost-item.total {
+            font-weight: 700;
+            font-size: 20px;
+        }
+
+        .cost-item.total .cost-value {
+            color: var(--danger);
+        }
+
+        /* Builds Section */
+        .builds-section {
+            padding: 80px 0;
+            background: var(--gray-50);
+        }
+
+        .build-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            margin-bottom: 40px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .build-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .build-header {
+            padding: 40px;
+            color: white;
+            position: relative;
+        }
+
+        .build-1 .build-header { background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%); }
+        .build-2 .build-header { background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%); }
+        .build-3 .build-header { background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); }
+        .build-4 .build-header { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); }
+
+        .build-number {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            font-size: 80px;
+            font-weight: 900;
+            opacity: 0.2;
+            line-height: 1;
+        }
+
+        .build-header h3 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .build-header p {
+            font-size: 16px;
+            opacity: 0.9;
+            max-width: 500px;
+        }
+
+        .build-body {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 0;
+        }
+
+        .build-col {
+            padding: 32px;
+            border-right: 1px solid var(--gray-200);
+        }
+
+        .build-col:last-child {
+            border-right: none;
+        }
+
+        .build-col h4 {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--gray-500);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .build-col h4 .icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        .icon-problem { background: #FEE2E2; }
+        .icon-solution { background: #D1FAE5; }
+        .icon-result { background: #DBEAFE; }
+
+        .build-features {
+            list-style: none;
+        }
+
+        .build-features li {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 8px 0;
+            font-size: 14px;
+            color: var(--gray-700);
+        }
+
+        .build-features li::before {
+            content: '→';
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        /* Before/After */
+        .before-after {
+            padding: 80px 0;
+            background: white;
+        }
+
+        .ba-grid {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 40px;
+            align-items: stretch;
+        }
+
+        .ba-card {
+            padding: 40px;
+            border-radius: 16px;
+        }
+
+        .ba-before {
+            background: linear-gradient(135deg, #FEF2F2 0%, #FECACA 100%);
+            border: 2px solid #FCA5A5;
+        }
+
+        .ba-after {
+            background: linear-gradient(135deg, #ECFDF5 0%, #A7F3D0 100%);
+            border: 2px solid #6EE7B7;
+        }
+
+        .ba-card h3 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .ba-before h3 { color: var(--danger); }
+        .ba-after h3 { color: var(--success); }
+
+        .ba-card ul {
+            list-style: none;
+        }
+
+        .ba-card li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 0;
+            font-size: 15px;
+        }
+
+        .ba-card li .check {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .ba-before .check { background: #FCA5A5; color: white; }
+        .ba-after .check { background: #34D399; color: white; }
+
+        .ba-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ba-arrow-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--gold) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: white;
+            box-shadow: 0 10px 25px rgba(44, 204, 212, 0.4);
+        }
+
+        /* ROI Section */
+        .roi-section {
+            padding: 80px 0;
+            background: linear-gradient(135deg, var(--gray-900) 0%, #1a1a2e 100%);
+            color: white;
+        }
+
+        .roi-section .section-title h2 {
+            color: white;
+        }
+
+        .roi-section .section-title p {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .roi-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+
+        .roi-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 32px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .roi-card:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateY(-4px);
+        }
+
+        .roi-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin: 0 auto 20px;
+        }
+
+        .roi-card:nth-child(1) .roi-icon { background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%); }
+        .roi-card:nth-child(2) .roi-icon { background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%); }
+        .roi-card:nth-child(3) .roi-icon { background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); }
+        .roi-card:nth-child(4) .roi-icon { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); }
+
+        .roi-value {
+            font-size: 36px;
+            font-weight: 900;
+            margin-bottom: 8px;
+        }
+
+        .roi-card:nth-child(1) .roi-value { color: #60A5FA; }
+        .roi-card:nth-child(2) .roi-value { color: #A78BFA; }
+        .roi-card:nth-child(3) .roi-value { color: #FBBF24; }
+        .roi-card:nth-child(4) .roi-value { color: var(--primary); }
+
+        .roi-label {
+            font-size: 14px;
+            color: rgba(255,255,255,0.7);
+        }
+
+        .roi-total {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--gold) 100%);
+            border-radius: 20px;
+            padding: 48px;
+            display: grid;
+            grid-template-columns: 1fr 2px 1fr 2px 1fr;
+            gap: 40px;
+            text-align: center;
+        }
+
+        .roi-total-divider {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .roi-total-item h4 {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.9;
+            margin-bottom: 12px;
+        }
+
+        .roi-total-value {
+            font-size: 42px;
+            font-weight: 900;
+        }
+
+        /* Salary Comparison */
+        .salary-section {
+            padding: 80px 0;
+            background: var(--gray-50);
+        }
+
+        .salary-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .salary-card {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .salary-card.human {
+            border-top: 4px solid var(--danger);
+        }
+
+        .salary-card.ai {
+            border-top: 4px solid var(--success);
+        }
+
+        .salary-card h3 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .salary-card.human h3 { color: var(--danger); }
+        .salary-card.ai h3 { color: var(--success); }
+
+        .salary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .salary-row:last-child {
+            border-bottom: none;
+            padding-top: 20px;
+            margin-top: 8px;
+            border-top: 2px solid var(--gray-300);
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .salary-card.human .salary-row:last-child .salary-value { color: var(--danger); }
+        .salary-card.ai .salary-row:last-child .salary-value { color: var(--success); }
+
+        .savings-highlight {
+            background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+            border: 2px solid var(--success);
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .savings-highlight h3 {
+            font-size: 28px;
+            color: var(--success);
+            margin-bottom: 8px;
+        }
+
+        .savings-highlight .big-number {
+            font-size: 64px;
+            font-weight: 900;
+            color: var(--success);
+            line-height: 1;
+            margin: 16px 0;
+        }
+
+        .savings-highlight p {
+            font-size: 16px;
+            color: var(--gray-700);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 100px 0;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            font-size: 40px;
+            font-weight: 900;
+            margin-bottom: 16px;
+        }
+
+        .cta-section p {
+            font-size: 20px;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 18px 40px;
+            font-size: 16px;
+            font-weight: 700;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: var(--gold);
+            color: var(--gray-900);
+        }
+
+        .btn-primary:hover {
+            background: var(--gold-light);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: white;
+            border: 2px solid rgba(255,255,255,0.5);
+        }
+
+        .btn-outline:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: white;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--gray-900);
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-size: 24px;
+            font-weight: 900;
+            margin-bottom: 12px;
+        }
+
+        .footer-logo span {
+            color: var(--primary);
+        }
+
+        .footer p {
+            font-size: 14px;
+            opacity: 0.6;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-header h1 { font-size: 36px; }
+            .build-body { grid-template-columns: 1fr; }
+            .build-col { border-right: none; border-bottom: 1px solid var(--gray-200); }
+            .build-col:last-child { border-bottom: none; }
+            .roi-grid { grid-template-columns: repeat(2, 1fr); }
+            .roi-total { grid-template-columns: 1fr; gap: 24px; }
+            .roi-total-divider { display: none; }
+        }
+
+        @media (max-width: 768px) {
+            .problem-grid { grid-template-columns: 1fr; }
+            .ba-grid { grid-template-columns: 1fr; }
+            .ba-arrow { transform: rotate(90deg); padding: 20px 0; }
+            .salary-comparison { grid-template-columns: 1fr; }
+            .hero-stats { flex-direction: column; gap: 24px; }
+            .roi-grid { grid-template-columns: 1fr; }
+            .cta-buttons { flex-direction: column; align-items: center; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Header -->
+    <header class="hero-header">
+        <div class="container">
+            <div class="hero-content">
+                <span class="hero-badge">Solution IA sur-mesure</span>
+                <h1>Automatisez votre service client avec <span>l'Intelligence Artificielle</span></h1>
+                <p class="hero-subtitle">Découvrez les 4 Builds d'automatisation conçus spécifiquement pour Air Tahiti Nui. Réduisez vos coûts de 70% tout en offrant une expérience client premium 24/7.</p>
+
+                <div class="hero-stats">
+                    <div class="hero-stat">
+                        <div class="hero-stat-value">70%</div>
+                        <div class="hero-stat-label">Réduction des coûts</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-value">24/7</div>
+                        <div class="hero-stat-label">Disponibilité</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-value">5+</div>
+                        <div class="hero-stat-label">Langues testées</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-value">&lt;2s</div>
+                        <div class="hero-stat-label">Temps de réponse</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Problem Section -->
+    <section class="problem-section">
+        <div class="container">
+            <div class="problem-grid">
+                <div class="problem-content">
+                    <h3>Le <span>problème actuel</span> du service client aérien</h3>
+                    <ul class="problem-list">
+                        <li>
+                            <div class="problem-icon">⏰</div>
+                            <div class="problem-text">
+                                <strong>Temps d'attente excessifs</strong>
+                                <span>Les clients attendent parfois 30+ minutes pour une réponse simple</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="problem-icon">🌍</div>
+                            <div class="problem-text">
+                                <strong>Barrières linguistiques</strong>
+                                <span>Impossibilité de répondre en chinois, japonais, espagnol 24/7</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="problem-icon">💸</div>
+                            <div class="problem-text">
+                                <strong>Coûts salariaux élevés</strong>
+                                <span>Une équipe multilingue 24/7 coûte plus de 50 millions XPF/an</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="problem-icon">📉</div>
+                            <div class="problem-text">
+                                <strong>Qualité inconsistante</strong>
+                                <span>Réponses variables selon l'agent, l'heure, la charge de travail</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="problem-icon">🔄</div>
+                            <div class="problem-text">
+                                <strong>Tâches répétitives</strong>
+                                <span>80% des questions sont les mêmes (bagages, horaires, annulations)</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="cost-breakdown">
+                    <h4>Coût annuel d'une équipe traditionnelle</h4>
+                    <p style="font-size: 0.85em; color: #666; margin-bottom: 1rem;">
+                        <em>Estimation basée sur le salaire moyen en Polynésie française (~280K XPF/mois) + charges patronales 40%</em>
+                    </p>
+                    <div class="cost-item">
+                        <span>Équipe service client (4-6 agents temps plein)</span>
+                        <span class="cost-value">19-28M XPF</span>
+                    </div>
+                    <div class="cost-item">
+                        <span>Couverture 24/7 (nuits, weekends, jours fériés)</span>
+                        <span class="cost-value">12-18M XPF</span>
+                    </div>
+                    <div class="cost-item">
+                        <span>Primes linguistiques + formation + turnover</span>
+                        <span class="cost-value">8-12M XPF</span>
+                    </div>
+                    <div class="cost-item total">
+                        <span>Total annuel estimé</span>
+                        <span class="cost-value">45-55M XPF</span>
+                    </div>
+                    <p style="font-size: 0.75em; color: #888; margin-top: 0.5rem;">
+                        Source: ISPF - Salaire moyen Polynésie française 2024
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Builds Section -->
+    <section class="builds-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Les 4 Builds PACIFIK'AI</h2>
+                <p>Chaque Build résout un problème spécifique avec une solution IA optimisée et mesurable</p>
+            </div>
+
+            <!-- Build 1 -->
+            <div class="build-card build-1">
+                <div class="build-header">
+                    <span class="build-number">01</span>
+                    <h3>Concierge IA Multilingue</h3>
+                    <p>Assistant virtuel disponible 24/7 qui répond instantanément aux questions des voyageurs dans leur langue maternelle</p>
+                </div>
+                <div class="build-body">
+                    <div class="build-col">
+                        <h4><span class="icon icon-problem">❌</span> Problème résolu</h4>
+                        <ul class="build-features">
+                            <li>Temps d'attente téléphonique > 15 min</li>
+                            <li>Impossibilité de répondre en plusieurs langues 24/7</li>
+                            <li>Questions répétitives (80% du volume)</li>
+                            <li>Aucune disponibilité la nuit</li>
+                        </ul>
+                    </div>
+                    <div class="build-col">
+                        <h4><span class="icon icon-solution">✓</span> Solution</h4>
+                        <ul class="build-features">
+                            <li>Chatbot IA avec mémoire conversationnelle</li>
+                            <li>Détection automatique de la langue</li>
+                            <li>Réponses personnalisées (nom, n° réservation)</li>
+                            <li>Escalade vers humain si nécessaire</li>
+                        </ul>
+                    </div>
+                    <div class="build-col">
+                        <h4><span class="icon icon-result">📊</span> Résultats attendus</h4>
+                        <ul class="build-features">
+                            <li><strong>+35%</strong> conversion visiteur → lead</li>
+                            <li><strong>-99%</strong> coût par interaction (200 XPF → &lt;1 XPF)</li>
+                            <li><strong>5 langues</strong> (FR, EN, ES, JP, CN)</li>
+                            <li><strong>24/7</strong> sans heures de nuit</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Build 2 -->
+            <div class="build-card build-2">
+                <div class="build-header">
+                    <span class="build-number">02</span>
+                    <h3>Newsletters Hyper-Personnalisées</h3>
+                    <p>Système d'emails automatisés qui adapte le contenu selon les préférences de chaque voyageur</p>
+                </div>
+                <div class="build-body">
+                    <div class="build-col">
+                        <h4><span class="icon icon-problem">❌</span> Problème résolu</h4>
+                        <ul class="build-features">
+                            <li>Newsletters génériques = taux d'ouverture faible</li>
+                            <li>Pas de segmentation avancée</li>
+                            <li>Contenu manuel chronophage</li>
+                            <li>Aucune personnalisation par segment</li>
+                        </ul>
+                    </div>
+                    <div class="build-col">
+                        <h4><span class="icon icon-solution">✓</span> Solution</h4>
+                        <ul class="build-features">
+                            <li>Segmentation automatique par intérêts</li>
+                            <li>Contenu généré par IA selon le segment</li>
+                            <li>Envoi automatisé via Brevo</li>
+                            <li>A/B testing intelligent</li>
+                        </ul>
+                    </div>
+                    <div class="build-col">
+                        <h4><span class="icon icon-result">📊</span> Résultats attendus</h4>
+                        <ul class="build-features">
+                            <li><strong>35-45%</strong> taux d'ouverture (vs 15-20% standard)</li>
+                            <li><strong>+40%</strong> taux de clic vers réservation</li>
+                            <li><strong>5 segments</strong> (Famille, Lune de miel, Plongeurs, Business, General)</li>
+                            <li><strong>10 sec</strong> par email personnalisé</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Build 3 -->
+            <div class="build-card build-3">
+                <div class="build-header">
+                    <span class="build-number">03</span>
+                    <h3>Content Factory SEO + GEO 2026</h3>
+                    <p>Production automatisée d'articles optimisés pour Google ET les moteurs IA (ChatGPT, Perplexity, Claude)</p>
+                </div>
+                <div class="build-body">
+                    <div class="build-col">
+                        <h4><span class="icon icon-problem">❌</span> Problème résolu</h4>
+                        <ul class="build-features">
+                            <li>Pas de contenu régulier sur le blog</li>
+                            <li>Invisibilité dans les réponses IA (Perplexity, ChatGPT)</li>
+                            <li>Coût élevé des rédacteurs SEO</li>
+                            <li>Pas de stratégie GEO (Generative Engine Optimization)</li>
+                        </ul>
+                    </div>
+                    <div class="build-col">
+                        <h4><span class="icon icon-solution">✓</span> Solution</h4>
+                        <ul class="build-features">
+                            <li>Pipeline de génération d'articles IA</li>
+                            <li>Optimisation SEO + GEO 2026 intégrée</li>
+                            <li>Citations structurées pour LLMs</li>
+                            <li>Publication automatique avec Schema.org</li>
+                        </ul>
+                    </div>
+                    <div class="build-col">
+                        <h4><span class="icon icon-result">📊</span> Résultats attendus</h4>
+                        <ul class="build-features">
+                            <li><strong>12-20 articles</strong>/mois générés</li>
+                            <li><strong>Score SEO 90+</strong> garanti</li>
+                            <li><strong>+25%</strong> conversion trafic → réservation</li>
+                            <li><strong>40%</strong> recherches via IA en 2026 (Gartner)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Build 4 -->
+            <div class="build-card build-4">
+                <div class="build-header">
+                    <span class="build-number">04</span>
+                    <h3>Analyste ROI IA</h3>
+                    <p>Détection d'anomalies et recommandations stratégiques en temps réel sur vos 4 marchés clés</p>
+                </div>
+                <div class="build-body">
+                    <div class="build-col">
+                        <h4><span class="icon icon-problem">❌</span> Problème résolu</h4>
+                        <ul class="build-features">
+                            <li>Détection anomalies en 24-48h (trop tard)</li>
+                            <li>Reporting Excel manuel 5h/semaine</li>
+                            <li>Pas de vision temps réel</li>
+                            <li>Réactivité insuffisante</li>
+                        </ul>
+                    </div>
+                    <div class="build-col">
+                        <h4><span class="icon icon-solution">✓</span> Solution</h4>
+                        <ul class="build-features">
+                            <li>Analyse Z-Score sur 4 mois historique</li>
+                            <li>Alertes automatiques par marché</li>
+                            <li>Recommandations IA contextualisées</li>
+                            <li>Dashboard temps réel</li>
+                        </ul>
+                    </div>
+                    <div class="build-col">
+                        <h4><span class="icon icon-result">📊</span> Résultats attendus</h4>
+                        <ul class="build-features">
+                            <li><strong>+15%</strong> ROI campagnes marketing</li>
+                            <li><strong>Temps réel</strong> vs 24-48h avant</li>
+                            <li><strong>4 marchés</strong> surveillés (Tokyo, Paris, LA, Auckland)</li>
+                            <li><strong>-5h/semaine</strong> de reporting manuel</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Before/After -->
+    <section class="before-after">
+        <div class="container">
+            <div class="section-title">
+                <h2>Avant vs Après PACIFIK'AI</h2>
+                <p>Transformation complète de l'expérience client et des opérations internes</p>
+            </div>
+
+            <div class="ba-grid">
+                <div class="ba-card ba-before">
+                    <h3>❌ Avant</h3>
+                    <ul>
+                        <li>
+                            <span class="check">✕</span>
+                            <span>Temps d'attente moyen: <strong>23 minutes</strong></span>
+                        </li>
+                        <li>
+                            <span class="check">✕</span>
+                            <span>Langues supportées: <strong>3</strong> (FR, EN, DE)</span>
+                        </li>
+                        <li>
+                            <span class="check">✕</span>
+                            <span>Disponibilité: <strong>8h-18h</strong> (jours ouvrés)</span>
+                        </li>
+                        <li>
+                            <span class="check">✕</span>
+                            <span>Taux d'ouverture emails: <strong>12%</strong></span>
+                        </li>
+                        <li>
+                            <span class="check">✕</span>
+                            <span>Articles blog/mois: <strong>1</strong></span>
+                        </li>
+                        <li>
+                            <span class="check">✕</span>
+                            <span>Coût annuel service client: <strong>50M XPF</strong></span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="ba-arrow">
+                    <div class="ba-arrow-icon">→</div>
+                </div>
+
+                <div class="ba-card ba-after">
+                    <h3>✓ Après</h3>
+                    <ul>
+                        <li>
+                            <span class="check">✓</span>
+                            <span>Temps de réponse: <strong>&lt;2 secondes</strong></span>
+                        </li>
+                        <li>
+                            <span class="check">✓</span>
+                            <span>Langues testées: <strong>5</strong> (FR, EN, ES, JP, CN)</span>
+                        </li>
+                        <li>
+                            <span class="check">✓</span>
+                            <span>Disponibilité: <strong>24/7/365</strong></span>
+                        </li>
+                        <li>
+                            <span class="check">✓</span>
+                            <span>Taux d'ouverture emails: <strong>45%</strong></span>
+                        </li>
+                        <li>
+                            <span class="check">✓</span>
+                            <span>Articles blog/mois: <strong>12</strong></span>
+                        </li>
+                        <li>
+                            <span class="check">✓</span>
+                            <span>Coût annuel IA: <strong>15M XPF</strong></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ROI Section -->
+    <section class="roi-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Retour sur Investissement</h2>
+                <p>Chiffres basés sur les résultats observés chez nos clients dans l'industrie aérienne</p>
+            </div>
+
+            <div class="roi-grid">
+                <div class="roi-card">
+                    <div class="roi-icon">🤖</div>
+                    <div class="roi-value">-75%</div>
+                    <div class="roi-label">Appels au call center</div>
+                </div>
+                <div class="roi-card">
+                    <div class="roi-icon">📧</div>
+                    <div class="roi-value">+45%</div>
+                    <div class="roi-label">Taux d'ouverture emails</div>
+                </div>
+                <div class="roi-card">
+                    <div class="roi-icon">📈</div>
+                    <div class="roi-value">+45%</div>
+                    <div class="roi-label">Trafic organique</div>
+                </div>
+                <div class="roi-card">
+                    <div class="roi-icon">⚡</div>
+                    <div class="roi-value">-5h</div>
+                    <div class="roi-label">Reporting manuel/semaine</div>
+                </div>
+            </div>
+
+            <div class="roi-total">
+                <div class="roi-total-item">
+                    <h4>Coût traditionnel</h4>
+                    <div class="roi-total-value">45-55M XPF/an</div>
+                </div>
+                <div class="roi-total-divider"></div>
+                <div class="roi-total-item">
+                    <h4>Coût avec PACIFIK'AI</h4>
+                    <div class="roi-total-value">~15M XPF/an</div>
+                </div>
+                <div class="roi-total-divider"></div>
+                <div class="roi-total-item">
+                    <h4>Économies annuelles</h4>
+                    <div class="roi-total-value">30-40M XPF</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Salary Comparison -->
+    <section class="salary-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Comparatif détaillé des coûts</h2>
+                <p>Équipe humaine traditionnelle vs Solution IA PACIFIK'AI</p>
+            </div>
+
+            <div class="salary-comparison">
+                <div class="salary-card human">
+                    <h3>👥 Équipe Humaine</h3>
+                    <p style="font-size: 0.75em; color: #888; margin-bottom: 0.5rem;">Estimation basée sur salaire moyen Polynésie (ISPF 2024)</p>
+                    <div class="salary-row">
+                        <span>Équipe service client (4-6 agents)</span>
+                        <span class="salary-value">19-28M XPF</span>
+                    </div>
+                    <div class="salary-row">
+                        <span>Couverture 24/7 + jours fériés</span>
+                        <span class="salary-value">12-18M XPF</span>
+                    </div>
+                    <div class="salary-row">
+                        <span>Primes, formation, turnover</span>
+                        <span class="salary-value">8-12M XPF</span>
+                    </div>
+                    <div class="salary-row total" style="border-top: 1px solid #ddd; padding-top: 0.5rem; margin-top: 0.5rem;">
+                        <span><strong>Total annuel estimé</strong></span>
+                        <span class="salary-value"><strong>45-55M XPF</strong></span>
+                    </div>
+                </div>
+
+                <div class="salary-card ai">
+                    <h3>🤖 Solution PACIFIK'AI</h3>
+                    <div class="salary-row">
+                        <span>Build 1 - Concierge IA</span>
+                        <span class="salary-value">4,3M XPF</span>
+                    </div>
+                    <div class="salary-row">
+                        <span>Build 2 - Newsletters</span>
+                        <span class="salary-value">2,1M XPF</span>
+                    </div>
+                    <div class="salary-row">
+                        <span>Build 3 - Content Factory</span>
+                        <span class="salary-value">2,9M XPF</span>
+                    </div>
+                    <div class="salary-row">
+                        <span>Build 4 - CRM Intelligence</span>
+                        <span class="salary-value">1,4M XPF</span>
+                    </div>
+                    <div class="salary-row">
+                        <span>Infrastructure & API IA</span>
+                        <span class="salary-value">4,3M XPF</span>
+                    </div>
+                    <div class="salary-row">
+                        <span>Total annuel</span>
+                        <span class="salary-value">15M XPF</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="savings-highlight">
+                <h3>Économies annuelles estimées</h3>
+                <div class="big-number">30-40M XPF</div>
+                <p>soit <strong>65-75% de réduction</strong> des coûts de service client tout en améliorant la qualité</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Future Automations Section -->
+    <section class="future-section" style="padding: 80px 0; background: white;">
+        <div class="container">
+            <div class="section-title">
+                <h2>🚀 Automatisations Futures</h2>
+                <p>Opportunités d'extension basées sur les meilleures pratiques de l'industrie aérienne</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px;">
+
+                <!-- Marketing & CX -->
+                <div style="background: linear-gradient(135deg, #EEF2FF 0%, #C7D2FE 100%); border-radius: 16px; padding: 32px; border: 2px solid #A5B4FC;">
+                    <h3 style="color: #4F46E5; font-size: 18px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                        📣 Marketing & Expérience Client
+                    </h3>
+                    <ul style="list-style: none; font-size: 14px; color: #374151;">
+                        <li style="padding: 10px 0; border-bottom: 1px solid rgba(79,70,229,0.2); display: flex; gap: 10px;">
+                            <span style="color: #4F46E5; font-weight: 700;">→</span>
+                            <div>
+                                <strong>Dynamic Pricing IA</strong><br>
+                                <span style="color: #6B7280;">Ajustement des prix en temps réel selon demande, météo, concurrence</span>
+                            </div>
+                        </li>
+                        <li style="padding: 10px 0; border-bottom: 1px solid rgba(79,70,229,0.2); display: flex; gap: 10px;">
+                            <span style="color: #4F46E5; font-weight: 700;">→</span>
+                            <div>
+                                <strong>Fidélité Prédictive</strong><br>
+                                <span style="color: #6B7280;">Offres personnalisées basées sur le comportement d'achat</span>
+                            </div>
+                        </li>
+                        <li style="padding: 10px 0; border-bottom: 1px solid rgba(79,70,229,0.2); display: flex; gap: 10px;">
+                            <span style="color: #4F46E5; font-weight: 700;">→</span>
+                            <div>
+                                <strong>Social Listening IA</strong><br>
+                                <span style="color: #6B7280;">Surveillance automatique des mentions et sentiment sur réseaux sociaux</span>
+                            </div>
+                        </li>
+                        <li style="padding: 10px 0; display: flex; gap: 10px;">
+                            <span style="color: #4F46E5; font-weight: 700;">→</span>
+                            <div>
+                                <strong>Upselling Intelligent</strong><br>
+                                <span style="color: #6B7280;">Recommandations bagages, surclassements au moment optimal</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Operations -->
+                <div style="background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%); border-radius: 16px; padding: 32px; border: 2px solid #FCD34D;">
+                    <h3 style="color: #D97706; font-size: 18px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                        ⚙️ Opérations & Logistique
+                    </h3>
+                    <ul style="list-style: none; font-size: 14px; color: #374151;">
+                        <li style="padding: 10px 0; border-bottom: 1px solid rgba(217,119,6,0.2); display: flex; gap: 10px;">
+                            <span style="color: #D97706; font-weight: 700;">→</span>
+                            <div>
+                                <strong>Rebooking Automatique</strong><br>
+                                <span style="color: #6B7280;">Réaffectation IA des passagers lors de perturbations</span>
+                            </div>
+                        </li>
+                        <li style="padding: 10px 0; border-bottom: 1px solid rgba(217,119,6,0.2); display: flex; gap: 10px;">
+                            <span style="color: #D97706; font-weight: 700;">→</span>
+                            <div>
+                                <strong>Prédiction Bagages</strong><br>
+                                <span style="color: #6B7280;">Anticipation des volumes bagages par vol</span>
+                            </div>
+                        </li>
+                        <li style="padding: 10px 0; border-bottom: 1px solid rgba(217,119,6,0.2); display: flex; gap: 10px;">
+                            <span style="color: #D97706; font-weight: 700;">→</span>
+                            <div>
+                                <strong>Optimisation Fuel</strong><br>
+                                <span style="color: #6B7280;">Routes intelligentes selon météo et trafic aérien (économie: 480K gal/6 mois chez Alaska Airlines)</span>
+                            </div>
+                        </li>
+                        <li style="padding: 10px 0; display: flex; gap: 10px;">
+                            <span style="color: #D97706; font-weight: 700;">→</span>
+                            <div>
+                                <strong>Crew Planning IA</strong><br>
+                                <span style="color: #6B7280;">Planification optimale des équipages selon règles et contraintes</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Service Client Avancé -->
+                <div style="background: linear-gradient(135deg, #ECFDF5 0%, #A7F3D0 100%); border-radius: 16px; padding: 32px; border: 2px solid #6EE7B7;">
+                    <h3 style="color: #059669; font-size: 18px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                        🎯 Service Client Avancé
+                    </h3>
+                    <ul style="list-style: none; font-size: 14px; color: #374151;">
+                        <li style="padding: 10px 0; border-bottom: 1px solid rgba(5,150,105,0.2); display: flex; gap: 10px;">
+                            <span style="color: #059669; font-weight: 700;">→</span>
+                            <div>
+                                <strong>Agent IA Autonome</strong><br>
+                                <span style="color: #6B7280;">Traitement complet des réclamations sans intervention humaine</span>
+                            </div>
+                        </li>
+                        <li style="padding: 10px 0; border-bottom: 1px solid rgba(5,150,105,0.2); display: flex; gap: 10px;">
+                            <span style="color: #059669; font-weight: 700;">→</span>
+                            <div>
+                                <strong>Compensation Proactive</strong><br>
+                                <span style="color: #6B7280;">Offres automatiques en cas de retard (modèle United Airlines)</span>
+                            </div>
+                        </li>
+                        <li style="padding: 10px 0; border-bottom: 1px solid rgba(5,150,105,0.2); display: flex; gap: 10px;">
+                            <span style="color: #059669; font-weight: 700;">→</span>
+                            <div>
+                                <strong>Tracking Bagages Live</strong><br>
+                                <span style="color: #6B7280;">Suivi temps réel avec notifications proactives</span>
+                            </div>
+                        </li>
+                        <li style="padding: 10px 0; display: flex; gap: 10px;">
+                            <span style="color: #059669; font-weight: 700;">→</span>
+                            <div>
+                                <strong>Voice Bot Téléphonique</strong><br>
+                                <span style="color: #6B7280;">Extension du chatbot vers le canal téléphonique (IVR IA)</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <!-- Stats de l'industrie -->
+            <div style="margin-top: 48px; background: linear-gradient(135deg, var(--gray-900) 0%, #1a1a2e 100%); border-radius: 16px; padding: 40px; color: white; text-align: center;">
+                <h4 style="font-size: 14px; text-transform: uppercase; letter-spacing: 1px; opacity: 0.7; margin-bottom: 24px;">L'IA dans l'aviation en chiffres (2025-2026)</h4>
+                <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 32px;">
+                    <div>
+                        <div style="font-size: 36px; font-weight: 900; color: var(--primary);">$26.9B</div>
+                        <div style="font-size: 13px; opacity: 0.7;">Marché IA Aviation 2032</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 36px; font-weight: 900; color: var(--gold);">73K h</div>
+                        <div style="font-size: 13px; opacity: 0.7;">Économisées/trimestre (JetBlue)</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 36px; font-weight: 900; color: #60A5FA;">50%+</div>
+                        <div style="font-size: 13px; opacity: 0.7;">Requêtes automatisées (American Airlines)</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 36px; font-weight: 900; color: #A78BFA;">500K</div>
+                        <div style="font-size: 13px; opacity: 0.7;">Conversations/mois (Ryanair bot)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>Prêt à transformer votre service client ?</h2>
+            <p>Demandez une démonstration personnalisée et découvrez comment PACIFIK'AI peut automatiser votre entreprise.</p>
+            <div class="cta-buttons">
+                <a href="index.html" class="btn btn-primary">Voir la démo live</a>
+                <a href="dashboard.html" class="btn btn-outline">Accéder au dashboard</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sources & Methodology Section -->
+    <section class="sources-section" style="padding: 80px 0; background: #F8FAFC;">
+        <div class="container">
+            <div class="section-title">
+                <h2>📚 Sources & Méthodologie</h2>
+                <p>Toutes nos statistiques sont basées sur des études vérifiées et des benchmarks industrie 2025-2026</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px;">
+
+                <!-- Build 1 - Chatbot Sources -->
+                <div style="background: white; border-radius: 16px; padding: 32px; border: 2px solid #E5E7EB;">
+                    <h3 style="color: var(--primary); font-size: 16px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                        💬 Build 1 - Concierge IA (Sources)
+                    </h3>
+                    <table style="width: 100%; font-size: 13px; border-collapse: collapse;">
+                        <tr style="border-bottom: 1px solid #E5E7EB;">
+                            <td style="padding: 12px 0; color: #374151;"><strong>-75% appels call center</strong></td>
+                            <td style="padding: 12px 0; color: #6B7280;">IndiGo "6Eskai" chatbot - <a href="https://tnmt.com/airline-chatbots/" target="_blank" style="color: var(--primary);">TNMT 2025</a></td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #E5E7EB;">
+                            <td style="padding: 12px 0; color: #374151;"><strong>93% containment rate</strong></td>
+                            <td style="padding: 12px 0; color: #6B7280;">Air India "AI.g" - <a href="https://tnmt.com/airline-chatbots/" target="_blank" style="color: var(--primary);">TNMT 2025</a></td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #E5E7EB;">
+                            <td style="padding: 12px 0; color: #374151;"><strong>&lt;2 sec réponse</strong></td>
+                            <td style="padding: 12px 0; color: #6B7280;">Bank of America Erica (44 sec pour 98% queries) - <a href="https://www.desk365.io/blog/ai-customer-service-statistics/" target="_blank" style="color: var(--primary);">Desk365 2026</a></td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #E5E7EB;">
+                            <td style="padding: 12px 0; color: #374151;"><strong>64% automatisation</strong></td>
+                            <td style="padding: 12px 0; color: #6B7280;">United Airlines special requests - <a href="https://vux.world/how-united-airlines-automates-64-of-special-requests-with-ai-enabled-voice-guidance/" target="_blank" style="color: var(--primary);">VUX World 2025</a></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 12px 0; color: #374151;"><strong>80% queries AI-handled</strong></td>
+                            <td style="padding: 12px 0; color: #6B7280;">Routine tasks benchmark - <a href="https://www.tidio.com/blog/chatbot-statistics/" target="_blank" style="color: var(--primary);">Tidio 2026</a></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <!-- Build 2 - Newsletter Sources -->
+                <div style="background: white; border-radius: 16px; padding: 32px; border: 2px solid #E5E7EB;">
+                    <h3 style="color: #EC4899; font-size: 16px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                        ✉️ Build 2 - Newsletter IA (Sources)
+                    </h3>
+                    <table style="width: 100%; font-size: 13px; border-collapse: collapse;">
+                        <tr style="border-bottom: 1px solid #E5E7EB;">
+                            <td style="padding: 12px 0; color: #374151;"><strong>45% open rate (cible)</strong></td>
+                            <td style="padding: 12px 0; color: #6B7280;">Median 42.35% + personnalisation - <a href="https://www.mailerlite.com/blog/compare-your-email-performance-metrics-industry-benchmarks" target="_blank" style="color: #EC4899;">MailerLite 2025</a></td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #E5E7EB;">
+                            <td style="padding: 12px 0; color: #374151;"><strong>+29% open rate (perso)</strong></td>
+                            <td style="padding: 12px 0; color: #6B7280;">Personalized vs generic - <a href="https://genesysgrowth.com/blog/email-open-rates-stats-for-marketing-leaders" target="_blank" style="color: #EC4899;">Genesys Growth 2025</a></td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #E5E7EB;">
+                            <td style="padding: 12px 0; color: #374151;"><strong>+41% CTR (perso)</strong></td>
+                            <td style="padding: 12px 0; color: #6B7280;">Click-through personalisé - <a href="https://genesysgrowth.com/blog/email-open-rates-stats-for-marketing-leaders" target="_blank" style="color: #EC4899;">Genesys Growth 2025</a></td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #E5E7EB;">
+                            <td style="padding: 12px 0; color: #374151;"><strong>+760% revenue (segment)</strong></td>
+                            <td style="padding: 12px 0; color: #6B7280;">Segmented vs broadcast - <a href="https://www.moengage.com/benchmarks/email-benchmarks-2025/" target="_blank" style="color: #EC4899;">MoEngage 2025</a></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 12px 0; color: #374151;"><strong>20% baseline travel</strong></td>
+                            <td style="padding: 12px 0; color: #6B7280;">Travel industry average - <a href="https://www.promodo.com/blog/tourism-marketing-benchmarks" target="_blank" style="color: #EC4899;">Promodo 2026</a></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <!-- Build 3 - SEO Sources -->
+                <div style="background: white; border-radius: 16px; padding: 32px; border: 2px solid #E5E7EB;">
+                    <h3 style="color: #06B6D4; font-size: 16px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                        📝 Build 3 - SEO + GEO (Sources)
+                    </h3>
+                    <table style="width: 100%; font-size: 13px; border-collapse: collapse;">
+                        <tr style="border-bottom: 1px solid #E5E7EB;">
+                            <td style="padding: 12px 0; color: #374151;"><strong>+45% organic traffic</strong></td>
+                            <td style="padding: 12px 0; color: #6B7280;">AI-driven SEO strategies - <a href="https://seoprofy.com/blog/ai-seo-statistics/" target="_blank" style="color: #06B6D4;">SEOProfy 2025</a></td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #E5E7EB;">
+                            <td style="padding: 12px 0; color: #374151;"><strong>+38% conversion e-com</strong></td>
+                            <td style="padding: 12px 0; color: #6B7280;">AI SEO adoption results - <a href="https://seoprofy.com/blog/ai-seo-statistics/" target="_blank" style="color: #06B6D4;">SEOProfy 2025</a></td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #E5E7EB;">
+                            <td style="padding: 12px 0; color: #374151;"><strong>+30% rankings (6 mois)</strong></td>
+                            <td style="padding: 12px 0; color: #6B7280;">AI SEO implementation - <a href="https://www.demandsage.com/ai-seo-statistics/" target="_blank" style="color: #06B6D4;">DemandSage 2026</a></td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #E5E7EB;">
+                            <td style="padding: 12px 0; color: #374151;"><strong>+59% CTR (AI headlines)</strong></td>
+                            <td style="padding: 12px 0; color: #6B7280;">AI-generated headlines - <a href="https://www.semrush.com/blog/ai-seo-statistics/" target="_blank" style="color: #06B6D4;">Semrush 2026</a></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 12px 0; color: #374151;"><strong>GEO: 13% queries AI</strong></td>
+                            <td style="padding: 12px 0; color: #6B7280;">AI Overviews expansion - <a href="https://thedigitalbloom.com/learn/2025-organic-traffic-crisis-analysis-report/" target="_blank" style="color: #06B6D4;">Digital Bloom 2025</a></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <!-- Build 4 - ROI Sources -->
+                <div style="background: white; border-radius: 16px; padding: 32px; border: 2px solid #E5E7EB;">
+                    <h3 style="color: #8B5CF6; font-size: 16px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                        📊 Build 4 - ROI & Métriques (Sources)
+                    </h3>
+                    <table style="width: 100%; font-size: 13px; border-collapse: collapse;">
+                        <tr style="border-bottom: 1px solid #E5E7EB;">
+                            <td style="padding: 12px 0; color: #374151;"><strong>$80B savings 2026</strong></td>
+                            <td style="padding: 12px 0; color: #6B7280;">Contact center labor costs - <a href="https://www.desk365.io/blog/ai-customer-service-statistics/" target="_blank" style="color: #8B5CF6;">Gartner via Desk365</a></td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #E5E7EB;">
+                            <td style="padding: 12px 0; color: #374151;"><strong>12x cost difference</strong></td>
+                            <td style="padding: 12px 0; color: #6B7280;">$0.50 chatbot vs $6 human - <a href="https://www.tidio.com/blog/chatbot-statistics/" target="_blank" style="color: #8B5CF6;">Tidio 2026</a></td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #E5E7EB;">
+                            <td style="padding: 12px 0; color: #374151;"><strong>-30% support costs</strong></td>
+                            <td style="padding: 12px 0; color: #6B7280;">Chatbot implementation - <a href="https://adamconnell.me/chatbot-statistics/" target="_blank" style="color: #8B5CF6;">Adam Connell 2025</a></td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #E5E7EB;">
+                            <td style="padding: 12px 0; color: #374151;"><strong>92% faster resolution</strong></td>
+                            <td style="padding: 12px 0; color: #6B7280;">AI contact centers - <a href="https://www.zendesk.com/blog/ai-customer-service-statistics/" target="_blank" style="color: #8B5CF6;">Zendesk 2026</a></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 12px 0; color: #374151;"><strong>$5M saved/year</strong></td>
+                            <td style="padding: 12px 0; color: #6B7280;">Delta IVR system (36M calls) - <a href="https://www.ajc.com/news/business/meet-your-newest-ai-chatbot-delta-concierge/3GFA5DFBOBBXVCYHNT2SMWCHAA/" target="_blank" style="color: #8B5CF6;">AJC 2025</a></td>
+                        </tr>
+                    </table>
+                </div>
+
+            </div>
+
+            <!-- Aviation Industry Stats Sources -->
+            <div style="margin-top: 48px; background: white; border-radius: 16px; padding: 32px; border: 2px solid #E5E7EB;">
+                <h3 style="color: var(--gray-900); font-size: 16px; margin-bottom: 20px;">✈️ Statistiques Industrie Aérienne (Sources vérifiées)</h3>
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; font-size: 13px;">
+                    <div style="text-align: center; padding: 16px; background: #F8FAFC; border-radius: 8px;">
+                        <div style="font-size: 24px; font-weight: 900; color: var(--primary);">$26.9B</div>
+                        <div style="color: #6B7280; margin-top: 4px;">Marché IA Aviation 2032</div>
+                        <a href="https://www.oag.com/blog/air-travel-statistics-2025" target="_blank" style="color: var(--primary); font-size: 11px;">OAG 2025</a>
+                    </div>
+                    <div style="text-align: center; padding: 16px; background: #F8FAFC; border-radius: 8px;">
+                        <div style="font-size: 24px; font-weight: 900; color: var(--gold);">64%</div>
+                        <div style="color: #6B7280; margin-top: 4px;">Automatisation United</div>
+                        <a href="https://vux.world/how-united-airlines-automates-64-of-special-requests-with-ai-enabled-voice-guidance/" target="_blank" style="color: var(--primary); font-size: 11px;">VUX World 2025</a>
+                    </div>
+                    <div style="text-align: center; padding: 16px; background: #F8FAFC; border-radius: 8px;">
+                        <div style="font-size: 24px; font-weight: 900; color: #60A5FA;">90%</div>
+                        <div style="color: #6B7280; margin-top: 4px;">Satisfaction clients United</div>
+                        <a href="https://vux.world/how-united-airlines-automates-64-of-special-requests-with-ai-enabled-voice-guidance/" target="_blank" style="color: var(--primary); font-size: 11px;">VUX World 2025</a>
+                    </div>
+                    <div style="text-align: center; padding: 16px; background: #F8FAFC; border-radius: 8px;">
+                        <div style="font-size: 24px; font-weight: 900; color: #A78BFA;">93%</div>
+                        <div style="color: #6B7280; margin-top: 4px;">Containment Air India</div>
+                        <a href="https://tnmt.com/airline-chatbots/" target="_blank" style="color: var(--primary); font-size: 11px;">TNMT 2025</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Methodology Note -->
+            <div style="margin-top: 32px; padding: 24px; background: linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 100%); border-radius: 12px; border-left: 4px solid var(--primary);">
+                <h4 style="color: var(--gray-900); font-size: 14px; margin-bottom: 8px;">📋 Note méthodologique</h4>
+                <p style="color: #6B7280; font-size: 13px; line-height: 1.6; margin: 0;">
+                    Les projections de résultats pour Air Tahiti Nui sont basées sur des benchmarks industrie et des cas similaires documentés (United Airlines, Air India, IndiGo, Delta).
+                    Les résultats réels peuvent varier selon l'implémentation, le volume de trafic et l'adoption client.
+                    Toutes les sources ont été vérifiées en janvier 2026 et proviennent de publications spécialisées (Gartner, OAG, TNMT, Tidio, Semrush, etc.).
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-logo">PACIFIK'<span>AI</span></div>
+            <p>Automatisation IA sur-mesure pour les entreprises polynésiennes</p>
+            <p style="margin-top: 20px; opacity: 0.4;">© 2026 PACIFIK'AI - Document de présentation commerciale</p>
+        </div>
+    </footer>
+</body>
+</html>

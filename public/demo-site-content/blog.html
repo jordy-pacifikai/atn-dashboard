@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Air Tahiti Nui - Inspirations & Conseils Voyage Polynesie</title>
+    <meta name="description" content="Decouvrez nos articles sur la Polynesie francaise : guides de voyage, conseils pratiques, culture tahitienne et destinations incontournables.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --atn-blue: #2CCCD4;
+            --atn-blue-light: #3dd9e1;
+            --atn-blue-dark: #1aa3aa;
+            --atn-teal: #2CCCD4;
+            --atn-gold: #C9A84C;
+            --atn-orange: #FF6B00;
+            --atn-white: #FFFFFF;
+            --atn-gray-light: #F8FAFC;
+            --atn-gray: #E2E8F0;
+            --atn-gray-dark: #334155;
+            --atn-text: #0F172A;
+            --gradient-teal: linear-gradient(135deg, #2CCCD4 0%, #0D9488 100%);
+            --gradient-purple: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%);
+            --gradient-gold: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--atn-text);
+            line-height: 1.6;
+            background: var(--atn-white);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .header-top {
+            background: var(--gradient-teal);
+            padding: 10px 0;
+            font-size: 13px;
+        }
+
+        .header-top .container {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 28px;
+        }
+
+        .header-top a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.2s;
+            letter-spacing: 0.01em;
+        }
+
+        .header-top a:hover {
+            opacity: 0.85;
+        }
+
+        .header-main {
+            padding: 16px 0;
+        }
+
+        .header-main .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo img {
+            height: 52px;
+            width: auto;
+        }
+
+        .nav-main {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-main a {
+            color: var(--atn-gray-dark);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            padding: 10px 18px;
+            border-radius: 10px;
+            transition: all 0.2s;
+            letter-spacing: 0.01em;
+        }
+
+        .nav-main a:hover {
+            color: var(--atn-teal);
+            background: rgba(44, 204, 212, 0.08);
+        }
+
+        .nav-main a.active {
+            color: var(--atn-teal);
+            background: rgba(44, 204, 212, 0.1);
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Blog Hero - Full Width Immersive */
+        .blog-hero {
+            margin-top: 120px;
+            position: relative;
+            height: 420px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .blog-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url('images/bora-bora.jpg') center center / cover no-repeat;
+            filter: brightness(0.5);
+        }
+
+        .blog-hero::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(15, 23, 42, 0.3) 0%, rgba(15, 23, 42, 0.7) 100%);
+        }
+
+        .blog-hero-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            color: white;
+            padding: 0 24px;
+        }
+
+        .blog-hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 8px 18px;
+            border-radius: 100px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .blog-hero h1 {
+            font-size: 56px;
+            font-weight: 800;
+            margin-bottom: 18px;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+        }
+
+        .blog-hero p {
+            font-size: 20px;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+            font-weight: 400;
+            line-height: 1.6;
+        }
+
+        /* Categories Bar */
+        .categories-bar {
+            background: white;
+            border-bottom: 1px solid var(--atn-gray);
+            padding: 20px 0;
+            position: sticky;
+            top: 120px;
+            z-index: 100;
+        }
+
+        .categories-list {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .category-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 100px;
+            font-size: 14px;
+            font-weight: 600;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid var(--atn-gray);
+            background: white;
+            color: var(--atn-gray-dark);
+        }
+
+        .category-pill:hover {
+            border-color: var(--atn-teal);
+            color: var(--atn-teal);
+        }
+
+        .category-pill.active {
+            background: var(--gradient-teal);
+            color: white;
+            border-color: transparent;
+        }
+
+        /* Blog Section */
+        .blog-section {
+            padding: 60px 0 80px;
+            background: var(--atn-gray-light);
+        }
+
+        /* Featured Article - Magazine Style */
+        .featured-article {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 0;
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: var(--shadow-xl);
+            margin-bottom: 60px;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .featured-article:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 32px 48px -12px rgba(0, 0, 0, 0.18);
+        }
+
+        .featured-image {
+            position: relative;
+            height: 100%;
+            min-height: 480px;
+            overflow: hidden;
+        }
+
+        .featured-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .featured-article:hover .featured-image img {
+            transform: scale(1.05);
+        }
+
+        .featured-content {
+            padding: 48px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .article-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .article-category {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--gradient-teal);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .ai-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--gradient-purple);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .featured-content h2 {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--atn-text);
+            margin-bottom: 18px;
+            line-height: 1.25;
+            letter-spacing: -0.02em;
+        }
+
+        .featured-content h2 a {
+            color: inherit;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .featured-content h2 a:hover {
+            color: var(--atn-teal);
+        }
+
+        .article-excerpt {
+            font-size: 17px;
+            color: var(--atn-gray-dark);
+            line-height: 1.8;
+            margin-bottom: 24px;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            font-size: 14px;
+            color: #64748B;
+            margin-bottom: 24px;
+        }
+
+        .article-meta span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .read-more {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--atn-text);
+            color: white;
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 14px;
+            text-decoration: none;
+            transition: all 0.3s;
+            width: fit-content;
+        }
+
+        .read-more:hover {
+            background: var(--atn-teal);
+            transform: translateX(4px);
+        }
+
+        .read-more svg {
+            transition: transform 0.3s;
+        }
+
+        .read-more:hover svg {
+            transform: translateX(4px);
+        }
+
+        /* Articles Grid */
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+        }
+
+        .article-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .article-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .article-card-image {
+            position: relative;
+            height: 220px;
+            overflow: hidden;
+        }
+
+        .article-card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .article-card:hover .article-card-image img {
+            transform: scale(1.08);
+        }
+
+        .article-card-image .score-badge {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: rgba(16, 185, 129, 0.95);
+            backdrop-filter: blur(8px);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .article-card-content {
+            padding: 28px;
+        }
+
+        .article-card-content .article-tags {
+            margin-bottom: 14px;
+        }
+
+        .article-card-content .article-category {
+            font-size: 11px;
+            padding: 5px 12px;
+        }
+
+        .article-card-content h3 {
+            font-size: 19px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            line-height: 1.4;
+            letter-spacing: -0.01em;
+        }
+
+        .article-card-content h3 a {
+            color: var(--atn-text);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .article-card-content h3 a:hover {
+            color: var(--atn-teal);
+        }
+
+        .article-card-content .article-excerpt {
+            font-size: 15px;
+            margin-bottom: 18px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            color: #64748B;
+        }
+
+        .article-card-content .article-meta {
+            font-size: 13px;
+            margin-bottom: 0;
+        }
+
+        /* Section Headers */
+        .section-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .section-header h2 {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--atn-text);
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
+        }
+
+        .section-header p {
+            color: var(--atn-gray-dark);
+            font-size: 18px;
+        }
+
+        /* AI Articles Section */
+        .ai-articles-section {
+            padding: 80px 0;
+            background: linear-gradient(180deg, #F5F3FF 0%, #EDE9FE 100%);
+            position: relative;
+        }
+
+        .ai-articles-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #C4B5FD, transparent);
+        }
+
+        .ai-articles-section .section-header h2 {
+            background: var(--gradient-purple);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .ai-articles-section .article-card {
+            border: 2px solid rgba(139, 92, 246, 0.15);
+        }
+
+        .ai-articles-section .article-card:hover {
+            border-color: rgba(139, 92, 246, 0.3);
+            box-shadow: 0 20px 40px rgba(139, 92, 246, 0.15);
+        }
+
+        /* All Articles Section */
+        .all-articles {
+            padding: 80px 0;
+            background: white;
+        }
+
+        /* Newsletter CTA */
+        .newsletter-cta {
+            padding: 100px 0;
+            background: var(--atn-text);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .newsletter-cta::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 60%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(44, 204, 212, 0.15) 0%, transparent 60%);
+        }
+
+        .newsletter-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .newsletter-cta h2 {
+            font-size: 40px;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 18px;
+            letter-spacing: -0.02em;
+        }
+
+        .newsletter-cta h2 span {
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .newsletter-cta p {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 36px;
+            line-height: 1.7;
+        }
+
+        .newsletter-form {
+            display: flex;
+            gap: 14px;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        .newsletter-form input {
+            flex: 1;
+            padding: 18px 24px;
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.08);
+            color: white;
+            font-size: 16px;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+
+        .newsletter-form input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .newsletter-form input:focus {
+            outline: none;
+            border-color: var(--atn-teal);
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .newsletter-form button {
+            padding: 18px 36px;
+            background: var(--gradient-gold);
+            color: var(--atn-text);
+            border: none;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .newsletter-form button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 24px rgba(245, 158, 11, 0.3);
+        }
+
+        /* Footer */
+        .footer {
+            background: #0F172A;
+            color: white;
+            padding: 80px 0 40px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+            gap: 48px;
+            margin-bottom: 60px;
+        }
+
+        .footer-logo img {
+            height: 48px;
+            margin-bottom: 20px;
+        }
+
+        .footer-about p {
+            font-size: 15px;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.8;
+        }
+
+        .footer h5 {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: white;
+        }
+
+        .footer ul {
+            list-style: none;
+        }
+
+        .footer ul li {
+            margin-bottom: 14px;
+        }
+
+        .footer ul a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            font-size: 15px;
+            transition: color 0.2s;
+        }
+
+        .footer ul a:hover {
+            color: var(--atn-teal);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-in {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .featured-article {
+                grid-template-columns: 1fr;
+            }
+            .featured-image {
+                min-height: 300px;
+            }
+            .articles-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .blog-hero h1 {
+                font-size: 42px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-main {
+                display: none;
+            }
+            .blog-hero {
+                height: 360px;
+                margin-top: 100px;
+            }
+            .blog-hero h1 {
+                font-size: 32px;
+            }
+            .blog-hero p {
+                font-size: 16px;
+            }
+            .articles-grid {
+                grid-template-columns: 1fr;
+            }
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 32px;
+            }
+            .newsletter-form {
+                flex-direction: column;
+            }
+            .section-header h2 {
+                font-size: 28px;
+            }
+            .featured-content {
+                padding: 32px;
+            }
+            .featured-content h2 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-top">
+            <div class="container">
+                <a href="#">Club Tiare</a>
+                <a href="#">Aide & Contact</a>
+                <a href="#">FR</a>
+            </div>
+        </div>
+        <div class="header-main">
+            <div class="container">
+                <a href="index.html" class="logo">
+                    <img src="images/logo-full-color.svg" alt="Air Tahiti Nui">
+                </a>
+                <nav class="nav-main">
+                    <a href="index.html">Reserver</a>
+                    <a href="#">Offres</a>
+                    <a href="#">Fidelite</a>
+                    <a href="blog.html" class="active">Blog</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Blog Hero -->
+    <section class="blog-hero">
+        <div class="blog-hero-content">
+            <div class="blog-hero-badge">
+                <span>Nouveau</span> Articles generes par IA
+            </div>
+            <h1>Inspirations Polynesiennes</h1>
+            <p>Guides de voyage, conseils pratiques et decouvertes culturelles pour preparer votre sejour au paradis</p>
+        </div>
+    </section>
+
+    <!-- Categories -->
+    <div class="categories-bar">
+        <div class="container">
+            <div class="categories-list">
+                <span class="category-pill active">Tous les articles</span>
+                <span class="category-pill">Destinations</span>
+                <span class="category-pill">Culture & Traditions</span>
+                <span class="category-pill">Conseils Pratiques</span>
+                <span class="category-pill">Classes de Voyage</span>
+                <span class="category-pill">Lune de Miel</span>
+                <span class="category-pill">Plongee</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Featured Article -->
+    <section class="blog-section">
+        <div class="container">
+            <article class="featured-article animate-in">
+                <div class="featured-image">
+                    <img src="images/bora-bora.jpg" alt="Bora Bora vue aerienne">
+                </div>
+                <div class="featured-content">
+                    <div class="article-tags">
+                        <span class="article-category">Guide Destination</span>
+                        <span class="ai-badge">Genere par IA</span>
+                    </div>
+                    <h2><a href="#">Bora Bora : Le Guide Ultime pour un Sejour Inoubliable en 2026</a></h2>
+                    <p class="article-excerpt">
+                        Surnommee "la perle du Pacifique", Bora Bora fascine les voyageurs du monde entier avec son lagon aux nuances infinies de bleu et ses luxueux bungalows sur pilotis. Decouvrez nos conseils d'experts pour vivre une experience authentique.
+                    </p>
+                    <div class="article-meta">
+                        <span>
+                            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                            15 janvier 2026
+                        </span>
+                        <span>
+                            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            12 min de lecture
+                        </span>
+                    </div>
+                    <a href="#" class="read-more">
+                        Lire l'article
+                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                        </svg>
+                    </a>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <!-- AI Generated Articles -->
+    <section class="ai-articles-section" id="dynamic-section" style="display:none;">
+        <div class="container">
+            <div class="section-header">
+                <h2>Articles Generes par IA</h2>
+                <p>Contenu SEO + GEO optimise, cree automatiquement par le Build 3</p>
+            </div>
+            <div class="articles-grid" id="dynamic-articles">
+                <!-- Dynamic content -->
+            </div>
+        </div>
+    </section>
+
+    <!-- All Articles -->
+    <section class="all-articles">
+        <div class="container">
+            <div class="section-header">
+                <h2>Tous nos articles</h2>
+                <p>Explorez nos guides et conseils pour votre voyage en Polynesie</p>
+            </div>
+
+            <div class="articles-grid">
+                <article class="article-card">
+                    <div class="article-card-image">
+                        <img src="images/accommodation.jpg" alt="Plongee Polynesie">
+                    </div>
+                    <div class="article-card-content">
+                        <div class="article-tags">
+                            <span class="article-category">Plongee</span>
+                        </div>
+                        <h3><a href="#">Les 7 Meilleurs Spots de Plongee en Polynesie Francaise</a></h3>
+                        <p class="article-excerpt">De Rangiroa a Fakarava, decouvrez les sites de plongee les plus spectaculaires au monde, ou requins et raies manta vous attendent.</p>
+                        <div class="article-meta">
+                            <span>3 jan 2026</span>
+                            <span>8 min</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="article-card">
+                    <div class="article-card-image">
+                        <img src="images/tokyo.jpg" alt="Tokyo Tahiti">
+                    </div>
+                    <div class="article-card-content">
+                        <div class="article-tags">
+                            <span class="article-category">Nouveau Vol</span>
+                        </div>
+                        <h3><a href="#">Tokyo - Tahiti : Notre Nouvelle Ligne Directe</a></h3>
+                        <p class="article-excerpt">11 heures de vol direct entre le Japon et la Polynesie. Horaires, services a bord et conseils pour voyager confortablement.</p>
+                        <div class="article-meta">
+                            <span>1 jan 2026</span>
+                            <span>5 min</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="article-card">
+                    <div class="article-card-image">
+                        <img src="images/rental.jpg" alt="Location voiture Tahiti">
+                    </div>
+                    <div class="article-card-content">
+                        <div class="article-tags">
+                            <span class="article-category">Pratique</span>
+                        </div>
+                        <h3><a href="#">Louer une Voiture a Tahiti : Guide 2026</a></h3>
+                        <p class="article-excerpt">Permis, assurance, routes, prix... Tout ce que vous devez savoir pour explorer l'ile de Tahiti en toute liberte.</p>
+                        <div class="article-meta">
+                            <span>28 dec 2025</span>
+                            <span>6 min</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="article-card">
+                    <div class="article-card-image">
+                        <img src="images/auckland.jpg" alt="Auckland">
+                    </div>
+                    <div class="article-card-content">
+                        <div class="article-tags">
+                            <span class="article-category">Escales</span>
+                        </div>
+                        <h3><a href="#">Nouvelle-Zelande - Tahiti : L'Aventure Pacifique</a></h3>
+                        <p class="article-excerpt">Combinez deux destinations d'exception en un seul voyage. Auckland et Tahiti partagent une culture polynesienne commune.</p>
+                        <div class="article-meta">
+                            <span>25 dec 2025</span>
+                            <span>7 min</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="article-card">
+                    <div class="article-card-image">
+                        <img src="images/la-beach.jpg" alt="Lune de miel">
+                    </div>
+                    <div class="article-card-content">
+                        <div class="article-tags">
+                            <span class="article-category">Lune de Miel</span>
+                        </div>
+                        <h3><a href="#">Lune de Miel en Polynesie : 5 Iles pour les Amoureux</a></h3>
+                        <p class="article-excerpt">Bora Bora, Moorea, Taha'a, Rangiroa ou Tikehau ? Decouvrez laquelle correspond le mieux a votre couple.</p>
+                        <div class="article-meta">
+                            <span>22 dec 2025</span>
+                            <span>9 min</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="article-card">
+                    <div class="article-card-image">
+                        <img src="images/business-class-new.jpg" alt="Business class">
+                    </div>
+                    <div class="article-card-content">
+                        <div class="article-tags">
+                            <span class="article-category">Classes</span>
+                        </div>
+                        <h3><a href="#">Poerava Business : L'Excellence Polynesienne</a></h3>
+                        <p class="article-excerpt">Sieges-lits full flat, menu gastronomique, salon VIP... Decouvrez notre classe affaires d'exception.</p>
+                        <div class="article-meta">
+                            <span>20 dec 2025</span>
+                            <span>4 min</span>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter CTA -->
+    <section class="newsletter-cta">
+        <div class="container">
+            <div class="newsletter-content">
+                <h2>Recevez nos <span>inspirations voyage</span></h2>
+                <p>Inscrivez-vous pour recevoir nos derniers articles, offres exclusives et conseils de voyage directement dans votre boite mail.</p>
+                <form class="newsletter-form" id="blogNewsletterForm">
+                    <input type="email" placeholder="Votre adresse email" required>
+                    <button type="submit">S'inscrire</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-about">
+                    <div class="footer-logo">
+                        <img src="images/logo_flower.svg" alt="Air Tahiti Nui">
+                    </div>
+                    <p>La compagnie aerienne internationale de la Polynesie francaise. Depuis 1996, nous relions Tahiti au monde avec le legendaire accueil polynesien.</p>
+                </div>
+                <div>
+                    <h5>Reserver</h5>
+                    <ul>
+                        <li><a href="#">Rechercher un vol</a></li>
+                        <li><a href="#">Nos offres</a></li>
+                        <li><a href="#">Sejours</a></li>
+                        <li><a href="#">Groupes</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5>Preparer</h5>
+                    <ul>
+                        <li><a href="#">Bagages</a></li>
+                        <li><a href="#">Enregistrement</a></li>
+                        <li><a href="#">A bord</a></li>
+                        <li><a href="#">Documents</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5>Club Tiare</h5>
+                    <ul>
+                        <li><a href="#">Adherer</a></li>
+                        <li><a href="#">Avantages</a></li>
+                        <li><a href="#">Partenaires</a></li>
+                        <li><a href="#">Mon compte</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5>A propos</h5>
+                    <ul>
+                        <li><a href="#">Notre compagnie</a></li>
+                        <li><a href="#">Carrieres</a></li>
+                        <li><a href="#">Presse</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>2026 Air Tahiti Nui - Site de demonstration PACIFIK'AI</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+    // Load dynamic articles from Airtable
+    async function loadDynamicArticles() {
+        const AIRTABLE_BASE = 'appWd0x5YZPHKL0VK';
+        const AIRTABLE_TABLE = 'tblH8zjZEkVwmS0zY';
+        const AIRTABLE_TOKEN = 'AIRTABLE_KEY_PLACEHOLDER';
+
+        try {
+            const response = await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE}/${AIRTABLE_TABLE}?maxRecords=10`, {
+                headers: { 'Authorization': `Bearer ${AIRTABLE_TOKEN}` }
+            });
+            const data = await response.json();
+
+            if (data.records && data.records.length > 0) {
+                data.records.sort((a, b) => new Date(b.createdTime) - new Date(a.createdTime));
+                const container = document.getElementById('dynamic-articles');
+
+                const imageMapping = {
+                    'plongee': 'images/accommodation.jpg',
+                    'bora bora': 'images/bora-bora.jpg',
+                    'moorea': 'images/tahiti-moorea.jpg',
+                    'baleines': 'images/auckland.jpg',
+                    'tahiti': 'images/hero-4k.jpg',
+                    'default': 'images/hero-4k.jpg'
+                };
+
+                function getImageForTopic(topic) {
+                    const lowerTopic = topic.toLowerCase();
+                    for (const [keyword, image] of Object.entries(imageMapping)) {
+                        if (keyword !== 'default' && lowerTopic.includes(keyword)) return image;
+                    }
+                    return imageMapping.default;
+                }
+
+                container.innerHTML = data.records.map(record => {
+                    const fields = record.fields;
+                    const topic = fields.Topic || 'Article SEO';
+                    const article = fields.Article || '';
+                    const seoScore = fields['Score SEO'] || 0;
+                    const geoScore = fields['Score GEO'] || 0;
+                    const mots = fields.Mots || 0;
+
+                    let excerpt = article.replace(/^#+\s+[^\n]+\n*/gm, '').replace(/\*\*([^*]+)\*\*/g, '$1').replace(/\n+/g, ' ').substring(0, 150) + '...';
+                    const createdDate = new Date(record.createdTime);
+                    const dateStr = createdDate.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
+                    const readTime = Math.max(3, Math.ceil(mots / 200));
+                    const coverImg = fields.Image || getImageForTopic(topic);
+                    const avgScore = Math.round((seoScore + geoScore) / 2);
+                    const articleId = `article-${record.id}`;
+                    window[articleId] = { topic, article, seoScore, geoScore, mots };
+
+                    return `
+                        <article class="article-card" onclick="showArticleModal('${articleId}')">
+                            <div class="article-card-image">
+                                <img src="${coverImg}" alt="${topic}" onerror="this.src='images/hero-4k.jpg'">
+                                <div class="score-badge">Score ${avgScore}/100</div>
+                            </div>
+                            <div class="article-card-content">
+                                <div class="article-tags">
+                                    <span class="ai-badge">IA</span>
+                                </div>
+                                <h3><a href="#" onclick="event.preventDefault();">${topic}</a></h3>
+                                <p class="article-excerpt">${excerpt}</p>
+                                <div class="article-meta">
+                                    <span>${dateStr}</span>
+                                    <span>${readTime} min</span>
+                                </div>
+                            </div>
+                        </article>
+                    `;
+                }).join('');
+
+                document.getElementById('dynamic-section').style.display = 'block';
+            }
+        } catch (error) {
+            console.error('Erreur chargement articles:', error);
+        }
+    }
+
+    function showArticleModal(articleId) {
+        const data = window[articleId];
+        if (!data) return;
+
+        const { topic, article, seoScore, geoScore, mots } = data;
+        const readTime = Math.max(3, Math.ceil(mots / 200));
+
+        const existing = document.getElementById('articleModal');
+        if (existing) existing.remove();
+
+        let htmlContent = article
+            .replace(/^# (.+)$/gm, '<h1 style="font-size:28px;margin:32px 0 16px;color:#0F172A;font-weight:800;">$1</h1>')
+            .replace(/^## (.+)$/gm, '<h2 style="font-size:22px;margin:28px 0 14px;color:#1E293B;font-weight:700;">$1</h2>')
+            .replace(/^### (.+)$/gm, '<h3 style="font-size:18px;margin:24px 0 12px;color:#334155;font-weight:600;">$1</h3>')
+            .replace(/^> (.+)$/gm, '<blockquote style="border-left:4px solid #2CCCD4;padding:16px 24px;margin:24px 0;background:#F8FAFC;border-radius:0 12px 12px 0;">$1</blockquote>')
+            .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+            .replace(/\*(.+?)\*/g, '<em>$1</em>')
+            .replace(/\n\n/g, '</p><p style="margin:18px 0;line-height:1.9;color:#475569;">');
+
+        const modal = document.createElement('div');
+        modal.id = 'articleModal';
+        modal.style.cssText = 'position:fixed;inset:0;background:rgba(15,23,42,0.9);display:flex;align-items:flex-start;justify-content:center;z-index:2000;padding:40px 20px;overflow:auto;backdrop-filter:blur(8px);';
+        modal.innerHTML = `
+            <div style="background:white;border-radius:24px;max-width:800px;width:100%;position:relative;box-shadow:0 32px 64px rgba(0,0,0,0.3);">
+                <div style="height:180px;background:linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%);border-radius:24px 24px 0 0;position:relative;display:flex;align-items:center;justify-content:center;">
+                    <span style="font-size:56px;">🌴</span>
+                    <button onclick="this.closest('#articleModal').remove()" style="position:absolute;top:20px;right:20px;background:white;color:#0F172A;border:none;width:44px;height:44px;border-radius:12px;font-size:24px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,0,0,0.15);transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">x</button>
+                </div>
+                <div style="display:flex;flex-wrap:wrap;gap:10px;padding:28px 36px 0;">
+                    <span style="background:linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%);color:white;padding:8px 16px;border-radius:10px;font-size:13px;font-weight:700;">Genere par IA</span>
+                    <span style="background:linear-gradient(135deg, #3B82F6 0%, #60A5FA 100%);color:white;padding:8px 16px;border-radius:10px;font-size:13px;font-weight:700;">SEO: ${seoScore}/100</span>
+                    <span style="background:linear-gradient(135deg, #10B981 0%, #34D399 100%);color:white;padding:8px 16px;border-radius:10px;font-size:13px;font-weight:700;">GEO: ${geoScore}/100</span>
+                    <span style="background:#F1F5F9;color:#64748B;padding:8px 16px;border-radius:10px;font-size:13px;font-weight:600;">${mots} mots - ${readTime} min</span>
+                </div>
+                <h1 style="font-size:28px;font-weight:800;margin:24px 36px;line-height:1.35;color:#0F172A;">${topic}</h1>
+                <div style="padding:0 36px 40px;font-size:17px;line-height:1.9;color:#475569;">
+                    <p style="margin:18px 0;line-height:1.9;color:#475569;">${htmlContent}</p>
+                </div>
+                <div style="border-top:1px solid #E2E8F0;padding:24px 36px;display:flex;justify-content:space-between;align-items:center;background:#F8FAFC;border-radius:0 0 24px 24px;">
+                    <span style="font-size:14px;color:#94A3B8;">Article optimise pour Google & moteurs IA</span>
+                    <button onclick="this.closest('#articleModal').remove()" style="background:linear-gradient(135deg, #2CCCD4 0%, #0D9488 100%);color:white;border:none;padding:12px 28px;border-radius:12px;font-weight:700;cursor:pointer;transition:transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">Fermer</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
+    }
+
+    loadDynamicArticles();
+
+    document.getElementById('blogNewsletterForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = e.target.querySelector('input[type="email"]').value;
+        try {
+            await fetch('https://n8n.srv1140766.hstgr.cloud/webhook/atn-newsletter-signup', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, segment: 'general', interests: ['blog-reader'], source: 'blog-page', timestamp: new Date().toISOString() })
+            });
+            alert('Mauruuru ! Vous etes inscrit a notre newsletter.');
+            e.target.reset();
+        } catch (error) { console.error('Erreur:', error); }
+    });
+    </script>
+</body>
+</html>

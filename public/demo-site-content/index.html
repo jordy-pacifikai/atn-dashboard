@@ -1,0 +1,1948 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Air Tahiti Nui - La compagnie de la Polynésie française</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --atn-blue: #2CCCD4;
+            --atn-blue-light: #3dd9e1;
+            --atn-blue-dark: #1aa3aa;
+            --atn-teal: #2CCCD4;
+            --atn-gold: #C9A84C;
+            --atn-orange: #FF6B00;
+            --atn-white: #FFFFFF;
+            --atn-gray-light: #F8F9FA;
+            --atn-gray: #E5E5E5;
+            --atn-gray-dark: #333333;
+            --atn-text: #1A1A1A;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--atn-text);
+            line-height: 1.5;
+            background: var(--atn-white);
+        }
+
+        /* Header ATN Style */
+        .header {
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            background: var(--atn-white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .header-top {
+            background: linear-gradient(135deg, #2CCCD4 0%, #1aa3aa 100%);
+            padding: 8px 0;
+            font-size: 13px;
+        }
+
+        .header-top .container {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .header-top a {
+            color: var(--atn-white);
+            text-decoration: none;
+            font-weight: 400;
+            transition: opacity 0.2s;
+        }
+
+        .header-top a:hover {
+            opacity: 0.8;
+        }
+
+        .header-main {
+            padding: 12px 0;
+            border-bottom: 1px solid var(--atn-gray);
+        }
+
+        .header-main .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo img {
+            height: 55px;
+            width: auto;
+        }
+
+        .nav-main {
+            display: flex;
+            align-items: center;
+            gap: 0;
+        }
+
+        .nav-main a {
+            color: var(--atn-text);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            padding: 15px 20px;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: relative;
+        }
+
+        .nav-main a:hover {
+            color: var(--atn-teal);
+        }
+
+        .nav-main a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 20px;
+            right: 20px;
+            height: 3px;
+            background: var(--atn-teal);
+            transform: scaleX(0);
+            transition: transform 0.2s;
+        }
+
+        .nav-main a:hover::after,
+        .nav-main a.active::after {
+            transform: scaleX(1);
+        }
+
+        .container {
+            max-width: 1320px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Hero Section - ATN Style */
+        .hero {
+            margin-top: 110px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 600px;
+        }
+
+        .hero-image {
+            background: url('images/hero-4k.jpg') center center / cover no-repeat;
+            position: relative;
+        }
+
+        .hero-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(44,204,212,0.2) 0%, rgba(26,163,170,0.15) 100%);
+        }
+
+        .hero-content {
+            background: linear-gradient(135deg, #2CCCD4 0%, #1aa3aa 100%);
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            color: var(--atn-white);
+        }
+
+        .hero-promo-tag {
+            display: inline-block;
+            background: var(--atn-orange);
+            color: var(--atn-white);
+            padding: 6px 16px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 25px;
+            border-radius: 3px;
+        }
+
+        .hero-content h1 {
+            font-size: 42px;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+
+        .hero-content p {
+            font-size: 18px;
+            opacity: 0.9;
+            margin-bottom: 30px;
+            max-width: 400px;
+        }
+
+        .btn-cta {
+            display: inline-block;
+            background: var(--atn-gold);
+            color: #1a1a1a;
+            padding: 16px 40px;
+            font-size: 14px;
+            font-weight: 700;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-cta:hover {
+            background: #d4b35a;
+            transform: translateY(-2px);
+        }
+
+        /* Booking Form Section */
+        .booking-section {
+            background: var(--atn-gray-light);
+            padding: 50px 0;
+        }
+
+        .booking-form {
+            background: var(--atn-white);
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .booking-form h3 {
+            color: var(--atn-blue);
+            font-size: 24px;
+            margin-bottom: 25px;
+            font-weight: 700;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr auto;
+            gap: 20px;
+            align-items: end;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--atn-gray-dark);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--atn-gray);
+            border-radius: 4px;
+            font-size: 15px;
+            font-family: inherit;
+            transition: border-color 0.2s;
+            background: var(--atn-white);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--atn-teal);
+        }
+
+        .btn-search {
+            background: var(--atn-teal);
+            color: var(--atn-white);
+            border: none;
+            padding: 16px 35px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+
+        .btn-search:hover {
+            background: #1aa3aa;
+        }
+
+        /* Services Grid */
+        .services {
+            padding: 80px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-header h2 {
+            font-size: 32px;
+            color: var(--atn-blue);
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .section-header p {
+            color: var(--atn-gray-dark);
+            font-size: 16px;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+        }
+
+        .service-card {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            background: var(--atn-white);
+        }
+
+        .service-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+        }
+
+        .service-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .service-card-content {
+            padding: 25px;
+        }
+
+        .service-card h4 {
+            font-size: 18px;
+            color: var(--atn-blue);
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .service-card p {
+            font-size: 14px;
+            color: var(--atn-gray-dark);
+            margin-bottom: 15px;
+        }
+
+        .service-link {
+            color: var(--atn-teal);
+            font-weight: 600;
+            font-size: 14px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .service-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Offers Section */
+        .offers {
+            background: var(--atn-gray-light);
+            padding: 80px 0;
+        }
+
+        .offers-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+        }
+
+        .offer-card {
+            background: var(--atn-white);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+        }
+
+        .offer-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .offer-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .offer-card-content {
+            padding: 20px;
+        }
+
+        .offer-tag {
+            display: inline-block;
+            background: var(--atn-orange);
+            color: var(--atn-white);
+            padding: 4px 10px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            border-radius: 3px;
+        }
+
+        .offer-card h4 {
+            font-size: 16px;
+            color: var(--atn-text);
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .offer-route {
+            font-size: 13px;
+            color: var(--atn-gray-dark);
+            margin-bottom: 12px;
+        }
+
+        .offer-price {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--atn-teal);
+        }
+
+        .offer-price span {
+            font-size: 13px;
+            font-weight: 400;
+            color: var(--atn-gray-dark);
+        }
+
+        /* Travel Classes */
+        .classes {
+            padding: 80px 0;
+            background: linear-gradient(180deg, var(--atn-white) 0%, var(--atn-gray-light) 100%);
+        }
+
+        .classes-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .class-card {
+            background: var(--atn-white);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 6px 25px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .class-card img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+        }
+
+        .class-card-content {
+            padding: 30px;
+        }
+
+        .class-name {
+            font-size: 13px;
+            color: var(--atn-teal);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        .class-card h4 {
+            font-size: 26px;
+            color: var(--atn-blue);
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .class-card p {
+            font-size: 14px;
+            color: var(--atn-gray-dark);
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+
+        .class-features {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 25px;
+        }
+
+        .class-features li {
+            padding: 10px 0;
+            font-size: 14px;
+            border-bottom: 1px solid var(--atn-gray);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .class-features li:last-child {
+            border-bottom: none;
+        }
+
+        .class-features li::before {
+            content: '✓';
+            color: var(--atn-teal);
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .btn-outline {
+            display: inline-block;
+            border: 2px solid var(--atn-teal);
+            color: var(--atn-teal);
+            padding: 12px 30px;
+            font-size: 13px;
+            font-weight: 700;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.2s;
+        }
+
+        .btn-outline:hover {
+            background: var(--atn-teal);
+            color: var(--atn-white);
+        }
+
+        /* Stats Banner */
+        .stats-banner {
+            background: linear-gradient(135deg, #2CCCD4 0%, #1aa3aa 100%);
+            color: var(--atn-white);
+            padding: 60px 0;
+        }
+
+        /* Newsletter Section */
+        .newsletter-section {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            padding: 80px 0;
+            color: var(--atn-white);
+        }
+
+        .newsletter-content {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .newsletter-content h2 {
+            font-size: 32px;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .newsletter-content h2 span {
+            color: var(--atn-gold);
+        }
+
+        .newsletter-content p {
+            font-size: 16px;
+            opacity: 0.8;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .newsletter-form {
+            display: flex;
+            gap: 12px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .newsletter-form input[type="email"] {
+            flex: 1;
+            padding: 16px 20px;
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 6px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            font-size: 15px;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+
+        .newsletter-form input[type="email"]::placeholder {
+            color: rgba(255,255,255,0.5);
+        }
+
+        .newsletter-form input[type="email"]:focus {
+            outline: none;
+            border-color: var(--atn-teal);
+            background: rgba(255,255,255,0.15);
+        }
+
+        .newsletter-form button {
+            padding: 16px 32px;
+            background: var(--atn-gold);
+            color: #1a1a1a;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .newsletter-form button:hover {
+            background: #d4b35a;
+            transform: translateY(-2px);
+        }
+
+        /* Modal Newsletter */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            animation: fadeInOverlay 0.3s ease;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        @keyframes fadeInOverlay {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 500px;
+            padding: 40px;
+            position: relative;
+            animation: slideUpModal 0.3s ease;
+        }
+
+        @keyframes slideUpModal {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            background: #f3f4f6;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: #6b7280;
+            transition: all 0.2s;
+        }
+
+        .modal-close:hover {
+            background: #e5e7eb;
+            color: #1f2937;
+        }
+
+        .modal-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .modal-header .modal-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #2CCCD4 0%, #1aa3aa 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+
+        .modal-header .modal-icon img {
+            width: 36px;
+            height: 36px;
+            filter: brightness(0) invert(1);
+        }
+
+        .modal-header h3 {
+            font-size: 24px;
+            color: var(--atn-text);
+            margin-bottom: 8px;
+        }
+
+        .modal-header p {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .interests-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .interest-option {
+            position: relative;
+        }
+
+        .interest-option input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .interest-option label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .interest-option label:hover {
+            border-color: #2CCCD4;
+            background: #f0fdfa;
+        }
+
+        .interest-option input:checked + label {
+            border-color: #2CCCD4;
+            background: linear-gradient(135deg, rgba(44,204,212,0.1) 0%, rgba(26,163,170,0.1) 100%);
+        }
+
+        .interest-option input:checked + label::after {
+            content: '✓';
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 22px;
+            height: 22px;
+            background: #2CCCD4;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .interest-option .interest-icon {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .interest-option .interest-name {
+            font-weight: 600;
+            color: var(--atn-text);
+            font-size: 14px;
+        }
+
+        .interest-option .interest-desc {
+            font-size: 12px;
+            color: #6b7280;
+            margin-top: 4px;
+        }
+
+        .modal-submit {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #2CCCD4 0%, #1aa3aa 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .modal-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(44,204,212,0.4);
+        }
+
+        .modal-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Success state */
+        .newsletter-success {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .newsletter-success .success-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 32px;
+            color: white;
+        }
+
+        .newsletter-success h4 {
+            font-size: 20px;
+            color: var(--atn-text);
+            margin-bottom: 8px;
+        }
+
+        .newsletter-success p {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        @media (max-width: 600px) {
+            .newsletter-form {
+                flex-direction: column;
+            }
+            .interests-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            text-align: center;
+        }
+
+        .stat-item h3 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .stat-item p {
+            font-size: 14px;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--atn-gray-dark);
+            color: var(--atn-white);
+            padding: 60px 0 30px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-logo img {
+            height: 50px;
+            margin-bottom: 20px;
+        }
+
+        .footer-about p {
+            font-size: 14px;
+            opacity: 0.7;
+            line-height: 1.8;
+        }
+
+        .footer h5 {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .footer ul {
+            list-style: none;
+        }
+
+        .footer ul li {
+            margin-bottom: 12px;
+        }
+
+        .footer ul a {
+            color: var(--atn-white);
+            text-decoration: none;
+            font-size: 14px;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+
+        .footer ul a:hover {
+            opacity: 1;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            opacity: 0.6;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 15px;
+        }
+
+        .footer-social a {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--atn-white);
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        .footer-social a:hover {
+            background: var(--atn-teal);
+        }
+
+        /* Demo Badge */
+        .demo-badge {
+            position: fixed;
+            top: 120px;
+            right: 20px;
+            background: var(--atn-orange);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            z-index: 1001;
+            box-shadow: 0 4px 15px rgba(255,107,0,0.4);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .form-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .services-grid,
+            .offers-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 992px) {
+            .hero {
+                grid-template-columns: 1fr;
+            }
+            .hero-image {
+                min-height: 300px;
+            }
+            .classes-grid {
+                grid-template-columns: 1fr;
+            }
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-main {
+                display: none;
+            }
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            .services-grid,
+            .offers-grid {
+                grid-template-columns: 1fr;
+            }
+            .hero-content {
+                padding: 40px 20px;
+            }
+            .hero-content h1 {
+                font-size: 28px;
+            }
+        }
+
+        /* ============================================
+           TIARE CHATBOT - Custom Design Premium
+           ============================================ */
+
+        .tiare-chat-toggle {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #2CCCD4 0%, #1fb8c0 100%);
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(44, 204, 212, 0.4);
+            z-index: 9999;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tiare-chat-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 28px rgba(44, 204, 212, 0.5);
+        }
+
+        .tiare-chat-toggle svg {
+            width: 28px;
+            height: 28px;
+            fill: white;
+        }
+
+        .tiare-chat-toggle.open svg.chat-icon { display: none; }
+        .tiare-chat-toggle.open svg.close-icon { display: block; }
+        .tiare-chat-toggle svg.close-icon { display: none; }
+
+        .tiare-chat-window {
+            position: fixed;
+            bottom: 100px;
+            right: 24px;
+            width: 380px;
+            height: 520px;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0,0,0,0.05);
+            z-index: 9998;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            animation: slideUp 0.3s ease;
+        }
+
+        .tiare-chat-window.open {
+            display: flex;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .tiare-chat-header {
+            background: linear-gradient(135deg, #2CCCD4 0%, #1aa3aa 100%);
+            padding: 20px;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .tiare-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #C9A84C 0%, #b8973f 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .tiare-header-info h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin: 0 0 2px 0;
+        }
+
+        .tiare-header-info p {
+            font-size: 13px;
+            opacity: 0.85;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tiare-status-dot {
+            width: 8px;
+            height: 8px;
+            background: #10B981;
+            border-radius: 50%;
+        }
+
+        .tiare-chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            background: #f9fafb;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .tiare-message {
+            max-width: 85%;
+            padding: 12px 16px;
+            border-radius: 16px;
+            font-size: 14px;
+            line-height: 1.5;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .tiare-message.bot {
+            background: white;
+            color: #1f2937;
+            border-bottom-left-radius: 4px;
+            align-self: flex-start;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        .tiare-message.bot strong {
+            color: #0f766e;
+        }
+
+        .tiare-message.bot br + br {
+            content: '';
+            display: block;
+            margin-top: 8px;
+        }
+
+        .tiare-message.user {
+            background: linear-gradient(135deg, #2CCCD4 0%, #1fb8c0 100%);
+            color: white;
+            border-bottom-right-radius: 4px;
+            align-self: flex-end;
+        }
+
+        .tiare-typing {
+            display: flex;
+            gap: 4px;
+            padding: 12px 16px;
+            background: white;
+            border-radius: 16px;
+            border-bottom-left-radius: 4px;
+            align-self: flex-start;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        .tiare-typing span {
+            width: 8px;
+            height: 8px;
+            background: #2CCCD4;
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out;
+        }
+
+        .tiare-typing span:nth-child(1) { animation-delay: -0.32s; }
+        .tiare-typing span:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0.6); opacity: 0.5; }
+            40% { transform: scale(1); opacity: 1; }
+        }
+
+        .tiare-chat-input {
+            padding: 16px;
+            background: white;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .tiare-chat-input input {
+            flex: 1;
+            padding: 12px 18px;
+            border: 2px solid #e5e7eb;
+            border-radius: 24px;
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .tiare-chat-input input:focus {
+            border-color: #2CCCD4;
+        }
+
+        .tiare-chat-input input::placeholder {
+            color: #9ca3af;
+        }
+
+        .tiare-send-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #C9A84C 0%, #b8973f 100%);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+            flex-shrink: 0;
+        }
+
+        .tiare-send-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .tiare-send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .tiare-send-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: #003366;
+        }
+
+        /* Scrollbar */
+        .tiare-chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .tiare-chat-messages::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .tiare-chat-messages::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 3px;
+        }
+
+        /* Mobile */
+        @media (max-width: 480px) {
+            .tiare-chat-window {
+                width: 100%;
+                height: 100%;
+                bottom: 0;
+                right: 0;
+                border-radius: 0;
+            }
+            .tiare-chat-toggle.open {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-top">
+            <div class="container">
+                <a href="#">Club Tiare</a>
+                <a href="#">Aide & Contact</a>
+                <a href="#">FR</a>
+            </div>
+        </div>
+        <div class="header-main">
+            <div class="container">
+                <a href="index.html" class="logo">
+                    <img src="images/logo-full-color.svg" alt="Air Tahiti Nui" style="height:55px;width:auto;">
+                </a>
+                <nav class="nav-main">
+                    <a href="index.html" class="active">Réserver</a>
+                    <a href="#">Offres</a>
+                    <a href="#">Fidélité</a>
+                    <a href="blog.html">Blog</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-image"></div>
+        <div class="hero-content">
+            <span class="hero-promo-tag">Offre spéciale 2026</span>
+            <h1>Découvrez la magie de la Polynésie française</h1>
+            <p>Envolez-vous vers le paradis à bord de nos Boeing 787-9 Dreamliner. Tahiti, Bora Bora, Moorea... votre rêve polynésien commence ici.</p>
+            <a href="#" class="btn-cta">Voir les offres</a>
+        </div>
+    </section>
+
+    <!-- Booking Form -->
+    <section class="booking-section">
+        <div class="container">
+            <form class="booking-form">
+                <h3>Rechercher un vol</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Départ</label>
+                        <select>
+                            <option>Paris (CDG)</option>
+                            <option>Los Angeles (LAX)</option>
+                            <option>Tokyo (NRT)</option>
+                            <option>Auckland (AKL)</option>
+                            <option>Sydney (SYD)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Destination</label>
+                        <select>
+                            <option>Papeete (PPT)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Date aller</label>
+                        <input type="date" value="2026-03-15">
+                    </div>
+                    <div class="form-group">
+                        <label>Date retour</label>
+                        <input type="date" value="2026-03-30">
+                    </div>
+                    <button type="button" class="btn-search">Rechercher</button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Services -->
+    <section class="services">
+        <div class="container">
+            <div class="section-header">
+                <h2>Préparez votre séjour</h2>
+                <p>Des services complémentaires pour un voyage parfait</p>
+            </div>
+            <div class="services-grid">
+                <div class="service-card">
+                    <img src="images/business-class-new.jpg" alt="Classe Poerava Business">
+                    <div class="service-card-content">
+                        <h4>Surclassement Poerava</h4>
+                        <p>Vivez l'excellence polynésienne avec notre classe Business</p>
+                        <a href="#" class="service-link">Découvrir →</a>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <img src="images/bungalow.jpg" alt="Hébergements">
+                    <div class="service-card-content">
+                        <h4>Hébergements</h4>
+                        <p>Bungalows sur pilotis, hôtels de luxe et pensions de charme</p>
+                        <a href="#" class="service-link">Réserver →</a>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <img src="images/rental.jpg" alt="Location de voiture">
+                    <div class="service-card-content">
+                        <h4>Location de voiture</h4>
+                        <p>Explorez les îles en toute liberté avec nos partenaires</p>
+                        <a href="#" class="service-link">Voir les offres →</a>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <img src="images/bora-bora.jpg" alt="Excursions">
+                    <div class="service-card-content">
+                        <h4>Excursions</h4>
+                        <p>Plongée, safari 4x4, croisières et bien plus encore</p>
+                        <a href="#" class="service-link">Explorer →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Offers -->
+    <section class="offers">
+        <div class="container">
+            <div class="section-header">
+                <h2>Nos meilleures offres</h2>
+                <p>Profitez de tarifs exceptionnels vers la Polynésie</p>
+            </div>
+            <div class="offers-grid">
+                <div class="offer-card">
+                    <img src="images/tahiti-moorea.jpg" alt="Paris - Tahiti">
+                    <div class="offer-card-content">
+                        <span class="offer-tag">-20%</span>
+                        <h4>Paris - Tahiti</h4>
+                        <div class="offer-route">Aller-retour, via Los Angeles</div>
+                        <div class="offer-price">1 299 € <span>TTC / pers.</span></div>
+                    </div>
+                </div>
+                <div class="offer-card">
+                    <img src="images/la-venice-offer.jpg" alt="Los Angeles - Tahiti">
+                    <div class="offer-card-content">
+                        <span class="offer-tag">Vol direct</span>
+                        <h4>Los Angeles - Tahiti</h4>
+                        <div class="offer-route">Aller-retour, vol direct 8h</div>
+                        <div class="offer-price">899 $ <span>TTC / pers.</span></div>
+                    </div>
+                </div>
+                <div class="offer-card">
+                    <img src="images/tokyo.jpg" alt="Tokyo - Tahiti">
+                    <div class="offer-card-content">
+                        <span class="offer-tag">Nouveau</span>
+                        <h4>Tokyo - Tahiti</h4>
+                        <div class="offer-route">Aller-retour, vol direct 11h</div>
+                        <div class="offer-price">159 000 <span>JPY / pers.</span></div>
+                    </div>
+                </div>
+                <div class="offer-card">
+                    <img src="images/auckland.jpg" alt="Auckland - Tahiti">
+                    <div class="offer-card-content">
+                        <span class="offer-tag">Promo NZ</span>
+                        <h4>Auckland - Tahiti</h4>
+                        <div class="offer-route">Aller-retour, vol direct 5h</div>
+                        <div class="offer-price">1 199 <span>NZD / pers.</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Travel Classes -->
+    <section class="classes">
+        <div class="container">
+            <div class="section-header">
+                <h2>Nos classes de voyage</h2>
+                <p>Choisissez l'expérience qui vous correspond</p>
+            </div>
+            <div class="classes-grid">
+                <div class="class-card">
+                    <img src="images/accommodation.jpg" alt="Moana Economy">
+                    <div class="class-card-content">
+                        <div class="class-name">Économie</div>
+                        <h4>Moana Economy</h4>
+                        <p>Le confort essentiel avec le légendaire accueil polynésien</p>
+                        <ul class="class-features">
+                            <li>Siège ergonomique 18"</li>
+                            <li>Écran tactile 12 pouces</li>
+                            <li>Repas polynésien inclus</li>
+                            <li>2 bagages x 23kg</li>
+                        </ul>
+                        <a href="#" class="btn-outline">En savoir plus</a>
+                    </div>
+                </div>
+                <div class="class-card">
+                    <img src="images/la-beach.jpg" alt="Manava Premium">
+                    <div class="class-card-content">
+                        <div class="class-name">Premium</div>
+                        <h4>Mānava Premium</h4>
+                        <p>Plus d'espace et de confort pour votre voyage</p>
+                        <ul class="class-features">
+                            <li>Siège plus large 19"</li>
+                            <li>Inclinaison 40% supérieure</li>
+                            <li>Écran 13 pouces</li>
+                            <li>Repas amélioré</li>
+                        </ul>
+                        <a href="#" class="btn-outline">En savoir plus</a>
+                    </div>
+                </div>
+                <div class="class-card">
+                    <img src="images/business-class-new.jpg" alt="Poerava Business">
+                    <div class="class-card-content">
+                        <div class="class-name">Business</div>
+                        <h4>Poerava Business</h4>
+                        <p>L'excellence polynésienne dans les airs</p>
+                        <ul class="class-features">
+                            <li>Siège-lit full flat 180°</li>
+                            <li>Écran 18 pouces HD</li>
+                            <li>Menu gastronomique</li>
+                            <li>Accès salon Poerava</li>
+                        </ul>
+                        <a href="#" class="btn-outline">En savoir plus</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Banner -->
+    <section class="stats-banner">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <h3>25+</h3>
+                    <p>Années d'expérience</p>
+                </div>
+                <div class="stat-item">
+                    <h3>5</h3>
+                    <p>Destinations internationales</p>
+                </div>
+                <div class="stat-item">
+                    <h3>787</h3>
+                    <p>Boeing Dreamliner</p>
+                </div>
+                <div class="stat-item">
+                    <h3>500K+</h3>
+                    <p>Passagers par an</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="newsletter-section" id="newsletter">
+        <div class="container">
+            <div class="newsletter-content">
+                <h2>Recevez nos <span>offres exclusives</span></h2>
+                <p>Inscrivez-vous à notre newsletter et recevez en avant-première nos meilleures promotions, conseils de voyage et inspirations polynésiennes.</p>
+                <form class="newsletter-form" id="newsletterForm">
+                    <input type="email" id="newsletterEmail" placeholder="Votre adresse email" required>
+                    <button type="submit">S'inscrire</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal Centres d'intérêt -->
+    <div class="modal-overlay" id="interestsModal">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">×</button>
+
+            <div id="modalFormView">
+                <div class="modal-header">
+                    <div class="modal-icon">
+                        <img src="images/logo_flower.svg" alt="Air Tahiti Nui">
+                    </div>
+                    <h3>Personnalisez votre expérience</h3>
+                    <p>Sélectionnez vos centres d'intérêt pour recevoir des offres adaptées</p>
+                </div>
+
+                <div class="interests-grid">
+                    <div class="interest-option">
+                        <input type="checkbox" name="interest" value="plongee" id="int-plongee">
+                        <label for="int-plongee">
+                            <span class="interest-icon">🤿</span>
+                            <span class="interest-name">Plongée</span>
+                            <span class="interest-desc">Spots, faune marine</span>
+                        </label>
+                    </div>
+                    <div class="interest-option">
+                        <input type="checkbox" name="interest" value="lune-de-miel" id="int-lune">
+                        <label for="int-lune">
+                            <span class="interest-icon">💑</span>
+                            <span class="interest-name">Lune de miel</span>
+                            <span class="interest-desc">Romance, intimité</span>
+                        </label>
+                    </div>
+                    <div class="interest-option">
+                        <input type="checkbox" name="interest" value="famille" id="int-famille">
+                        <label for="int-famille">
+                            <span class="interest-icon">👨‍👩‍👧‍👦</span>
+                            <span class="interest-name">Famille</span>
+                            <span class="interest-desc">Activités enfants</span>
+                        </label>
+                    </div>
+                    <div class="interest-option">
+                        <input type="checkbox" name="interest" value="business" id="int-business">
+                        <label for="int-business">
+                            <span class="interest-icon">💼</span>
+                            <span class="interest-name">Business</span>
+                            <span class="interest-desc">Voyages d'affaires</span>
+                        </label>
+                    </div>
+                </div>
+
+                <button class="modal-submit" id="submitInterests">Confirmer mon inscription</button>
+            </div>
+
+            <div id="modalSuccessView" class="newsletter-success" style="display:none;">
+                <div class="success-icon">✓</div>
+                <h4>Māuruuru ! (Merci)</h4>
+                <p>Vous êtes maintenant inscrit à notre newsletter personnalisée.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-about">
+                    <div class="footer-logo">
+                        <img src="images/logo_flower.svg" alt="Air Tahiti Nui">
+                    </div>
+                    <p>La compagnie aérienne internationale de la Polynésie française. Depuis 1996, nous relions Tahiti au monde avec le légendaire accueil polynésien.</p>
+                </div>
+                <div>
+                    <h5>Réserver</h5>
+                    <ul>
+                        <li><a href="#">Rechercher un vol</a></li>
+                        <li><a href="#">Nos offres</a></li>
+                        <li><a href="#">Séjours</a></li>
+                        <li><a href="#">Groupes</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5>Préparer</h5>
+                    <ul>
+                        <li><a href="#">Bagages</a></li>
+                        <li><a href="#">Enregistrement</a></li>
+                        <li><a href="#">À bord</a></li>
+                        <li><a href="#">Documents</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5>Club Tiare</h5>
+                    <ul>
+                        <li><a href="#">Adhérer</a></li>
+                        <li><a href="#">Avantages</a></li>
+                        <li><a href="#">Partenaires</a></li>
+                        <li><a href="#">Mon compte</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5>À propos</h5>
+                    <ul>
+                        <li><a href="#">Notre compagnie</a></li>
+                        <li><a href="#">Carrières</a></li>
+                        <li><a href="#">Presse</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 Air Tahiti Nui - Site de démonstration PACIFIK'AI - Tous droits réservés</p>
+                <div class="footer-social">
+                    <a href="#" title="Facebook">f</a>
+                    <a href="#" title="Instagram">ig</a>
+                    <a href="#" title="YouTube">yt</a>
+                    <a href="#" title="LinkedIn">in</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Tiare Chatbot - Custom Design -->
+    <button class="tiare-chat-toggle" id="tiareToggle" aria-label="Ouvrir le chat">
+        <svg class="chat-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/>
+        </svg>
+        <svg class="close-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+        </svg>
+    </button>
+
+    <div class="tiare-chat-window" id="tiareWindow">
+        <div class="tiare-chat-header">
+            <div class="tiare-avatar">
+                <img src="images/logo_flower.svg" alt="Tiare" style="width:32px;height:32px;filter:brightness(0) invert(1);">
+            </div>
+            <div class="tiare-header-info">
+                <h4>Tiare</h4>
+                <p><span class="tiare-status-dot"></span> Concierge Air Tahiti Nui</p>
+            </div>
+        </div>
+        <div class="tiare-chat-messages" id="tiareMessages">
+            <div class="tiare-message bot">
+                Ia ora na ! Je suis Tiare, votre concierge virtuelle Air Tahiti Nui. Comment puis-je vous aider à préparer votre voyage en Polynésie ?
+            </div>
+        </div>
+        <div class="tiare-chat-input">
+            <input type="text" id="tiareInput" placeholder="Posez votre question..." autocomplete="off">
+            <button class="tiare-send-btn" id="tiareSend" aria-label="Envoyer">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <script>
+    (function() {
+        const toggle = document.getElementById('tiareToggle');
+        const window_chat = document.getElementById('tiareWindow');
+        const messages = document.getElementById('tiareMessages');
+        const input = document.getElementById('tiareInput');
+        const sendBtn = document.getElementById('tiareSend');
+
+        // Session ID unique et persistant
+        let sessionId = sessionStorage.getItem('tiare-session');
+        if (!sessionId) {
+            sessionId = 'tiare-' + Date.now() + '-' + Math.random().toString(36).substring(2, 9);
+            sessionStorage.setItem('tiare-session', sessionId);
+        }
+
+        const WEBHOOK_URL = 'https://n8n.srv1140766.hstgr.cloud/webhook/atn-concierge-demo/chat';
+
+        // Toggle chat window
+        toggle.addEventListener('click', () => {
+            const isOpen = window_chat.classList.toggle('open');
+            toggle.classList.toggle('open');
+            if (isOpen) {
+                input.focus();
+            }
+        });
+
+        // Auto-open if coming from dashboard
+        if (localStorage.getItem('openChatbot') === 'true') {
+            localStorage.removeItem('openChatbot');
+            setTimeout(() => {
+                window_chat.classList.add('open');
+                toggle.classList.add('open');
+                input.focus();
+            }, 500);
+        }
+
+        // Also check URL hash
+        if (window.location.hash === '#chatbot') {
+            setTimeout(() => {
+                window_chat.classList.add('open');
+                toggle.classList.add('open');
+                input.focus();
+            }, 500);
+        }
+
+        // Send message
+        async function sendMessage() {
+            const text = input.value.trim();
+            if (!text) return;
+
+            // Add user message
+            addMessage(text, 'user');
+            input.value = '';
+            sendBtn.disabled = true;
+
+            // Show typing indicator
+            const typing = showTyping();
+
+            try {
+                const response = await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        action: 'sendMessage',
+                        sessionId: sessionId,
+                        chatInput: text
+                    })
+                });
+
+                typing.remove();
+
+                if (response.ok) {
+                    const data = await response.json();
+                    // n8n Chat Trigger renvoie la réponse dans différents formats possibles
+                    let botText = data.output || data.text || data.response || data.message;
+
+                    // Si c'est un array, prendre le premier élément
+                    if (Array.isArray(data)) {
+                        botText = data[0]?.output || data[0]?.text || data[0]?.response || JSON.stringify(data[0]);
+                    }
+
+                    // Si toujours pas de texte, afficher les données brutes
+                    if (!botText && typeof data === 'object') {
+                        botText = JSON.stringify(data);
+                    }
+
+                    addMessage(botText || "Réponse reçue mais format inattendu.", 'bot');
+                } else {
+                    const errorText = await response.text();
+                    console.error('Erreur webhook:', response.status, errorText);
+                    addMessage("Désolé, une erreur s'est produite (code " + response.status + "). Veuillez réessayer.", 'bot');
+                }
+            } catch (error) {
+                typing.remove();
+                console.error('Erreur réseau:', error);
+                addMessage("Désolé, je ne peux pas me connecter au serveur. Vérifiez votre connexion.", 'bot');
+            }
+
+            sendBtn.disabled = false;
+        }
+
+        function addMessage(text, type) {
+            const msg = document.createElement('div');
+            msg.className = 'tiare-message ' + type;
+            // Convertir le Markdown simple en HTML
+            msg.innerHTML = formatMessage(text);
+            messages.appendChild(msg);
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        function formatMessage(text) {
+            return text
+                // Échapper les caractères HTML dangereux
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                // Titres ##
+                .replace(/^## \*\*(.+?)\*\*$/gm, '<strong style="display:block;margin-top:12px;margin-bottom:6px;font-size:15px;">$1</strong>')
+                .replace(/^## (.+)$/gm, '<strong style="display:block;margin-top:12px;margin-bottom:6px;font-size:15px;">$1</strong>')
+                // Gras **text**
+                .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+                // Italique *text*
+                .replace(/\*(.+?)\*/g, '<em>$1</em>')
+                // Listes à puces
+                .replace(/^- (.+)$/gm, '<span style="display:block;padding-left:12px;">• $1</span>')
+                // Retours à la ligne doubles
+                .replace(/\n\n/g, '<br><br>')
+                // Retours à la ligne simples
+                .replace(/\n/g, '<br>');
+        }
+
+        function showTyping() {
+            const typing = document.createElement('div');
+            typing.className = 'tiare-typing';
+            typing.innerHTML = '<span></span><span></span><span></span>';
+            messages.appendChild(typing);
+            messages.scrollTop = messages.scrollHeight;
+            return typing;
+        }
+
+        // Event listeners
+        sendBtn.addEventListener('click', sendMessage);
+        input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+    })();
+
+    // ============================================
+    // NEWSLETTER AVEC POPUP CENTRES D'INTÉRÊT
+    // ============================================
+    (function() {
+        const form = document.getElementById('newsletterForm');
+        const emailInput = document.getElementById('newsletterEmail');
+        const modal = document.getElementById('interestsModal');
+        const modalClose = document.getElementById('modalClose');
+        const submitBtn = document.getElementById('submitInterests');
+        const formView = document.getElementById('modalFormView');
+        const successView = document.getElementById('modalSuccessView');
+
+        let userEmail = '';
+
+        // Ouvrir le modal quand on soumet le formulaire
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            userEmail = emailInput.value.trim();
+            if (userEmail && validateEmail(userEmail)) {
+                modal.classList.add('show');
+                formView.style.display = 'block';
+                successView.style.display = 'none';
+            }
+        });
+
+        // Fermer le modal
+        modalClose.addEventListener('click', () => {
+            modal.classList.remove('show');
+        });
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.remove('show');
+            }
+        });
+
+        // Soumettre les intérêts
+        submitBtn.addEventListener('click', async () => {
+            const interests = [];
+            document.querySelectorAll('.interest-option input:checked').forEach(cb => {
+                interests.push(cb.value);
+            });
+
+            // Déterminer le segment principal (premier sélectionné ou "general")
+            const segment = interests.length > 0 ? interests[0] : 'general';
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Inscription en cours...';
+
+            try {
+                // Envoyer vers Airtable via n8n webhook
+                const response = await fetch('https://n8n.srv1140766.hstgr.cloud/webhook/atn-newsletter-signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: userEmail,
+                        segment: segment,
+                        interests: interests,
+                        source: 'website-popup',
+                        timestamp: new Date().toISOString()
+                    })
+                });
+
+                if (response.ok) {
+                    // Afficher le succès
+                    formView.style.display = 'none';
+                    successView.style.display = 'block';
+
+                    // Reset le formulaire
+                    emailInput.value = '';
+                    document.querySelectorAll('.interest-option input:checked').forEach(cb => {
+                        cb.checked = false;
+                    });
+
+                    // Fermer après 3 secondes
+                    setTimeout(() => {
+                        modal.classList.remove('show');
+                    }, 3000);
+                } else {
+                    throw new Error('Erreur serveur');
+                }
+            } catch (error) {
+                console.error('Erreur inscription:', error);
+                alert('Une erreur est survenue. Veuillez réessayer.');
+            }
+
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Confirmer mon inscription';
+        });
+
+        function validateEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
+    })();
+    </script>
+</body>
+</html>

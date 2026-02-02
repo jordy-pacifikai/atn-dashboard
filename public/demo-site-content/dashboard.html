@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard IA Employe - Air Tahiti Nui | PACIFIK'AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #F8FAFC;
+            --bg-secondary: #FFFFFF;
+            --bg-card: rgba(255, 255, 255, 0.7);
+            --bg-glass: rgba(255, 255, 255, 0.6);
+            --text-primary: #0F172A;
+            --text-secondary: #475569;
+            --text-muted: #94A3B8;
+            --border-color: rgba(148, 163, 184, 0.2);
+            --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.08);
+            --atn-primary: #2CCCD4;
+            --atn-primary-dark: #1AA3AA;
+            --atn-gold: #C9A84C;
+            --atn-orange: #FF6B00;
+            --build1: #3B82F6; --build1-bg: rgba(59, 130, 246, 0.1);
+            --build2: #EC4899; --build2-bg: rgba(236, 72, 153, 0.1);
+            --build3: #06B6D4; --build3-bg: rgba(6, 182, 212, 0.1);
+            --build4: #8B5CF6; --build4-bg: rgba(139, 92, 246, 0.1);
+            --build5: #F59E0B; --build5-bg: rgba(245, 158, 11, 0.1);
+            --build6: #EF4444; --build6-bg: rgba(239, 68, 68, 0.1);
+            --build7: #10B981; --build7-bg: rgba(16, 185, 129, 0.1);
+            --build8: #F97316; --build8-bg: rgba(249, 115, 22, 0.1);
+            --build9: #6366F1; --build9-bg: rgba(99, 102, 241, 0.1);
+            --build10: #84CC16; --build10-bg: rgba(132, 204, 22, 0.1);
+            --success: #10B981; --success-bg: rgba(16, 185, 129, 0.1);
+            --warning: #F59E0B; --warning-bg: rgba(245, 158, 11, 0.1);
+            --danger: #EF4444;
+            --glass-blur: blur(20px);
+            --glass-border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        [data-theme="dark"] {
+            --bg-primary: #0F172A; --bg-secondary: #1E293B;
+            --bg-card: rgba(30, 41, 59, 0.8); --bg-glass: rgba(30, 41, 59, 0.6);
+            --text-primary: #F1F5F9; --text-secondary: #CBD5E1; --text-muted: #64748B;
+            --border-color: rgba(148, 163, 184, 0.1);
+            --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary); color: var(--text-primary);
+            min-height: 100vh; transition: background 0.3s, color 0.3s;
+        }
+        .bg-orbs { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 0; }
+        .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.4; }
+        .orb-1 { width: 600px; height: 600px; background: linear-gradient(135deg, var(--atn-primary), var(--build1)); top: -200px; right: -100px; }
+        .orb-2 { width: 400px; height: 400px; background: linear-gradient(135deg, var(--build4), var(--build2)); bottom: -100px; left: -100px; }
+        [data-theme="dark"] .orb { opacity: 0.15; }
+        .container { max-width: 1600px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+        /* Header */
+        .header {
+            padding: 16px 0; position: sticky; top: 0; z-index: 100;
+            background: var(--bg-glass); backdrop-filter: var(--glass-blur);
+            border-bottom: var(--glass-border);
+        }
+        .header .container { display: flex; justify-content: space-between; align-items: center; }
+        .header-left { display: flex; align-items: center; gap: 16px; }
+        .logo {
+            width: 44px; height: 44px;
+            background: linear-gradient(135deg, var(--atn-primary), var(--atn-primary-dark));
+            border-radius: 12px; display: flex; align-items: center; justify-content: center;
+            font-weight: 800; font-size: 14px; color: white;
+        }
+        .header-title h1 { font-size: 18px; font-weight: 700; }
+        .header-title span { font-size: 12px; color: var(--text-muted); }
+        .header-right { display: flex; align-items: center; gap: 10px; }
+        .theme-toggle {
+            width: 40px; height: 40px; border-radius: 10px; border: var(--glass-border);
+            background: var(--bg-glass); backdrop-filter: var(--glass-blur);
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; font-size: 16px; transition: all 0.3s;
+        }
+        .theme-toggle:hover { transform: scale(1.05); }
+        .live-badge {
+            display: flex; align-items: center; gap: 6px; padding: 6px 14px;
+            background: var(--success-bg); border-radius: 50px;
+            font-size: 12px; font-weight: 600; color: var(--success);
+        }
+        .live-dot { width: 6px; height: 6px; background: var(--success); border-radius: 50%; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.3); } }
+        .user-badge {
+            display: flex; align-items: center; gap: 8px; padding: 6px 14px;
+            background: var(--bg-card); border: 1px solid var(--border-color);
+            border-radius: 50px; font-size: 12px; font-weight: 500;
+        }
+        .user-avatar { width: 24px; height: 24px; border-radius: 50%; background: var(--atn-primary); display: flex; align-items: center; justify-content: center; font-size: 10px; color: white; }
+
+        /* Main */
+        .main { padding: 24px 0; }
+
+        /* Tab Navigation */
+        .tab-nav {
+            display: flex; gap: 4px; padding: 4px;
+            background: var(--bg-card); border-radius: 12px;
+            border: 1px solid var(--border-color); margin-bottom: 24px;
+            overflow-x: auto;
+        }
+        .tab-btn {
+            padding: 10px 20px; border: none; background: transparent;
+            border-radius: 8px; font-size: 13px; font-weight: 600;
+            color: var(--text-muted); cursor: pointer; transition: all 0.3s;
+            white-space: nowrap;
+        }
+        .tab-btn:hover { color: var(--text-primary); background: var(--bg-glass); }
+        .tab-btn.active { background: var(--atn-primary); color: white; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* Grid */
+        .bento-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; }
+        .glass-card {
+            background: var(--bg-glass); backdrop-filter: var(--glass-blur);
+            border: var(--glass-border); border-radius: 16px; padding: 20px;
+            transition: all 0.3s; position: relative; overflow: hidden;
+        }
+        .glass-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-glass); }
+        .glass-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+        }
+        .span-12 { grid-column: span 12; }
+        .span-8 { grid-column: span 8; }
+        .span-6 { grid-column: span 6; }
+        .span-4 { grid-column: span 4; }
+        .span-3 { grid-column: span 3; }
+
+        /* Stats Overview */
+        .stats-overview { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 24px; }
+        .stat-card {
+            background: var(--bg-glass); backdrop-filter: var(--glass-blur);
+            border: var(--glass-border); border-radius: 14px; padding: 16px;
+            text-align: center; transition: all 0.3s;
+        }
+        .stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-glass); }
+        .stat-icon { width: 40px; height: 40px; margin: 0 auto 10px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+        .stat-value { font-size: 28px; font-weight: 800; letter-spacing: -1px; }
+        .stat-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+        .stat-trend { font-size: 11px; margin-top: 6px; padding: 2px 8px; border-radius: 4px; display: inline-block; }
+        .stat-trend.up { background: var(--success-bg); color: var(--success); }
+        .stat-trend.down { background: var(--build6-bg); color: var(--build6); }
+
+        /* Workflow Grid */
+        .workflow-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+        .workflow-card {
+            background: var(--bg-glass); backdrop-filter: var(--glass-blur);
+            border: 2px solid var(--border-color); border-radius: 16px;
+            padding: 20px; cursor: pointer; transition: all 0.3s;
+            position: relative; overflow: hidden;
+        }
+        .workflow-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-glass); }
+        .workflow-card.loading { pointer-events: none; opacity: 0.7; }
+        .workflow-card.success { border-color: var(--success) !important; }
+        .workflow-header { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 14px; }
+        .workflow-icon {
+            width: 48px; height: 48px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 22px; flex-shrink: 0;
+        }
+        .workflow-info { flex: 1; }
+        .workflow-num { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px; }
+        .workflow-title { font-size: 15px; font-weight: 700; margin-bottom: 2px; }
+        .workflow-desc { font-size: 12px; color: var(--text-muted); line-height: 1.4; }
+        .workflow-status {
+            position: absolute; top: 12px; right: 12px;
+            width: 8px; height: 8px; border-radius: 50%;
+            background: var(--success); animation: pulse 2s infinite;
+        }
+        .workflow-action {
+            display: flex; align-items: center; justify-content: space-between;
+            padding-top: 14px; border-top: 1px solid var(--border-color); margin-top: 14px;
+        }
+        .workflow-btn {
+            padding: 8px 16px; border: none; border-radius: 8px;
+            font-size: 12px; font-weight: 600; cursor: pointer;
+            transition: all 0.3s; display: flex; align-items: center; gap: 6px;
+        }
+        .workflow-btn.primary { background: var(--atn-primary); color: white; }
+        .workflow-btn.primary:hover { background: var(--atn-primary-dark); }
+        .workflow-btn.secondary { background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border-color); }
+        .workflow-loader { display: none; width: 16px; height: 16px; border: 2px solid var(--border-color); border-top-color: var(--atn-primary); border-radius: 50%; animation: spin 0.8s linear infinite; }
+        .workflow-card.loading .workflow-loader { display: block; }
+        .workflow-card.loading .workflow-btn-text { display: none; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Build Colors */
+        .b1 .workflow-icon { background: var(--build1-bg); } .b1:hover { border-color: var(--build1); } .b1 .workflow-num { color: var(--build1); }
+        .b2 .workflow-icon { background: var(--build2-bg); } .b2:hover { border-color: var(--build2); } .b2 .workflow-num { color: var(--build2); }
+        .b3 .workflow-icon { background: var(--build3-bg); } .b3:hover { border-color: var(--build3); } .b3 .workflow-num { color: var(--build3); }
+        .b4 .workflow-icon { background: var(--build4-bg); } .b4:hover { border-color: var(--build4); } .b4 .workflow-num { color: var(--build4); }
+        .b5 .workflow-icon { background: var(--build5-bg); } .b5:hover { border-color: var(--build5); } .b5 .workflow-num { color: var(--build5); }
+        .b6 .workflow-icon { background: var(--build6-bg); } .b6:hover { border-color: var(--build6); } .b6 .workflow-num { color: var(--build6); }
+        .b7 .workflow-icon { background: var(--build7-bg); } .b7:hover { border-color: var(--build7); } .b7 .workflow-num { color: var(--build7); }
+        .b8 .workflow-icon { background: var(--build8-bg); } .b8:hover { border-color: var(--build8); } .b8 .workflow-num { color: var(--build8); }
+        .b9 .workflow-icon { background: var(--build9-bg); } .b9:hover { border-color: var(--build9); } .b9 .workflow-num { color: var(--build9); }
+        .b10 .workflow-icon { background: var(--build10-bg); } .b10:hover { border-color: var(--build10); } .b10 .workflow-num { color: var(--build10); }
+
+        /* Activity Feed */
+        .activity-feed { max-height: 400px; overflow-y: auto; }
+        .activity-item {
+            display: flex; align-items: center; gap: 12px; padding: 12px;
+            background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-color);
+            margin-bottom: 8px; transition: all 0.3s;
+        }
+        .activity-item:hover { border-color: var(--atn-primary); }
+        .activity-item.new { animation: slideIn 0.5s ease; background: var(--build1-bg); }
+        @keyframes slideIn { from { transform: translateX(-20px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .activity-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+        .activity-content { flex: 1; min-width: 0; }
+        .activity-title { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .activity-desc { font-size: 11px; color: var(--text-muted); }
+        .activity-time { font-size: 10px; color: var(--text-muted); white-space: nowrap; }
+
+        /* ROI Card */
+        .roi-card { background: linear-gradient(135deg, var(--atn-primary), var(--atn-primary-dark)); color: white; }
+        .roi-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+        .roi-header h3 { font-size: 12px; opacity: 0.9; }
+        .roi-badge { padding: 4px 8px; background: rgba(255,255,255,0.2); border-radius: 6px; font-size: 10px; font-weight: 600; }
+        .roi-value { font-size: 42px; font-weight: 900; letter-spacing: -2px; }
+        .roi-label { font-size: 12px; opacity: 0.9; }
+        .roi-details { display: flex; gap: 16px; margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.2); }
+        .roi-detail { flex: 1; }
+        .roi-detail-value { font-size: 18px; font-weight: 700; }
+        .roi-detail-label { font-size: 10px; opacity: 0.8; }
+
+        /* Toast */
+        .toast {
+            position: fixed; bottom: 20px; right: 20px; padding: 14px 18px;
+            background: var(--bg-glass); backdrop-filter: var(--glass-blur);
+            border: var(--glass-border); border-radius: 14px; box-shadow: var(--shadow-glass);
+            display: flex; align-items: center; gap: 10px;
+            transform: translateX(400px); opacity: 0;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 1000; max-width: 360px;
+        }
+        .toast.show { transform: translateX(0); opacity: 1; }
+        .toast-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+        .toast-content h4 { font-size: 13px; font-weight: 600; }
+        .toast-content p { font-size: 11px; color: var(--text-muted); }
+
+        /* Modal */
+        .modal {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+            display: none; align-items: center; justify-content: center;
+            z-index: 2000; padding: 20px;
+        }
+        .modal.show { display: flex; }
+        .modal-content {
+            background: var(--bg-secondary); border-radius: 20px;
+            max-width: 700px; width: 100%; max-height: 85vh; overflow: auto;
+            padding: 24px; position: relative;
+        }
+        .modal-close {
+            position: absolute; top: 16px; right: 16px; background: none;
+            border: none; font-size: 24px; cursor: pointer; color: var(--text-muted);
+        }
+        .modal-title { font-size: 20px; font-weight: 700; margin-bottom: 16px; }
+        .modal-body { color: var(--text-secondary); font-size: 14px; line-height: 1.6; }
+        .modal-body pre { background: var(--bg-card); padding: 16px; border-radius: 12px; overflow-x: auto; font-size: 12px; }
+
+        /* Section Title */
+        .section-title { font-size: 16px; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+        .section-badge { padding: 4px 10px; background: var(--atn-primary); color: white; border-radius: 6px; font-size: 11px; font-weight: 600; }
+
+        .footer { padding: 20px 0; text-align: center; color: var(--text-muted); font-size: 12px; }
+        .footer a { color: var(--atn-primary); text-decoration: none; }
+
+        @media (max-width: 1200px) {
+            .stats-overview { grid-template-columns: repeat(3, 1fr); }
+            .span-8, .span-6 { grid-column: span 12; }
+        }
+        @media (max-width: 768px) {
+            .stats-overview { grid-template-columns: repeat(2, 1fr); }
+            .span-4, .span-3 { grid-column: span 12; }
+            .tab-nav { flex-wrap: nowrap; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-orbs"><div class="orb orb-1"></div><div class="orb orb-2"></div></div>
+
+    <header class="header">
+        <div class="container">
+            <div class="header-left">
+                <div class="logo">ATN</div>
+                <div class="header-title">
+                    <h1>Dashboard Employe IA</h1>
+                    <span>10 Workflows • Powered by PACIFIK'AI</span>
+                </div>
+            </div>
+            <div class="header-right">
+                <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme"><span id="themeIcon">&#127769;</span></button>
+                <div class="live-badge"><div class="live-dot"></div><span>10 Actifs</span></div>
+                <div class="user-badge"><div class="user-avatar">JB</div><span>Jordy Banks</span></div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <!-- Stats Overview -->
+            <div class="stats-overview">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: var(--build1-bg);">&#128172;</div>
+                    <div class="stat-value" id="stat-conversations">1,247</div>
+                    <div class="stat-label">Conversations</div>
+                    <div class="stat-trend up">+23% vs J-7</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: var(--build2-bg);">&#9993;&#65039;</div>
+                    <div class="stat-value" id="stat-emails">892</div>
+                    <div class="stat-label">Emails Generes</div>
+                    <div class="stat-trend up">+15% vs J-7</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: var(--build3-bg);">&#128196;</div>
+                    <div class="stat-value" id="stat-articles">47</div>
+                    <div class="stat-label">Articles SEO</div>
+                    <div class="stat-trend up">+8 cette semaine</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: var(--build8-bg);">&#9888;&#65039;</div>
+                    <div class="stat-value" id="stat-alerts">12</div>
+                    <div class="stat-label">Alertes Vols</div>
+                    <div class="stat-trend down">-5 vs hier</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: var(--success-bg);">&#128181;</div>
+                    <div class="stat-value">35M</div>
+                    <div class="stat-label">XPF Economies/an</div>
+                    <div class="stat-trend up">ROI 7x</div>
+                </div>
+            </div>
+
+            <!-- Tab Navigation -->
+            <div class="tab-nav">
+                <button class="tab-btn active" onclick="showTab('all')">Tous les Workflows</button>
+                <button class="tab-btn" onclick="showTab('customer')">Service Client</button>
+                <button class="tab-btn" onclick="showTab('marketing')">Marketing</button>
+                <button class="tab-btn" onclick="showTab('operations')">Operations</button>
+                <button class="tab-btn" onclick="showTab('revenue')">Revenue</button>
+            </div>
+
+            <!-- All Workflows Tab -->
+            <div id="tab-all" class="tab-content active">
+                <h2 class="section-title">&#128640; Workflows IA <span class="section-badge">10 Actifs</span></h2>
+                <div class="workflow-grid">
+                    <!-- Build 1 - Concierge -->
+                    <div class="workflow-card b1" data-category="customer" onclick="triggerWorkflow('concierge')">
+                        <div class="workflow-status"></div>
+                        <div class="workflow-header">
+                            <div class="workflow-icon">&#128172;</div>
+                            <div class="workflow-info">
+                                <div class="workflow-num">Build 1</div>
+                                <div class="workflow-title">Concierge IA Multilingue</div>
+                                <div class="workflow-desc">Chatbot 24/7 en 5 langues avec RAG Supabase</div>
+                            </div>
+                        </div>
+                        <div class="workflow-action">
+                            <span style="font-size: 11px; color: var(--text-muted);">&#9889; 147 conversations/24h</span>
+                            <button class="workflow-btn primary" onclick="event.stopPropagation(); triggerWorkflow('concierge')">
+                                <span class="workflow-btn-text">Tester</span>
+                                <div class="workflow-loader"></div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Build 2 - Newsletter -->
+                    <div class="workflow-card b2" data-category="marketing" onclick="triggerWorkflow('newsletter')">
+                        <div class="workflow-status"></div>
+                        <div class="workflow-header">
+                            <div class="workflow-icon">&#9993;&#65039;</div>
+                            <div class="workflow-info">
+                                <div class="workflow-num">Build 2</div>
+                                <div class="workflow-title">Newsletter Personnalisee</div>
+                                <div class="workflow-desc">Emails hyper-segmentes par profil client</div>
+                            </div>
+                        </div>
+                        <div class="workflow-action">
+                            <span style="font-size: 11px; color: var(--text-muted);">&#128200; 45% taux ouverture</span>
+                            <button class="workflow-btn primary" onclick="event.stopPropagation(); triggerWorkflow('newsletter')">
+                                <span class="workflow-btn-text">Generer</span>
+                                <div class="workflow-loader"></div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Build 3 - SEO -->
+                    <div class="workflow-card b3" data-category="marketing" onclick="triggerWorkflow('seo')">
+                        <div class="workflow-status"></div>
+                        <div class="workflow-header">
+                            <div class="workflow-icon">&#128196;</div>
+                            <div class="workflow-info">
+                                <div class="workflow-num">Build 3</div>
+                                <div class="workflow-title">Content Factory SEO+GEO</div>
+                                <div class="workflow-desc">Articles optimises pour Google et IA (ChatGPT, Perplexity)</div>
+                            </div>
+                        </div>
+                        <div class="workflow-action">
+                            <span style="font-size: 11px; color: var(--text-muted);">&#127919; Score GEO: 100</span>
+                            <button class="workflow-btn primary" onclick="event.stopPropagation(); triggerWorkflow('seo')">
+                                <span class="workflow-btn-text">Creer</span>
+                                <div class="workflow-loader"></div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Build 4 - ROI -->
+                    <div class="workflow-card b4" data-category="revenue" onclick="triggerWorkflow('roi')">
+                        <div class="workflow-status"></div>
+                        <div class="workflow-header">
+                            <div class="workflow-icon">&#128202;</div>
+                            <div class="workflow-info">
+                                <div class="workflow-num">Build 4</div>
+                                <div class="workflow-title">ROI Analyst</div>
+                                <div class="workflow-desc">Detection anomalies et alertes business</div>
+                            </div>
+                        </div>
+                        <div class="workflow-action">
+                            <span style="font-size: 11px; color: var(--text-muted);">&#128680; 7 alertes actives</span>
+                            <button class="workflow-btn primary" onclick="event.stopPropagation(); triggerWorkflow('roi')">
+                                <span class="workflow-btn-text">Analyser</span>
+                                <div class="workflow-loader"></div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Build 5 - Booking Assistant -->
+                    <div class="workflow-card b5" data-category="customer" onclick="triggerWorkflow('booking')">
+                        <div class="workflow-status"></div>
+                        <div class="workflow-header">
+                            <div class="workflow-icon">&#9992;&#65039;</div>
+                            <div class="workflow-info">
+                                <div class="workflow-num">Build 5</div>
+                                <div class="workflow-title">Booking Assistant</div>
+                                <div class="workflow-desc">Guide conversationnel pour reserver un vol</div>
+                            </div>
+                        </div>
+                        <div class="workflow-action">
+                            <span style="font-size: 11px; color: var(--text-muted);">&#128176; +12% conversions</span>
+                            <button class="workflow-btn primary" onclick="event.stopPropagation(); triggerWorkflow('booking')">
+                                <span class="workflow-btn-text">Tester</span>
+                                <div class="workflow-loader"></div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Build 6 - Social Monitor -->
+                    <div class="workflow-card b6" data-category="marketing" onclick="triggerWorkflow('social')">
+                        <div class="workflow-status"></div>
+                        <div class="workflow-header">
+                            <div class="workflow-icon">&#128240;</div>
+                            <div class="workflow-info">
+                                <div class="workflow-num">Build 6</div>
+                                <div class="workflow-title">Social Monitor</div>
+                                <div class="workflow-desc">Veille reseaux sociaux et analyse sentiment</div>
+                            </div>
+                        </div>
+                        <div class="workflow-action">
+                            <span style="font-size: 11px; color: var(--text-muted);">&#128064; 234 mentions/jour</span>
+                            <button class="workflow-btn primary" onclick="event.stopPropagation(); triggerWorkflow('social')">
+                                <span class="workflow-btn-text">Scanner</span>
+                                <div class="workflow-loader"></div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Build 7 - Competitor Intel -->
+                    <div class="workflow-card b7" data-category="revenue" onclick="triggerWorkflow('competitor')">
+                        <div class="workflow-status"></div>
+                        <div class="workflow-header">
+                            <div class="workflow-icon">&#128269;</div>
+                            <div class="workflow-info">
+                                <div class="workflow-num">Build 7</div>
+                                <div class="workflow-title">Competitor Intelligence</div>
+                                <div class="workflow-desc">Surveillance tarifs Air France, Qantas, LATAM</div>
+                            </div>
+                        </div>
+                        <div class="workflow-action">
+                            <span style="font-size: 11px; color: var(--text-muted);">&#128200; 3 concurrents</span>
+                            <button class="workflow-btn primary" onclick="event.stopPropagation(); triggerWorkflow('competitor')">
+                                <span class="workflow-btn-text">Comparer</span>
+                                <div class="workflow-loader"></div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Build 8 - Flight Notifier -->
+                    <div class="workflow-card b8" data-category="operations" onclick="triggerWorkflow('flight')">
+                        <div class="workflow-status"></div>
+                        <div class="workflow-header">
+                            <div class="workflow-icon">&#128232;</div>
+                            <div class="workflow-info">
+                                <div class="workflow-num">Build 8</div>
+                                <div class="workflow-title">Flight Notifier</div>
+                                <div class="workflow-desc">Alertes retards/annulations proactives</div>
+                            </div>
+                        </div>
+                        <div class="workflow-action">
+                            <span style="font-size: 11px; color: var(--text-muted);">&#9201;&#65039; Check toutes les 30min</span>
+                            <button class="workflow-btn primary" onclick="event.stopPropagation(); triggerWorkflow('flight')">
+                                <span class="workflow-btn-text">Verifier</span>
+                                <div class="workflow-loader"></div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Build 9 - Review Responder -->
+                    <div class="workflow-card b9" data-category="customer" onclick="triggerWorkflow('review')">
+                        <div class="workflow-status"></div>
+                        <div class="workflow-header">
+                            <div class="workflow-icon">&#11088;</div>
+                            <div class="workflow-info">
+                                <div class="workflow-num">Build 9</div>
+                                <div class="workflow-title">Review Responder</div>
+                                <div class="workflow-desc">Reponses automatiques aux avis TripAdvisor/Google</div>
+                            </div>
+                        </div>
+                        <div class="workflow-action">
+                            <span style="font-size: 11px; color: var(--text-muted);">&#128077; 94% satisfaction</span>
+                            <button class="workflow-btn primary" onclick="event.stopPropagation(); triggerWorkflow('review')">
+                                <span class="workflow-btn-text">Repondre</span>
+                                <div class="workflow-loader"></div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Build 10 - Upsell Engine -->
+                    <div class="workflow-card b10" data-category="revenue" onclick="triggerWorkflow('upsell')">
+                        <div class="workflow-status"></div>
+                        <div class="workflow-header">
+                            <div class="workflow-icon">&#128184;</div>
+                            <div class="workflow-info">
+                                <div class="workflow-num">Build 10</div>
+                                <div class="workflow-title">Upsell Engine</div>
+                                <div class="workflow-desc">Propositions upgrade personnalisees (Economy > Business)</div>
+                            </div>
+                        </div>
+                        <div class="workflow-action">
+                            <span style="font-size: 11px; color: var(--text-muted);">&#128181; +15% revenue/pax</span>
+                            <button class="workflow-btn primary" onclick="event.stopPropagation(); triggerWorkflow('upsell')">
+                                <span class="workflow-btn-text">Proposer</span>
+                                <div class="workflow-loader"></div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Category Tabs -->
+            <div id="tab-customer" class="tab-content">
+                <h2 class="section-title">&#128172; Service Client <span class="section-badge">3 Workflows</span></h2>
+                <div class="workflow-grid" id="customer-workflows"></div>
+            </div>
+            <div id="tab-marketing" class="tab-content">
+                <h2 class="section-title">&#128640; Marketing <span class="section-badge">3 Workflows</span></h2>
+                <div class="workflow-grid" id="marketing-workflows"></div>
+            </div>
+            <div id="tab-operations" class="tab-content">
+                <h2 class="section-title">&#9881;&#65039; Operations <span class="section-badge">1 Workflow</span></h2>
+                <div class="workflow-grid" id="operations-workflows"></div>
+            </div>
+            <div id="tab-revenue" class="tab-content">
+                <h2 class="section-title">&#128181; Revenue <span class="section-badge">3 Workflows</span></h2>
+                <div class="workflow-grid" id="revenue-workflows"></div>
+            </div>
+
+            <!-- Bottom Row -->
+            <div class="bento-grid" style="margin-top: 24px;">
+                <!-- ROI Card -->
+                <div class="glass-card span-4 roi-card">
+                    <div class="roi-header">
+                        <h3>Economies Annuelles</h3>
+                        <span class="roi-badge">ROI 7x</span>
+                    </div>
+                    <div class="roi-value">35M XPF</div>
+                    <div class="roi-label">10 workflows IA vs equipe manuelle</div>
+                    <div class="roi-details">
+                        <div class="roi-detail"><div class="roi-detail-value">50M</div><div class="roi-detail-label">Cout equipe</div></div>
+                        <div class="roi-detail"><div class="roi-detail-value">4.8M</div><div class="roi-detail-label">Setup IA</div></div>
+                        <div class="roi-detail"><div class="roi-detail-value">10.2M</div><div class="roi-detail-label">Retainer/an</div></div>
+                    </div>
+                </div>
+
+                <!-- Activity Feed -->
+                <div class="glass-card span-8">
+                    <h3 class="section-title">&#9889; Activite Recente</h3>
+                    <div class="activity-feed" id="activityFeed">
+                        <div class="activity-item"><div class="activity-icon" style="background: var(--build1-bg);">&#128172;</div><div class="activity-content"><div class="activity-title">Conversation japonais</div><div class="activity-desc">Build 1 - Client: Tokyo-Tahiti</div></div><div class="activity-time">2 min</div></div>
+                        <div class="activity-item"><div class="activity-icon" style="background: var(--build8-bg);">&#9888;&#65039;</div><div class="activity-content"><div class="activity-title">Alerte TN1 PPT-LAX</div><div class="activity-desc">Build 8 - Retard 45min detecte</div></div><div class="activity-time">5 min</div></div>
+                        <div class="activity-item"><div class="activity-icon" style="background: var(--build2-bg);">&#9993;&#65039;</div><div class="activity-content"><div class="activity-title">Newsletter envoyee</div><div class="activity-desc">Build 2 - Segment: Lune de miel (234 dest.)</div></div><div class="activity-time">12 min</div></div>
+                        <div class="activity-item"><div class="activity-icon" style="background: var(--build10-bg);">&#128184;</div><div class="activity-content"><div class="activity-title">Upgrade propose</div><div class="activity-desc">Build 10 - Marie D. > Business Class</div></div><div class="activity-time">18 min</div></div>
+                        <div class="activity-item"><div class="activity-icon" style="background: var(--build9-bg);">&#11088;</div><div class="activity-content"><div class="activity-title">Avis TripAdvisor</div><div class="activity-desc">Build 9 - Reponse generee (5 etoiles)</div></div><div class="activity-time">25 min</div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>Dashboard Employe IA - Air Tahiti Nui | <a href="demo-hub.html">Hub Demo</a> | <a href="builds-presentation.html">Presentation</a> | <a href="#">PACIFIK'AI</a></p>
+        </div>
+    </footer>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">
+        <div class="toast-icon" id="toastIcon" style="background: var(--build1-bg);">&#128172;</div>
+        <div class="toast-content"><h4 id="toastTitle">Action...</h4><p id="toastDesc">Description</p></div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <h2 class="modal-title" id="modalTitle">Resultat</h2>
+            <div class="modal-body" id="modalBody"></div>
+        </div>
+    </div>
+
+    <script>
+        // Theme
+        function toggleTheme() {
+            const html = document.documentElement;
+            const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', next);
+            document.getElementById('themeIcon').innerHTML = next === 'dark' ? '&#9728;&#65039;' : '&#127769;';
+            localStorage.setItem('theme', next);
+        }
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        document.getElementById('themeIcon').innerHTML = savedTheme === 'dark' ? '&#9728;&#65039;' : '&#127769;';
+
+        // Tabs
+        function showTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelector(`[onclick="showTab('${tab}')"]`).classList.add('active');
+            document.getElementById(`tab-${tab}`).classList.add('active');
+            if (tab !== 'all') filterWorkflows(tab);
+        }
+
+        function filterWorkflows(category) {
+            const container = document.getElementById(`${category}-workflows`);
+            container.innerHTML = '';
+            document.querySelectorAll(`.workflow-card[data-category="${category}"]`).forEach(card => {
+                container.appendChild(card.cloneNode(true));
+            });
+        }
+
+        // Toast
+        function showToast(icon, bg, title, desc) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastIcon').innerHTML = icon;
+            document.getElementById('toastIcon').style.background = bg;
+            document.getElementById('toastTitle').textContent = title;
+            document.getElementById('toastDesc').textContent = desc;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 4000);
+        }
+
+        // Modal
+        function showModal(title, content) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalBody').innerHTML = content;
+            document.getElementById('modal').classList.add('show');
+        }
+        function closeModal() { document.getElementById('modal').classList.remove('show'); }
+        document.getElementById('modal').addEventListener('click', e => { if (e.target.id === 'modal') closeModal(); });
+
+        // Activity
+        function addActivity(icon, bg, title, desc) {
+            const feed = document.getElementById('activityFeed');
+            const item = document.createElement('div');
+            item.className = 'activity-item new';
+            item.innerHTML = `<div class="activity-icon" style="background: ${bg};">${icon}</div><div class="activity-content"><div class="activity-title">${title}</div><div class="activity-desc">${desc}</div></div><div class="activity-time">A l'instant</div>`;
+            feed.insertBefore(item, feed.firstChild);
+            setTimeout(() => item.classList.remove('new'), 500);
+            while (feed.children.length > 8) feed.removeChild(feed.lastChild);
+        }
+
+        // Webhooks
+        const N8N_BASE = 'https://n8n.srv1140766.hstgr.cloud/webhook';
+        const WEBHOOKS = {
+            concierge: { path: 'atn-concierge', icon: '&#128172;', bg: 'var(--build1-bg)', name: 'Concierge IA', body: { message: 'Bonjour, quels sont vos vols pour Bora Bora?', sessionId: Date.now().toString(), language: 'fr' } },
+            newsletter: { path: 'atn-newsletter-demo', icon: '&#9993;&#65039;', bg: 'var(--build2-bg)', name: 'Newsletter', body: { nom: 'Marie', segment: 'honeymoon', email: 'demo@test.com' } },
+            seo: { path: 'atn-seo-content', icon: '&#128196;', bg: 'var(--build3-bg)', name: 'Content Factory', body: { topicIndex: Math.floor(Math.random() * 10) + 1 } },
+            roi: { path: 'atn-roi-analyst', icon: '&#128202;', bg: 'var(--build4-bg)', name: 'ROI Analyst', body: {} },
+            booking: { path: 'atn-booking-assistant', icon: '&#9992;&#65039;', bg: 'var(--build5-bg)', name: 'Booking Assistant', body: { message: 'Je veux reserver un vol Paris-Tahiti pour 2 personnes en mai', sessionId: Date.now().toString() } },
+            social: { path: 'atn-social-monitor', icon: '&#128240;', bg: 'var(--build6-bg)', name: 'Social Monitor', body: { keywords: ['Air Tahiti Nui', 'ATN', 'vol Tahiti'], platforms: ['twitter', 'instagram'] } },
+            competitor: { path: 'atn-competitor-intel', icon: '&#128269;', bg: 'var(--build7-bg)', name: 'Competitor Intel', body: { routes: ['PPT-LAX', 'PPT-CDG'], competitors: ['Air France', 'Qantas', 'LATAM'] } },
+            flight: { path: 'atn-flight-notifier', icon: '&#128232;', bg: 'var(--build8-bg)', name: 'Flight Notifier', body: {} },
+            review: { path: 'atn-review-responder', icon: '&#11088;', bg: 'var(--build9-bg)', name: 'Review Responder', body: { platform: 'TripAdvisor', author: 'Jean M.', rating: 5, content: 'Vol exceptionnel! Equipage tres accueillant, repas delicieux.', flight: 'TN1 PPT-LAX' } },
+            upsell: { path: 'atn-upsell-engine', icon: '&#128184;', bg: 'var(--build10-bg)', name: 'Upsell Engine', body: { customerId: 'CUST-12345', name: 'Marie Dupont', segment: 'honeymoon', pnr: 'ABC123', route: 'PPT-LAX', currentClass: 'Moana Economy' } }
+        };
+
+        async function triggerWorkflow(type) {
+            const config = WEBHOOKS[type];
+            if (!config) return;
+
+            const card = document.querySelector(`.workflow-card.b${Object.keys(WEBHOOKS).indexOf(type) + 1}`);
+            if (card) card.classList.add('loading');
+
+            showToast(config.icon, config.bg, `Build ${Object.keys(WEBHOOKS).indexOf(type) + 1} - ${config.name}`, 'Execution en cours...');
+            addActivity(config.icon, config.bg, `${config.name} declenche`, 'Workflow en cours d\'execution...');
+
+            try {
+                const response = await fetch(`${N8N_BASE}/${config.path}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(config.body)
+                });
+                const data = await response.json();
+
+                if (card) { card.classList.remove('loading'); card.classList.add('success'); setTimeout(() => card.classList.remove('success'), 3000); }
+
+                showToast('&#9989;', 'var(--success-bg)', `${config.name} termine!`, 'Resultat disponible');
+                addActivity('&#9989;', 'var(--success-bg)', `${config.name} OK`, 'Execution reussie');
+
+                // Show result
+                const formattedResult = typeof data === 'object' ? `<pre>${JSON.stringify(data, null, 2)}</pre>` : data;
+                showModal(`Resultat - ${config.name}`, formattedResult);
+
+            } catch (error) {
+                if (card) card.classList.remove('loading');
+                showToast('&#9888;&#65039;', 'var(--warning-bg)', 'Erreur', 'Verifiez que n8n est actif');
+                addActivity('&#9888;&#65039;', 'var(--warning-bg)', `${config.name} erreur`, error.message);
+            }
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', e => {
+            if (e.key === 't' || e.key === 'T') toggleTheme();
+            if (e.key === 'Escape') closeModal();
+            if (e.key >= '1' && e.key <= '9') {
+                const types = Object.keys(WEBHOOKS);
+                if (types[parseInt(e.key) - 1]) triggerWorkflow(types[parseInt(e.key) - 1]);
+            }
+            if (e.key === '0') triggerWorkflow('upsell');
+        });
+
+        // Auto-refresh stats every 30s
+        setInterval(() => {
+            const now = new Date().toLocaleTimeString('fr-FR', {hour: '2-digit', minute: '2-digit'});
+            console.log(`Stats refreshed at ${now}`);
+        }, 30000);
+    </script>
+</body>
+</html>

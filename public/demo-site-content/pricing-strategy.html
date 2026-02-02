@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PACIFIK'AI - Stratégie de Pricing & Pitch Commercial</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2CCCD4;
+            --primary-dark: #1aa3aa;
+            --gold: #C9A84C;
+            --gold-light: #d4b35a;
+            --purple: #8B5CF6;
+            --orange: #FF6B00;
+            --success: #10B981;
+            --danger: #EF4444;
+            --gray-50: #F9FAFB;
+            --gray-100: #F3F4F6;
+            --gray-200: #E5E7EB;
+            --gray-300: #D1D5DB;
+            --gray-500: #6B7280;
+            --gray-700: #374151;
+            --gray-900: #111827;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--gray-900);
+            line-height: 1.6;
+            background: var(--gray-50);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--gray-900) 0%, #1a1a2e 100%);
+            color: white;
+            padding: 60px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 60%;
+            height: 200%;
+            background: linear-gradient(135deg, rgba(44,204,212,0.1) 0%, rgba(201,168,76,0.1) 100%);
+            transform: rotate(-12deg);
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--orange) 0%, #ff8533 100%);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 42px;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 16px;
+        }
+
+        .header h1 span {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            font-size: 18px;
+            opacity: 0.8;
+            max-width: 600px;
+        }
+
+        /* Sections */
+        section {
+            padding: 60px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .section-title h2 {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+
+        .section-title p {
+            font-size: 16px;
+            color: var(--gray-500);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Market Analysis */
+        .market-section {
+            background: white;
+        }
+
+        .market-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .market-card {
+            background: var(--gray-50);
+            border-radius: 16px;
+            padding: 32px;
+            border: 1px solid var(--gray-200);
+        }
+
+        .market-card h3 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .market-card.france h3 { color: #3B82F6; }
+        .market-card.polynesie h3 { color: var(--primary); }
+
+        .market-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--gray-200);
+            font-size: 14px;
+        }
+
+        .market-item:last-child {
+            border-bottom: none;
+        }
+
+        .market-item .label {
+            color: var(--gray-500);
+        }
+
+        .market-item .value {
+            font-weight: 600;
+        }
+
+        /* Advantage Box */
+        .advantage-box {
+            background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+            border: 2px solid var(--success);
+            border-radius: 16px;
+            padding: 32px;
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .advantage-box h3 {
+            font-size: 24px;
+            color: var(--success);
+            margin-bottom: 12px;
+        }
+
+        .advantage-box .multiplier {
+            font-size: 64px;
+            font-weight: 900;
+            color: var(--success);
+            line-height: 1;
+        }
+
+        .advantage-box p {
+            color: var(--gray-700);
+            margin-top: 12px;
+        }
+
+        /* Pricing Section */
+        .pricing-section {
+            background: var(--gray-50);
+        }
+
+        .pricing-models {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+
+        .pricing-model {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            border: 2px solid var(--gray-200);
+            transition: all 0.3s;
+        }
+
+        .pricing-model:hover {
+            border-color: var(--primary);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .pricing-model.recommended {
+            border-color: var(--gold);
+            position: relative;
+        }
+
+        .pricing-model.recommended::before {
+            content: '⭐ RECOMMANDÉ';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+            color: white;
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .pricing-model h3 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .pricing-model .desc {
+            font-size: 14px;
+            color: var(--gray-500);
+            margin-bottom: 24px;
+        }
+
+        .pricing-model .pros,
+        .pricing-model .cons {
+            list-style: none;
+            font-size: 13px;
+        }
+
+        .pricing-model .pros li,
+        .pricing-model .cons li {
+            padding: 8px 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .pricing-model .pros li::before {
+            content: '✓';
+            color: var(--success);
+            font-weight: 700;
+        }
+
+        .pricing-model .cons li::before {
+            content: '✕';
+            color: var(--danger);
+            font-weight: 700;
+        }
+
+        /* Builds Pricing */
+        .builds-pricing {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .builds-header {
+            background: linear-gradient(135deg, var(--gray-900) 0%, #1a1a2e 100%);
+            color: white;
+            padding: 32px;
+            text-align: center;
+        }
+
+        .builds-header h3 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .builds-header p {
+            opacity: 0.7;
+            font-size: 14px;
+        }
+
+        .builds-table {
+            padding: 32px;
+        }
+
+        .build-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+            gap: 16px;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--gray-200);
+            align-items: center;
+        }
+
+        .build-row.header {
+            font-weight: 700;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--gray-500);
+            padding-bottom: 16px;
+        }
+
+        .build-row:last-child {
+            border-bottom: none;
+        }
+
+        .build-name {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .build-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .build-1 .build-icon { background: rgba(59, 130, 246, 0.1); }
+        .build-2 .build-icon { background: rgba(139, 92, 246, 0.1); }
+        .build-3 .build-icon { background: rgba(245, 158, 11, 0.1); }
+        .build-4 .build-icon { background: rgba(44, 204, 212, 0.1); }
+
+        .build-name h4 {
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .build-name span {
+            font-size: 12px;
+            color: var(--gray-500);
+        }
+
+        .price-cell {
+            text-align: center;
+        }
+
+        .price-cell .amount {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .price-cell .period {
+            font-size: 11px;
+            color: var(--gray-500);
+        }
+
+        .price-france { color: #3B82F6; }
+        .price-polynesie { color: var(--primary); }
+
+        .margin-cell {
+            text-align: center;
+            font-weight: 700;
+            color: var(--success);
+        }
+
+        /* Total Row */
+        .total-row {
+            background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+            margin: 24px -32px -32px;
+            padding: 24px 32px;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .total-row .build-name h4 {
+            font-size: 18px;
+            color: var(--success);
+        }
+
+        .total-row .price-cell .amount {
+            font-size: 24px;
+        }
+
+        /* Pitch Section */
+        .pitch-section {
+            background: white;
+        }
+
+        .pitch-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .pitch-card {
+            background: var(--gray-50);
+            border-radius: 16px;
+            padding: 32px;
+        }
+
+        .pitch-card h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pitch-point {
+            padding: 12px 0;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .pitch-point:last-child {
+            border-bottom: none;
+        }
+
+        .pitch-point strong {
+            display: block;
+            color: var(--gray-900);
+            margin-bottom: 4px;
+        }
+
+        .pitch-point span {
+            font-size: 13px;
+            color: var(--gray-500);
+        }
+
+        /* Script Section */
+        .script-section {
+            background: linear-gradient(135deg, var(--gray-900) 0%, #1a1a2e 100%);
+            color: white;
+        }
+
+        .script-section .section-title h2 {
+            color: white;
+        }
+
+        .script-section .section-title p {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .script-box {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 24px;
+        }
+
+        .script-box h4 {
+            font-size: 16px;
+            color: var(--primary);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .script-box p {
+            font-size: 15px;
+            line-height: 1.8;
+            opacity: 0.9;
+        }
+
+        .script-box .highlight {
+            background: rgba(44, 204, 212, 0.2);
+            padding: 2px 8px;
+            border-radius: 4px;
+            color: var(--primary);
+        }
+
+        /* Objections */
+        .objection {
+            background: rgba(255,255,255,0.03);
+            border-left: 3px solid var(--gold);
+            padding: 20px 24px;
+            margin-bottom: 16px;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .objection .question {
+            font-weight: 600;
+            color: var(--gold);
+            margin-bottom: 12px;
+        }
+
+        .objection .answer {
+            font-size: 14px;
+            opacity: 0.85;
+        }
+
+        /* Revenue Projection */
+        .revenue-section {
+            background: var(--gray-50);
+        }
+
+        .revenue-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .revenue-card {
+            background: white;
+            border-radius: 16px;
+            padding: 28px;
+            text-align: center;
+            border: 1px solid var(--gray-200);
+        }
+
+        .revenue-card .scenario {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--gray-500);
+            margin-bottom: 12px;
+        }
+
+        .revenue-card .amount {
+            font-size: 36px;
+            font-weight: 900;
+            margin-bottom: 8px;
+        }
+
+        .revenue-card:nth-child(1) .amount { color: var(--gray-500); }
+        .revenue-card:nth-child(2) .amount { color: #3B82F6; }
+        .revenue-card:nth-child(3) .amount { color: var(--purple); }
+        .revenue-card:nth-child(4) .amount { color: var(--success); }
+
+        .revenue-card .details {
+            font-size: 13px;
+            color: var(--gray-500);
+        }
+
+        .revenue-breakdown {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+        }
+
+        .revenue-breakdown h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 24px;
+        }
+
+        .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .breakdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .breakdown-item .label {
+            color: var(--gray-700);
+        }
+
+        .breakdown-item .value {
+            font-weight: 600;
+        }
+
+        .breakdown-item.highlight {
+            background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+            margin: 0 -32px;
+            padding: 16px 32px;
+            border-radius: 8px;
+        }
+
+        .breakdown-item.highlight .value {
+            color: var(--success);
+            font-size: 20px;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--gray-900);
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .footer-logo span {
+            color: var(--primary);
+        }
+
+        .footer p {
+            font-size: 13px;
+            opacity: 0.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .pricing-models { grid-template-columns: 1fr; }
+            .revenue-grid { grid-template-columns: repeat(2, 1fr); }
+            .build-row { grid-template-columns: 1fr; gap: 8px; text-align: center; }
+            .build-row.header { display: none; }
+            .total-row { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            .market-grid { grid-template-columns: 1fr; }
+            .pitch-grid { grid-template-columns: 1fr; }
+            .revenue-grid { grid-template-columns: 1fr; }
+            .header h1 { font-size: 28px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <span class="header-badge">Document Interne</span>
+                <h1>Stratégie de Pricing <span>PACIFIK'AI</span></h1>
+                <p>Guide complet pour pitcher, justifier les prix et maximiser les revenus sur le marché polynésien.</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Market Analysis -->
+    <section class="market-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>📊 Analyse du Marché</h2>
+                <p>Pourquoi tu peux facturer plus cher en Polynésie qu'en France métropolitaine</p>
+            </div>
+
+            <div class="market-grid">
+                <div class="market-card france">
+                    <h3>🇫🇷 France Métropolitaine</h3>
+                    <div class="market-item">
+                        <span class="label">Concurrence</span>
+                        <span class="value" style="color: var(--danger);">Très élevée (100+ agences IA)</span>
+                    </div>
+                    <div class="market-item">
+                        <span class="label">Prix moyen Build</span>
+                        <span class="value">5 000€ - 15 000€</span>
+                    </div>
+                    <div class="market-item">
+                        <span class="label">Retainer mensuel</span>
+                        <span class="value">500€ - 2 000€/mois</span>
+                    </div>
+                    <div class="market-item">
+                        <span class="label">Maturité digitale</span>
+                        <span class="value">Élevée</span>
+                    </div>
+                    <div class="market-item">
+                        <span class="label">Pouvoir de négociation client</span>
+                        <span class="value" style="color: var(--danger);">Fort (comparaison facile)</span>
+                    </div>
+                </div>
+
+                <div class="market-card polynesie">
+                    <h3>🇵🇫 Polynésie Française</h3>
+                    <div class="market-item">
+                        <span class="label">Concurrence</span>
+                        <span class="value" style="color: var(--success);">Quasi inexistante (1-2 acteurs)</span>
+                    </div>
+                    <div class="market-item">
+                        <span class="label">Prix moyen Build</span>
+                        <span class="value">10 000€ - 30 000€</span>
+                    </div>
+                    <div class="market-item">
+                        <span class="label">Retainer mensuel</span>
+                        <span class="value">1 500€ - 4 000€/mois</span>
+                    </div>
+                    <div class="market-item">
+                        <span class="label">Maturité digitale</span>
+                        <span class="value">En développement</span>
+                    </div>
+                    <div class="market-item">
+                        <span class="label">Pouvoir de négociation client</span>
+                        <span class="value" style="color: var(--success);">Faible (peu d'alternatives)</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="advantage-box">
+                <h3>💎 Ton Avantage Compétitif</h3>
+                <div class="multiplier">x1.5 à x2</div>
+                <p>Tu peux facturer <strong>50% à 100% plus cher</strong> qu'en métropole grâce à ta position de quasi-monopole et à la rareté de l'expertise locale en automatisation IA.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Models -->
+    <section class="pricing-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>💰 Modèles de Facturation</h2>
+                <p>Compare les 3 approches et choisis la meilleure pour chaque client</p>
+            </div>
+
+            <div class="pricing-models">
+                <div class="pricing-model">
+                    <h3>🎯 Projet One-Shot</h3>
+                    <p class="desc">Paiement unique pour un livrable défini</p>
+                    <ul class="pros">
+                        <li>Trésorerie immédiate</li>
+                        <li>Scope clair et défini</li>
+                        <li>Pas d'engagement long terme</li>
+                    </ul>
+                    <ul class="cons">
+                        <li>Revenus non récurrents</li>
+                        <li>Client peut disparaître après</li>
+                        <li>Risque de scope creep</li>
+                    </ul>
+                </div>
+
+                <div class="pricing-model recommended">
+                    <h3>🔄 Hybride (Projet + Retainer)</h3>
+                    <p class="desc">Setup initial + maintenance mensuelle</p>
+                    <ul class="pros">
+                        <li>Revenus récurrents garantis</li>
+                        <li>Relation long terme</li>
+                        <li>Upsell facile (nouveaux builds)</li>
+                        <li>Cash flow prévisible</li>
+                    </ul>
+                    <ul class="cons">
+                        <li>Nécessite suivi régulier</li>
+                        <li>Client peut annuler</li>
+                    </ul>
+                </div>
+
+                <div class="pricing-model">
+                    <h3>📈 Value-Based</h3>
+                    <p class="desc">% des économies générées</p>
+                    <ul class="pros">
+                        <li>Alignement d'intérêts</li>
+                        <li>Potentiel revenus élevés</li>
+                        <li>Facile à justifier</li>
+                    </ul>
+                    <ul class="cons">
+                        <li>Difficile à mesurer</li>
+                        <li>Dépend de la transparence client</li>
+                        <li>Revenus variables</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Builds Pricing Table -->
+            <div class="builds-pricing">
+                <div class="builds-header">
+                    <h3>Grille Tarifaire PACIFIK'AI - Air Tahiti Nui</h3>
+                    <p>Prix recommandés pour le marché polynésien vs prix métropole</p>
+                </div>
+                <div class="builds-table">
+                    <div class="build-row header">
+                        <div>Build</div>
+                        <div style="text-align:center;">Prix France</div>
+                        <div style="text-align:center;">Prix Polynésie</div>
+                        <div style="text-align:center;">Retainer/mois</div>
+                        <div style="text-align:center;">Marge</div>
+                    </div>
+
+                    <div class="build-row build-1">
+                        <div class="build-name">
+                            <div class="build-icon">💬</div>
+                            <div>
+                                <h4>Build 1 - Concierge IA</h4>
+                                <span>Chatbot multilingue 24/7</span>
+                            </div>
+                        </div>
+                        <div class="price-cell">
+                            <div class="amount price-france">8 000€</div>
+                            <div class="period">one-shot</div>
+                        </div>
+                        <div class="price-cell">
+                            <div class="amount price-polynesie">15 000€</div>
+                            <div class="period">one-shot</div>
+                        </div>
+                        <div class="price-cell">
+                            <div class="amount">1 500€</div>
+                            <div class="period">/mois</div>
+                        </div>
+                        <div class="margin-cell">+87%</div>
+                    </div>
+
+                    <div class="build-row build-2">
+                        <div class="build-name">
+                            <div class="build-icon">✉️</div>
+                            <div>
+                                <h4>Build 2 - Newsletters IA</h4>
+                                <span>Emails hyper-personnalisés</span>
+                            </div>
+                        </div>
+                        <div class="price-cell">
+                            <div class="amount price-france">5 000€</div>
+                            <div class="period">one-shot</div>
+                        </div>
+                        <div class="price-cell">
+                            <div class="amount price-polynesie">10 000€</div>
+                            <div class="period">one-shot</div>
+                        </div>
+                        <div class="price-cell">
+                            <div class="amount">800€</div>
+                            <div class="period">/mois</div>
+                        </div>
+                        <div class="margin-cell">+100%</div>
+                    </div>
+
+                    <div class="build-row build-3">
+                        <div class="build-name">
+                            <div class="build-icon">📝</div>
+                            <div>
+                                <h4>Build 3 - Content Factory</h4>
+                                <span>Articles SEO + GEO 2026</span>
+                            </div>
+                        </div>
+                        <div class="price-cell">
+                            <div class="amount price-france">6 000€</div>
+                            <div class="period">one-shot</div>
+                        </div>
+                        <div class="price-cell">
+                            <div class="amount price-polynesie">12 000€</div>
+                            <div class="period">one-shot</div>
+                        </div>
+                        <div class="price-cell">
+                            <div class="amount">1 000€</div>
+                            <div class="period">/mois</div>
+                        </div>
+                        <div class="margin-cell">+100%</div>
+                    </div>
+
+                    <div class="build-row build-4">
+                        <div class="build-name">
+                            <div class="build-icon">📊</div>
+                            <div>
+                                <h4>Build 4 - Analyste ROI IA</h4>
+                                <span>Détection anomalies & recommandations</span>
+                            </div>
+                        </div>
+                        <div class="price-cell">
+                            <div class="amount price-france">4 000€</div>
+                            <div class="period">one-shot</div>
+                        </div>
+                        <div class="price-cell">
+                            <div class="amount price-polynesie">8 000€</div>
+                            <div class="period">one-shot</div>
+                        </div>
+                        <div class="price-cell">
+                            <div class="amount">500€</div>
+                            <div class="period">/mois</div>
+                        </div>
+                        <div class="margin-cell">+100%</div>
+                    </div>
+
+                    <div class="total-row">
+                        <div class="build-name">
+                            <div class="build-icon" style="background: rgba(16,185,129,0.2);">🎯</div>
+                            <div>
+                                <h4>PACK COMPLET (4 Builds)</h4>
+                                <span>Offre bundlée avec remise</span>
+                            </div>
+                        </div>
+                        <div class="price-cell">
+                            <div class="amount price-france">23 000€</div>
+                            <div class="period">valeur totale</div>
+                        </div>
+                        <div class="price-cell">
+                            <div class="amount price-polynesie">40 000€</div>
+                            <div class="period">prix packagé</div>
+                        </div>
+                        <div class="price-cell">
+                            <div class="amount">3 000€</div>
+                            <div class="period">/mois</div>
+                        </div>
+                        <div class="margin-cell">+74%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pitch Section -->
+    <section class="pitch-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>🎤 Arguments de Vente</h2>
+                <p>Les points clés à utiliser lors de ton pitch</p>
+            </div>
+
+            <div class="pitch-grid">
+                <div class="pitch-card">
+                    <h3>💡 Justification du Prix</h3>
+                    <div class="pitch-point">
+                        <strong>ROI mesurable : 294 000€/an d'économies</strong>
+                        <span>Le pack à 40K€ se rembourse en moins de 2 mois</span>
+                    </div>
+                    <div class="pitch-point">
+                        <strong>Expertise rare sur le territoire</strong>
+                        <span>Aucun autre prestataire local ne maîtrise n8n + IA + Airtable</span>
+                    </div>
+                    <div class="pitch-point">
+                        <strong>Support en fuseau horaire local</strong>
+                        <span>Pas besoin d'attendre 12h pour une réponse de métropole</span>
+                    </div>
+                    <div class="pitch-point">
+                        <strong>Connaissance du contexte polynésien</strong>
+                        <span>Adaptation aux spécificités locales (tourisme, multilingue)</span>
+                    </div>
+                </div>
+
+                <div class="pitch-card">
+                    <h3>🎯 Différenciateurs vs Métropole</h3>
+                    <div class="pitch-point">
+                        <strong>Pas de décalage horaire</strong>
+                        <span>Réunions et support aux heures de bureau polynésiennes</span>
+                    </div>
+                    <div class="pitch-point">
+                        <strong>Rencontres en présentiel possibles</strong>
+                        <span>Workshops, formations, démos sur site</span>
+                    </div>
+                    <div class="pitch-point">
+                        <strong>Compréhension du marché local</strong>
+                        <span>Tourisme haute saison, clientèle japonaise/américaine</span>
+                    </div>
+                    <div class="pitch-point">
+                        <strong>Réseau local</strong>
+                        <span>Connexions avec d'autres entreprises du fenua</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Script Section -->
+    <section class="script-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>📜 Script de Pitch</h2>
+                <p>Ce que tu peux dire lors de ta présentation au directeur marketing</p>
+            </div>
+
+            <div class="script-box">
+                <h4>🚀 Ouverture (30 sec)</h4>
+                <p>"Aujourd'hui, votre équipe service client répond aux mêmes questions <span class="highlight">200 fois par jour</span>. Bagages, horaires, annulations. Pendant ce temps, vos clients japonais et chinois attendent une réponse... qui ne vient jamais à 3h du matin. Je vous propose de résoudre ces deux problèmes <span class="highlight">en une semaine</span>, avec un chatbot IA qui parle 5 langues et travaille 24/7."</p>
+            </div>
+
+            <div class="script-box">
+                <h4>💰 Ancrage Prix (20 sec)</h4>
+                <p>"Une équipe service client multilingue 24/7 vous coûte <span class="highlight">420 000€ par an</span>. Notre solution complète : <span class="highlight">40 000€ en setup + 3 000€/mois</span>. Soit une économie de <span class="highlight">294 000€ dès la première année</span>. Le ROI est atteint en moins de 2 mois."</p>
+            </div>
+
+            <div class="script-box">
+                <h4>🏝️ Argument Local (15 sec)</h4>
+                <p>"Je suis basé ici, en Polynésie. Pas à Paris, pas à distance. Quand vous avez besoin de moi, je suis là en <span class="highlight">2 heures</span>. Et je connais vos clients : les touristes américains qui veulent voir Bora Bora, les Japonais qui planifient leur lune de miel, les familles françaises des vacances scolaires."</p>
+            </div>
+
+            <div class="section-title" style="margin-top: 48px;">
+                <h2>🛡️ Réponses aux Objections</h2>
+            </div>
+
+            <div class="objection">
+                <div class="question">"C'est trop cher, on peut trouver moins cher en France"</div>
+                <div class="answer">"Oui, vous pouvez. Mais ils seront à +12h de décalage, ne connaîtront pas votre marché, et vous aurez un support par email avec 48h de délai. Moi, je suis là demain si vous avez un bug. Et surtout : ce prix inclut la formation de vos équipes et 12 mois de support. C'est un investissement, pas une dépense."</div>
+            </div>
+
+            <div class="objection">
+                <div class="question">"On peut faire ça en interne"</div>
+                <div class="answer">"Absolument. Comptez 6 mois de développement, un développeur à 60K€/an minimum, et le risque qu'il parte avec le savoir-faire. Ou bien : je vous livre un système fonctionnel dans 4 semaines, documenté, avec formation. À vous de voir."</div>
+            </div>
+
+            <div class="objection">
+                <div class="question">"L'IA va remplacer nos employés ?"</div>
+                <div class="answer">"Non, elle va les libérer. Vos agents vont pouvoir se concentrer sur les cas complexes, les VIP, les situations délicates. L'IA gère les 80% de questions répétitives. Résultat : équipe plus épanouie, clients mieux servis."</div>
+            </div>
+
+            <div class="objection">
+                <div class="question">"On veut voir un pilote d'abord"</div>
+                <div class="answer">"Parfait. Je propose un Build 1 seul à 15 000€ avec 3 mois d'essai. Si les résultats sont là – et ils le seront – on continue avec les autres Builds. Deal ?"</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Revenue Projection -->
+    <section class="revenue-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>📈 Projection de Revenus</h2>
+                <p>Combien tu peux gagner en année 1 selon différents scénarios</p>
+            </div>
+
+            <div class="revenue-grid">
+                <div class="revenue-card">
+                    <div class="scenario">Conservateur</div>
+                    <div class="amount">76 000€</div>
+                    <div class="details">1 client Pack Complet<br>+ retainer 12 mois</div>
+                </div>
+                <div class="revenue-card">
+                    <div class="scenario">Réaliste</div>
+                    <div class="amount">152 000€</div>
+                    <div class="details">2 clients Pack Complet<br>+ retainers 12 mois</div>
+                </div>
+                <div class="revenue-card">
+                    <div class="scenario">Ambitieux</div>
+                    <div class="amount">250 000€</div>
+                    <div class="details">3 clients Pack + 2 Builds solo<br>+ retainers</div>
+                </div>
+                <div class="revenue-card">
+                    <div class="scenario">Objectif 3 ans</div>
+                    <div class="amount">500 000€</div>
+                    <div class="details">5-6 clients actifs<br>+ expansion Pacifique</div>
+                </div>
+            </div>
+
+            <div class="revenue-breakdown">
+                <h3>Détail Scénario "Réaliste" - 2 clients Pack Complet</h3>
+                <div class="breakdown-item">
+                    <span class="label">Setup initial (2 × 40 000€)</span>
+                    <span class="value">80 000€</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="label">Retainers mensuels (2 × 3 000€ × 12 mois)</span>
+                    <span class="value">72 000€</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="label">Coûts (APIs, hébergement, outils)</span>
+                    <span class="value" style="color: var(--danger);">- 12 000€</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="label">Temps estimé (2 × 80h setup + 10h/mois support)</span>
+                    <span class="value">400h/an</span>
+                </div>
+                <div class="breakdown-item highlight">
+                    <span class="label"><strong>Revenu net estimé</strong></span>
+                    <span class="value">140 000€</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="label">Taux horaire effectif</span>
+                    <span class="value" style="color: var(--success);">350€/h</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Clients Cibles -->
+    <section style="padding: 60px 0; background: white;">
+        <div class="container">
+            <div class="section-title">
+                <h2>🎯 Clients Cibles en Polynésie</h2>
+                <p>Les entreprises qui ont le budget ET le besoin</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
+                <div style="background: linear-gradient(135deg, #EEF2FF, #C7D2FE); border-radius: 16px; padding: 28px;">
+                    <h3 style="font-size: 18px; color: #4F46E5; margin-bottom: 16px;">✈️ Transport & Tourisme</h3>
+                    <ul style="list-style: none; font-size: 14px; color: #374151;">
+                        <li style="padding: 8px 0; border-bottom: 1px solid rgba(79,70,229,0.2);">• Air Tahiti Nui ✓ (en cours)</li>
+                        <li style="padding: 8px 0; border-bottom: 1px solid rgba(79,70,229,0.2);">• Air Tahiti (domestique)</li>
+                        <li style="padding: 8px 0; border-bottom: 1px solid rgba(79,70,229,0.2);">• Aranui (croisières)</li>
+                        <li style="padding: 8px 0; border-bottom: 1px solid rgba(79,70,229,0.2);">• Tahiti Tourisme</li>
+                        <li style="padding: 8px 0;">• Hôtels (Intercontinental, Hilton, etc.)</li>
+                    </ul>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #FEF3C7, #FDE68A); border-radius: 16px; padding: 28px;">
+                    <h3 style="font-size: 18px; color: #D97706; margin-bottom: 16px;">🏦 Finance & Assurance</h3>
+                    <ul style="list-style: none; font-size: 14px; color: #374151;">
+                        <li style="padding: 8px 0; border-bottom: 1px solid rgba(217,119,6,0.2);">• Banque de Polynésie</li>
+                        <li style="padding: 8px 0; border-bottom: 1px solid rgba(217,119,6,0.2);">• Banque de Tahiti</li>
+                        <li style="padding: 8px 0; border-bottom: 1px solid rgba(217,119,6,0.2);">• SOCREDO</li>
+                        <li style="padding: 8px 0; border-bottom: 1px solid rgba(217,119,6,0.2);">• GAN Assurances</li>
+                        <li style="padding: 8px 0;">• Assurances locales</li>
+                    </ul>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #ECFDF5, #A7F3D0); border-radius: 16px; padding: 28px;">
+                    <h3 style="font-size: 18px; color: #059669; margin-bottom: 16px;">🏛️ Institutions & Services</h3>
+                    <ul style="list-style: none; font-size: 14px; color: #374151;">
+                        <li style="padding: 8px 0; border-bottom: 1px solid rgba(5,150,105,0.2);">• OPT (Télécom)</li>
+                        <li style="padding: 8px 0; border-bottom: 1px solid rgba(5,150,105,0.2);">• EDT (Électricité)</li>
+                        <li style="padding: 8px 0; border-bottom: 1px solid rgba(5,150,105,0.2);">• Port Autonome de Papeete</li>
+                        <li style="padding: 8px 0; border-bottom: 1px solid rgba(5,150,105,0.2);">• CPS (Sécurité Sociale)</li>
+                        <li style="padding: 8px 0;">• Mairies & Communes</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-logo">PACIFIK'<span>AI</span></div>
+            <p>Document stratégique interne • Janvier 2026</p>
+            <p style="margin-top: 12px;">Sources: <a href="https://www.koino.fr/articles/top-10-des-agences-ia-en-france-2025-tarifs-clients-exemples" style="color: var(--primary);">Koino</a>, <a href="https://goodspeed.studio/blog/n8n-agency-pricing-what-it-costs-to-work-with-an-n8n-partner" style="color: var(--primary);">Goodspeed Studio</a>, <a href="https://www.boostprocess.net/blog-articles/revolution-numerique-tendances-2025-tahiti" style="color: var(--primary);">BoostProcess</a></p>
+        </div>
+    </footer>
+</body>
+</html>

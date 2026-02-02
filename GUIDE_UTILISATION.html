@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guide d'Utilisation - Dashboard ATN</title>
+    <style>
+        :root {
+            --atn-primary: #00456B;
+            --atn-secondary: #F15A29;
+            --atn-light: #EBF5FF;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.7;
+            color: #1e293b;
+            background: #f8fafc;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--atn-primary) 0%, #003554 100%);
+            color: white;
+            padding: 3rem 2rem;
+            border-radius: 1rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            opacity: 0.9;
+        }
+
+        /* Navigation */
+        .toc {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .toc h2 {
+            font-size: 1.25rem;
+            color: var(--atn-primary);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--atn-secondary);
+        }
+
+        .toc ol {
+            columns: 2;
+            column-gap: 2rem;
+        }
+
+        .toc li {
+            margin-bottom: 0.5rem;
+        }
+
+        .toc a {
+            color: #475569;
+            text-decoration: none;
+        }
+
+        .toc a:hover {
+            color: var(--atn-secondary);
+        }
+
+        /* Sections */
+        section {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        section h2 {
+            font-size: 1.5rem;
+            color: var(--atn-primary);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--atn-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        section h3 {
+            font-size: 1.1rem;
+            color: #334155;
+            margin: 1.5rem 0 0.75rem;
+        }
+
+        section p {
+            color: #475569;
+            margin-bottom: 1rem;
+        }
+
+        /* Steps */
+        .steps {
+            counter-reset: step;
+            list-style: none;
+            padding: 0;
+        }
+
+        .steps li {
+            position: relative;
+            padding-left: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .steps li::before {
+            counter-increment: step;
+            content: counter(step);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 2rem;
+            height: 2rem;
+            background: var(--atn-secondary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .steps li strong {
+            color: var(--atn-primary);
+        }
+
+        /* Tips */
+        .tip {
+            background: #fef3c7;
+            border-left: 4px solid var(--warning);
+            padding: 1rem 1.5rem;
+            border-radius: 0 0.5rem 0.5rem 0;
+            margin: 1rem 0;
+        }
+
+        .tip::before {
+            content: '💡 Astuce: ';
+            font-weight: 600;
+        }
+
+        .warning {
+            background: #fee2e2;
+            border-left: 4px solid var(--danger);
+            padding: 1rem 1.5rem;
+            border-radius: 0 0.5rem 0.5rem 0;
+            margin: 1rem 0;
+        }
+
+        .warning::before {
+            content: '⚠️ Attention: ';
+            font-weight: 600;
+        }
+
+        .success {
+            background: #d1fae5;
+            border-left: 4px solid var(--success);
+            padding: 1rem 1.5rem;
+            border-radius: 0 0.5rem 0.5rem 0;
+            margin: 1rem 0;
+        }
+
+        .success::before {
+            content: '✅ ';
+        }
+
+        /* Screenshots placeholder */
+        .screenshot {
+            background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+            border-radius: 0.5rem;
+            padding: 3rem;
+            text-align: center;
+            color: #64748b;
+            margin: 1rem 0;
+            border: 2px dashed #94a3b8;
+        }
+
+        /* Code blocks */
+        code {
+            background: #f1f5f9;
+            padding: 0.125rem 0.375rem;
+            border-radius: 0.25rem;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 0.875rem;
+            color: var(--atn-primary);
+        }
+
+        pre {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        th, td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            background: #f8fafc;
+            font-weight: 600;
+            color: var(--atn-primary);
+        }
+
+        /* Keyboard shortcuts */
+        kbd {
+            background: #e2e8f0;
+            border: 1px solid #cbd5e1;
+            border-radius: 0.25rem;
+            padding: 0.125rem 0.5rem;
+            font-family: inherit;
+            font-size: 0.75rem;
+            box-shadow: 0 1px 0 #94a3b8;
+        }
+
+        /* FAQ */
+        details {
+            background: #f8fafc;
+            border-radius: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        summary {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--atn-primary);
+        }
+
+        summary:hover {
+            background: #f1f5f9;
+            border-radius: 0.5rem;
+        }
+
+        details[open] summary {
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        details > div {
+            padding: 1rem 1.5rem;
+            color: #475569;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+
+        @media (max-width: 640px) {
+            .toc ol {
+                columns: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📖 Guide d'Utilisation</h1>
+            <p>Dashboard Air Tahiti Nui - Mode d'emploi complet</p>
+        </header>
+
+        <!-- Table des matières -->
+        <nav class="toc">
+            <h2>Table des matières</h2>
+            <ol>
+                <li><a href="#demarrage">Démarrage rapide</a></li>
+                <li><a href="#overview">Page d'accueil (Overview)</a></li>
+                <li><a href="#calendrier">Calendrier éditorial</a></li>
+                <li><a href="#newsletters">Gestion des newsletters</a></li>
+                <li><a href="#articles">Articles SEO</a></li>
+                <li><a href="#roi">Analyse ROI</a></li>
+                <li><a href="#conversations">Conversations concierge</a></li>
+                <li><a href="#avis">Avis clients</a></li>
+                <li><a href="#social">Social Monitor</a></li>
+                <li><a href="#vols">Alertes vols</a></li>
+                <li><a href="#assistant">Assistant IA (ChatWidget)</a></li>
+                <li><a href="#rapports">Génération de rapports</a></li>
+                <li><a href="#settings">Configuration</a></li>
+                <li><a href="#faq">FAQ</a></li>
+            </ol>
+        </nav>
+
+        <!-- Démarrage rapide -->
+        <section id="demarrage">
+            <h2>🚀 Démarrage rapide</h2>
+
+            <p>Le dashboard ATN centralise tous vos outils marketing et opérationnels. Voici comment commencer:</p>
+
+            <ol class="steps">
+                <li>
+                    <strong>Accédez au dashboard</strong><br>
+                    Ouvrez votre navigateur et allez sur <code>http://localhost:3000</code> (ou l'URL de production).
+                </li>
+                <li>
+                    <strong>Consultez l'Overview</strong><br>
+                    La page d'accueil affiche tous les KPIs importants: conversations, newsletters, revenus upsell.
+                </li>
+                <li>
+                    <strong>Utilisez l'assistant IA</strong><br>
+                    Cliquez sur la bulle 💬 en bas à droite pour interagir avec l'assistant connecté aux 10 workflows.
+                </li>
+                <li>
+                    <strong>Naviguez via le menu</strong><br>
+                    La sidebar gauche donne accès à toutes les sections: Calendar, Newsletters, ROI, etc.
+                </li>
+            </ol>
+
+            <div class="tip">
+                Pour une première prise en main, commencez par le Calendar pour planifier vos contenus, puis l'Overview pour suivre les performances.
+            </div>
+        </section>
+
+        <!-- Overview -->
+        <section id="overview">
+            <h2>📊 Page d'accueil (Overview)</h2>
+
+            <p>La page d'accueil présente une vue synthétique de toutes les activités.</p>
+
+            <h3>Cartes de statistiques</h3>
+            <table>
+                <tr>
+                    <th>Métrique</th>
+                    <th>Description</th>
+                    <th>Source</th>
+                </tr>
+                <tr>
+                    <td>Conversations aujourd'hui</td>
+                    <td>Nombre d'échanges traités par le concierge IA</td>
+                    <td>Build 1</td>
+                </tr>
+                <tr>
+                    <td>Taux d'ouverture</td>
+                    <td>Pourcentage d'ouverture de la dernière newsletter</td>
+                    <td>Build 2</td>
+                </tr>
+                <tr>
+                    <td>Revenus Upsell</td>
+                    <td>Revenus additionnels générés par les offres personnalisées</td>
+                    <td>Build 10</td>
+                </tr>
+                <tr>
+                    <td>Alertes actives</td>
+                    <td>Nombre d'alertes concurrentielles ou opérationnelles</td>
+                    <td>Build 7</td>
+                </tr>
+            </table>
+
+            <h3>Statut des workflows</h3>
+            <p>Les 10 workflows n8n sont affichés avec des indicateurs de couleur:</p>
+            <ul>
+                <li><span style="color: #10b981;">●</span> <strong>Vert</strong>: Workflow actif et fonctionnel</li>
+                <li><span style="color: #f59e0b;">●</span> <strong>Orange</strong>: Workflow en cours de traitement</li>
+                <li><span style="color: #ef4444;">●</span> <strong>Rouge</strong>: Workflow en erreur (action requise)</li>
+            </ul>
+
+            <div class="tip">
+                Cliquez sur un workflow pour voir ses dernières exécutions dans n8n.
+            </div>
+        </section>
+
+        <!-- Calendrier -->
+        <section id="calendrier">
+            <h2>📅 Calendrier éditorial</h2>
+
+            <p>Le calendrier permet de visualiser et planifier tous vos contenus (newsletters et articles).</p>
+
+            <h3>Navigation</h3>
+            <ul>
+                <li>Utilisez les flèches <kbd>◀</kbd> <kbd>▶</kbd> pour changer de mois</li>
+                <li>Cliquez sur "Aujourd'hui" pour revenir au mois courant</li>
+                <li>Filtrez par type: "Tous", "Newsletters" ou "Articles"</li>
+            </ul>
+
+            <h3>Planifier un contenu</h3>
+            <ol class="steps">
+                <li>
+                    <strong>Cliquez sur une date</strong><br>
+                    Une modal s'ouvre pour créer un nouveau contenu.
+                </li>
+                <li>
+                    <strong>Choisissez le type</strong><br>
+                    Newsletter (rose) ou Article SEO (violet).
+                </li>
+                <li>
+                    <strong>Remplissez le titre</strong><br>
+                    Le titre sera utilisé pour la génération IA.
+                </li>
+                <li>
+                    <strong>Enregistrez</strong><br>
+                    Le contenu apparaît sur le calendrier.
+                </li>
+            </ol>
+
+            <h3>Reprogrammer un contenu (Drag & Drop)</h3>
+            <ol class="steps">
+                <li>
+                    <strong>Survolez un contenu</strong><br>
+                    Il devient "draggable" (curseur en croix).
+                </li>
+                <li>
+                    <strong>Glissez vers la nouvelle date</strong><br>
+                    Maintenez le clic et déplacez.
+                </li>
+                <li>
+                    <strong>Relâchez</strong><br>
+                    La date est automatiquement mise à jour.
+                </li>
+            </ol>
+
+            <div class="warning">
+                Les contenus programmés dans les 24h ne peuvent plus être déplacés. Utilisez l'édition manuelle.
+            </div>
+        </section>
+
+        <!-- Newsletters -->
+        <section id="newsletters">
+            <h2>📧 Gestion des newsletters</h2>
+
+            <p>Cette section affiche l'historique et les performances de toutes les newsletters.</p>
+
+            <h3>Métriques clés</h3>
+            <table>
+                <tr>
+                    <th>Métrique</th>
+                    <th>Bon</th>
+                    <th>Moyen</th>
+                    <th>À améliorer</th>
+                </tr>
+                <tr>
+                    <td>Taux d'ouverture</td>
+                    <td style="color: #10b981;">&gt; 35%</td>
+                    <td style="color: #f59e0b;">25-35%</td>
+                    <td style="color: #ef4444;">&lt; 25%</td>
+                </tr>
+                <tr>
+                    <td>Taux de clic</td>
+                    <td style="color: #10b981;">&gt; 5%</td>
+                    <td style="color: #f59e0b;">2-5%</td>
+                    <td style="color: #ef4444;">&lt; 2%</td>
+                </tr>
+                <tr>
+                    <td>Score personnalisation</td>
+                    <td style="color: #10b981;">&gt; 90%</td>
+                    <td style="color: #f59e0b;">70-90%</td>
+                    <td style="color: #ef4444;">&lt; 70%</td>
+                </tr>
+            </table>
+
+            <h3>Créer une newsletter</h3>
+            <ol class="steps">
+                <li>Cliquez sur "Nouvelle newsletter"</li>
+                <li>Choisissez le segment cible (tous, fidèles, nouveaux...)</li>
+                <li>Entrez le sujet ou laissez l'IA suggérer</li>
+                <li>Prévisualisez et programmez l'envoi</li>
+            </ol>
+
+            <div class="success">
+                L'IA personnalise automatiquement le contenu selon l'historique client (destinations favorites, classe préférée, etc.)
+            </div>
+        </section>
+
+        <!-- Articles SEO -->
+        <section id="articles">
+            <h2>📄 Articles SEO</h2>
+
+            <p>La Content Factory génère des articles optimisés pour le référencement.</p>
+
+            <h3>Scores de qualité</h3>
+            <ul>
+                <li><strong>Score SEO</strong>: Optimisation mots-clés, structure, meta-données</li>
+                <li><strong>Score GEO</strong>: Pertinence géographique pour les recherches locales</li>
+                <li><strong>Readability</strong>: Lisibilité et accessibilité du contenu</li>
+            </ul>
+
+            <h3>Générer un article</h3>
+            <ol class="steps">
+                <li>Cliquez sur "Nouvel article"</li>
+                <li>Entrez le sujet (ex: "Meilleure période pour visiter Moorea")</li>
+                <li>L'IA génère un article de 1500-2000 mots</li>
+                <li>Relisez, modifiez si nécessaire, puis publiez</li>
+            </ol>
+
+            <div class="tip">
+                Les articles avec un score SEO &gt; 90% ont 3x plus de chances d'apparaître en première page Google.
+            </div>
+        </section>
+
+        <!-- ROI -->
+        <section id="roi">
+            <h2>📈 Analyse ROI</h2>
+
+            <p>Suivez les performances commerciales par route aérienne.</p>
+
+            <h3>Comprendre les indicateurs</h3>
+            <table>
+                <tr>
+                    <th>Indicateur</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>Revenus</td>
+                    <td>Chiffre d'affaires total sur la période</td>
+                </tr>
+                <tr>
+                    <td>Réservations</td>
+                    <td>Nombre de billets vendus</td>
+                </tr>
+                <tr>
+                    <td>Remplissage</td>
+                    <td>Taux d'occupation moyen des vols</td>
+                </tr>
+                <tr>
+                    <td>Ticket moyen</td>
+                    <td>Prix moyen par passager</td>
+                </tr>
+            </table>
+
+            <h3>Alertes d'anomalie</h3>
+            <p>Le système détecte automatiquement les variations anormales:</p>
+            <ul>
+                <li><span style="color: #ef4444;">▼ Rouge</span>: Baisse significative (&gt; 20%)</li>
+                <li><span style="color: #10b981;">▲ Vert</span>: Hausse significative (&gt; 20%)</li>
+            </ul>
+
+            <div class="warning">
+                Quand une route montre une anomalie rouge, l'IA peut suggérer automatiquement une campagne ciblée.
+            </div>
+        </section>
+
+        <!-- Conversations -->
+        <section id="conversations">
+            <h2>💬 Conversations concierge</h2>
+
+            <p>Historique de toutes les interactions clients avec le concierge IA multilingue.</p>
+
+            <h3>Langues supportées</h3>
+            <p>Le concierge détecte automatiquement la langue et répond dans:</p>
+            <ul style="columns: 3;">
+                <li>🇫🇷 Français</li>
+                <li>🇬🇧 Anglais</li>
+                <li>🇪🇸 Espagnol</li>
+                <li>🇯🇵 Japonais</li>
+                <li>🇨🇳 Chinois</li>
+                <li>🇩🇪 Allemand</li>
+            </ul>
+
+            <h3>Score de satisfaction</h3>
+            <p>Chaque conversation reçoit un score basé sur:</p>
+            <ul>
+                <li>Résolution du problème</li>
+                <li>Temps de réponse</li>
+                <li>Feedback implicite (réponses courtes = satisfaction)</li>
+            </ul>
+        </section>
+
+        <!-- Avis -->
+        <section id="avis">
+            <h2>⭐ Avis clients</h2>
+
+            <p>Centralisez et répondez aux avis de toutes les plateformes.</p>
+
+            <h3>Workflow de validation</h3>
+            <ol class="steps">
+                <li>
+                    <strong>Nouvel avis détecté</strong><br>
+                    L'IA analyse le sentiment et génère une réponse adaptée.
+                </li>
+                <li>
+                    <strong>Statut "À valider"</strong><br>
+                    Relisez la réponse suggérée, modifiez si nécessaire.
+                </li>
+                <li>
+                    <strong>Approuver ou Rejeter</strong><br>
+                    Cliquez sur "Approuver" pour passer en file de publication.
+                </li>
+                <li>
+                    <strong>Publication</strong><br>
+                    La réponse est postée sur la plateforme d'origine.
+                </li>
+            </ol>
+
+            <h3>Tons de réponse</h3>
+            <ul>
+                <li><strong>Reconnaissant</strong>: Pour avis positifs (4-5 étoiles)</li>
+                <li><strong>Empathique</strong>: Pour avis négatifs avec problème réel</li>
+                <li><strong>Professionnel</strong>: Pour avis neutres ou professionnels</li>
+            </ul>
+
+            <div class="tip">
+                Traitez les avis négatifs en priorité. Une réponse rapide et empathique peut transformer un client mécontent en ambassadeur.
+            </div>
+        </section>
+
+        <!-- Social -->
+        <section id="social">
+            <h2>📱 Social Monitor</h2>
+
+            <p>Surveillez les mentions de la marque sur les réseaux sociaux.</p>
+
+            <h3>Plateformes surveillées</h3>
+            <ul>
+                <li>Twitter/X</li>
+                <li>Instagram</li>
+                <li>Facebook</li>
+                <li>LinkedIn</li>
+            </ul>
+
+            <h3>Priorisation automatique</h3>
+            <table>
+                <tr>
+                    <th>Priorité</th>
+                    <th>Critères</th>
+                    <th>Action</th>
+                </tr>
+                <tr>
+                    <td style="color: #ef4444;">Haute</td>
+                    <td>Sentiment négatif + forte portée</td>
+                    <td>Répondre immédiatement</td>
+                </tr>
+                <tr>
+                    <td style="color: #f59e0b;">Moyenne</td>
+                    <td>Mention positive influente</td>
+                    <td>Répondre dans la journée</td>
+                </tr>
+                <tr>
+                    <td style="color: #64748b;">Basse</td>
+                    <td>Mention neutre ou faible portée</td>
+                    <td>Optionnel</td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- Vols -->
+        <section id="vols">
+            <h2>✈️ Alertes vols</h2>
+
+            <p>Système de notification automatique pour retards et annulations.</p>
+
+            <h3>Types d'alertes</h3>
+            <ul>
+                <li><strong>Retard</strong>: Notification si &gt; 30 minutes</li>
+                <li><strong>Annulation</strong>: Notification immédiate + options rebooking</li>
+                <li><strong>Changement de porte</strong>: Notification aux passagers en zone d'embarquement</li>
+            </ul>
+
+            <h3>Canaux de notification</h3>
+            <ul>
+                <li>📱 SMS</li>
+                <li>📧 Email</li>
+                <li>🔔 Push App</li>
+                <li>💬 WhatsApp</li>
+            </ul>
+
+            <div class="success">
+                Le système notifie automatiquement. Vous pouvez aussi déclencher manuellement une notification depuis cette page.
+            </div>
+        </section>
+
+        <!-- Assistant IA -->
+        <section id="assistant">
+            <h2>💬 Assistant IA (ChatWidget)</h2>
+
+            <p>L'assistant flottant en bas à droite peut effectuer des actions sur tout le dashboard.</p>
+
+            <h3>Actions rapides</h3>
+            <ul>
+                <li>"Reprogramme le contenu de demain à vendredi"</li>
+                <li>"Génère un rapport du jour"</li>
+                <li>"Modifie le titre de la prochaine newsletter"</li>
+                <li>"Montre les avis en attente"</li>
+                <li>"Quelles routes sont en baisse ?"</li>
+            </ul>
+
+            <h3>Commandes utiles</h3>
+            <pre><code>"Donne-moi le rapport du jour"
+"Génère un article sur [sujet]"
+"Quels sont les avis négatifs à traiter ?"
+"Ajuste le prompt du workflow newsletter"</code></pre>
+
+            <div class="tip">
+                L'assistant est connecté aux 10 workflows métier. Il peut lire les données ET effectuer des actions.
+            </div>
+        </section>
+
+        <!-- Rapports -->
+        <section id="rapports">
+            <h2>📋 Génération de rapports</h2>
+
+            <p>Créez des rapports personnalisés ou utilisez les templates prédéfinis.</p>
+
+            <h3>Templates disponibles</h3>
+            <table>
+                <tr>
+                    <th>Rapport</th>
+                    <th>Fréquence suggérée</th>
+                    <th>Contenu</th>
+                </tr>
+                <tr>
+                    <td>Résumé quotidien</td>
+                    <td>Tous les jours</td>
+                    <td>KPIs des 10 workflows</td>
+                </tr>
+                <tr>
+                    <td>Performance Marketing</td>
+                    <td>Hebdomadaire</td>
+                    <td>Newsletters, articles, conversions</td>
+                </tr>
+                <tr>
+                    <td>Analyse ROI</td>
+                    <td>Hebdomadaire</td>
+                    <td>Performance par route</td>
+                </tr>
+                <tr>
+                    <td>Satisfaction client</td>
+                    <td>Hebdomadaire</td>
+                    <td>Avis, NPS, temps réponse</td>
+                </tr>
+                <tr>
+                    <td>Veille concurrentielle</td>
+                    <td>Bi-hebdomadaire</td>
+                    <td>Prix, nouvelles routes</td>
+                </tr>
+            </table>
+
+            <h3>Rapport personnalisé avec l'IA</h3>
+            <p>Décrivez ce que vous voulez analyser:</p>
+            <pre><code>"Compare les performances newsletters des 2 dernières semaines avec recommandations"
+"Analyse l'impact des retards sur la satisfaction client ce mois"
+"Top 5 opportunités d'upsell basées sur les données récentes"</code></pre>
+        </section>
+
+        <!-- Settings -->
+        <section id="settings">
+            <h2>⚙️ Configuration</h2>
+
+            <h3>Smart Generator (Build 15)</h3>
+            <p>Configure la génération automatique de contenu:</p>
+            <ul>
+                <li><strong>Fréquence</strong>: Quotidien, Hebdomadaire, Bi-hebdomadaire</li>
+                <li><strong>Contenu/semaine</strong>: Nombre total (newsletters + articles)</li>
+                <li><strong>Semaines d'avance</strong>: Combien de semaines planifier à l'avance</li>
+                <li><strong>Seuil d'anomalie</strong>: % de variation pour déclencher une suggestion</li>
+            </ul>
+
+            <h3>Configuration recommandée</h3>
+            <pre><code>Fréquence: Hebdomadaire (Lundi 8h)
+Newsletters/semaine: 3
+Articles/semaine: 4
+Semaines d'avance: 4
+Seuil anomalie: 20%</code></pre>
+
+            <div class="warning">
+                Après modification des paramètres, cliquez sur "Sauvegarder" pour appliquer les changements.
+            </div>
+        </section>
+
+        <!-- FAQ -->
+        <section id="faq">
+            <h2>❓ FAQ</h2>
+
+            <details>
+                <summary>Comment lancer manuellement un workflow n8n ?</summary>
+                <div>
+                    <p>Deux options:</p>
+                    <ol>
+                        <li>Utilisez l'assistant: "Lance le workflow newsletter"</li>
+                        <li>Allez dans Settings et cliquez sur "Lancer génération maintenant"</li>
+                    </ol>
+                </div>
+            </details>
+
+            <details>
+                <summary>Pourquoi un workflow est en orange/rouge ?</summary>
+                <div>
+                    <p><strong>Orange</strong>: Le workflow est en cours d'exécution ou en attente d'une action externe (API, validation...).</p>
+                    <p><strong>Rouge</strong>: Une erreur s'est produite. Allez dans n8n pour voir les logs d'erreur.</p>
+                </div>
+            </details>
+
+            <details>
+                <summary>Comment modifier un contenu déjà programmé ?</summary>
+                <div>
+                    <ol>
+                        <li>Allez dans Calendar ou Planner</li>
+                        <li>Cliquez sur le contenu</li>
+                        <li>Modifiez le titre ou la date</li>
+                        <li>Utilisez le champ "Prompt IA" pour demander des modifications au contenu</li>
+                    </ol>
+                </div>
+            </details>
+
+            <details>
+                <summary>Les données affichées sont-elles en temps réel ?</summary>
+                <div>
+                    <p>Actuellement, le dashboard utilise des données de démonstration. En production, les données seront synchronisées avec Airtable toutes les 5 minutes.</p>
+                </div>
+            </details>
+
+            <details>
+                <summary>Comment ajouter un nouveau type de rapport ?</summary>
+                <div>
+                    <p>Utilisez la fonction "Rapport personnalisé" dans la section Reports. Décrivez votre besoin en langage naturel et l'IA générera le rapport correspondant.</p>
+                </div>
+            </details>
+
+            <details>
+                <summary>Puis-je programmer des rapports automatiques ?</summary>
+                <div>
+                    <p>Oui! Dans la section Reports, cliquez sur "+ Programmer un nouveau rapport" et configurez:</p>
+                    <ul>
+                        <li>Le type de rapport</li>
+                        <li>La fréquence (quotidien, hebdomadaire, mensuel)</li>
+                        <li>L'heure d'envoi</li>
+                        <li>Les destinataires email</li>
+                    </ul>
+                </div>
+            </details>
+
+            <details>
+                <summary>Comment contacter le support technique ?</summary>
+                <div>
+                    <p>Contactez PACIFIK'AI:</p>
+                    <ul>
+                        <li>Email: jordy@pacifikai.com</li>
+                        <li>Téléphone: +689 XX XX XX</li>
+                    </ul>
+                </div>
+            </details>
+        </section>
+
+        <footer>
+            <p>Guide d'utilisation Dashboard ATN v2.0</p>
+            <p>Dernière mise à jour: 28 janvier 2026</p>
+            <p>Développé par PACIFIK'AI</p>
+        </footer>
+    </div>
+</body>
+</html>

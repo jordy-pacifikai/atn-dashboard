@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ATN Dashboard - Présentation Complète</title>
+    <style>
+        :root {
+            --atn-primary: #00456B;
+            --atn-secondary: #F15A29;
+            --atn-light: #EBF5FF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            line-height: 1.6;
+            color: #1e293b;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--atn-primary) 0%, #003554 100%);
+            color: white;
+            padding: 3rem 2rem;
+            border-radius: 1rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(241, 90, 41, 0.1) 0%, transparent 70%);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            position: relative;
+        }
+
+        header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+            position: relative;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background: var(--atn-secondary);
+            color: white;
+            margin-left: 0.5rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .stat-card h3 {
+            font-size: 0.875rem;
+            color: #64748b;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--atn-primary);
+        }
+
+        .pages-section {
+            margin-bottom: 3rem;
+        }
+
+        .pages-section > h2 {
+            font-size: 1.5rem;
+            color: var(--atn-primary);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--atn-secondary);
+        }
+
+        .page-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-left: 4px solid var(--atn-secondary);
+        }
+
+        .page-card h3 {
+            font-size: 1.25rem;
+            color: var(--atn-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-card .route {
+            font-family: monospace;
+            font-size: 0.875rem;
+            background: #f1f5f9;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            color: #64748b;
+        }
+
+        .page-card .description {
+            color: #64748b;
+            margin-bottom: 1rem;
+        }
+
+        .page-card .build-tag {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background: var(--atn-light);
+            color: var(--atn-primary);
+            margin-right: 0.5rem;
+        }
+
+        .features-list {
+            background: #f8fafc;
+            border-radius: 0.5rem;
+            padding: 1rem 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .features-list h4 {
+            font-size: 0.875rem;
+            color: #475569;
+            margin-bottom: 0.75rem;
+        }
+
+        .features-list ul {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+        }
+
+        .features-list li {
+            font-size: 0.875rem;
+            color: #64748b;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .features-list li::before {
+            content: '✓';
+            color: var(--atn-secondary);
+            font-weight: bold;
+        }
+
+        .improvements-section {
+            background: linear-gradient(135deg, var(--atn-secondary) 0%, #c94820 100%);
+            color: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        .improvements-section h2 {
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .improvement-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .improvement-card {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+        }
+
+        .improvement-card h4 {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .improvement-card p {
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+
+        .improvement-card .priority {
+            display: inline-block;
+            padding: 0.125rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.625rem;
+            font-weight: 600;
+            background: white;
+            color: var(--atn-secondary);
+            margin-left: auto;
+        }
+
+        .workflow-status {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .workflow-status h2 {
+            font-size: 1.5rem;
+            color: var(--atn-primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .workflow-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1rem;
+        }
+
+        .workflow-item {
+            text-align: center;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            background: #f8fafc;
+        }
+
+        .workflow-item.active {
+            background: #dcfce7;
+        }
+
+        .workflow-item.pending {
+            background: #fef3c7;
+        }
+
+        .workflow-item .number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--atn-primary);
+        }
+
+        .workflow-item .name {
+            font-size: 0.75rem;
+            color: #64748b;
+            margin-top: 0.25rem;
+        }
+
+        .workflow-item .status-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 0.25rem;
+        }
+
+        .workflow-item .status-dot.green { background: #22c55e; }
+        .workflow-item .status-dot.yellow { background: #eab308; }
+        .workflow-item .status-dot.red { background: #ef4444; }
+
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 2rem;
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+
+        @media (max-width: 1024px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .improvement-grid { grid-template-columns: 1fr; }
+            .workflow-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        @media (max-width: 640px) {
+            .stats-grid { grid-template-columns: 1fr; }
+            .features-list ul { grid-template-columns: 1fr; }
+            .workflow-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>ATN Dashboard <span class="badge">v2.0</span></h1>
+            <p>Présentation complète des 15 pages et fonctionnalités du tableau de bord Air Tahiti Nui</p>
+        </header>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Pages du Dashboard</h3>
+                <div class="value">15</div>
+            </div>
+            <div class="stat-card">
+                <h3>Workflows n8n</h3>
+                <div class="value">15</div>
+            </div>
+            <div class="stat-card">
+                <h3>Composants React</h3>
+                <div class="value">50+</div>
+            </div>
+            <div class="stat-card">
+                <h3>APIs Intégrées</h3>
+                <div class="value">12</div>
+            </div>
+        </div>
+
+        <!-- Workflow Status -->
+        <div class="workflow-status">
+            <h2>Statut des 15 Builds n8n</h2>
+            <div class="workflow-grid">
+                <div class="workflow-item active">
+                    <div class="number">1</div>
+                    <div class="name"><span class="status-dot green"></span>Concierge IA</div>
+                </div>
+                <div class="workflow-item active">
+                    <div class="number">2</div>
+                    <div class="name"><span class="status-dot green"></span>Newsletter</div>
+                </div>
+                <div class="workflow-item active">
+                    <div class="number">3</div>
+                    <div class="name"><span class="status-dot green"></span>SEO Content</div>
+                </div>
+                <div class="workflow-item active">
+                    <div class="number">4</div>
+                    <div class="name"><span class="status-dot green"></span>ROI Analyst</div>
+                </div>
+                <div class="workflow-item active">
+                    <div class="number">5</div>
+                    <div class="name"><span class="status-dot green"></span>Booking</div>
+                </div>
+                <div class="workflow-item active">
+                    <div class="number">6</div>
+                    <div class="name"><span class="status-dot green"></span>Social Monitor</div>
+                </div>
+                <div class="workflow-item active">
+                    <div class="number">7</div>
+                    <div class="name"><span class="status-dot green"></span>Competitor Intel</div>
+                </div>
+                <div class="workflow-item active">
+                    <div class="number">8</div>
+                    <div class="name"><span class="status-dot green"></span>Flight Notifier</div>
+                </div>
+                <div class="workflow-item active">
+                    <div class="number">9</div>
+                    <div class="name"><span class="status-dot green"></span>Review Responder</div>
+                </div>
+                <div class="workflow-item active">
+                    <div class="number">10</div>
+                    <div class="name"><span class="status-dot green"></span>Upsell Engine</div>
+                </div>
+                <div class="workflow-item active">
+                    <div class="number">11</div>
+                    <div class="name"><span class="status-dot green"></span>Dashboard API</div>
+                </div>
+                <div class="workflow-item active">
+                    <div class="number">12</div>
+                    <div class="name"><span class="status-dot green"></span>Content Scheduler</div>
+                </div>
+                <div class="workflow-item active">
+                    <div class="number">13</div>
+                    <div class="name"><span class="status-dot green"></span>AI Assistant</div>
+                </div>
+                <div class="workflow-item active">
+                    <div class="number">14</div>
+                    <div class="name"><span class="status-dot green"></span>Report Generator</div>
+                </div>
+                <div class="workflow-item active">
+                    <div class="number">15</div>
+                    <div class="name"><span class="status-dot green"></span>Smart Generator</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="pages-section">
+            <h2>Pages du Dashboard</h2>
+
+            <!-- Page: Overview -->
+            <div class="page-card">
+                <h3>
+                    <span style="font-size: 1.5rem;">📊</span>
+                    Overview (Accueil)
+                    <span class="route">/</span>
+                </h3>
+                <p class="description">Vue d'ensemble de tous les KPIs et métriques clés du dashboard ATN.</p>
+                <span class="build-tag">Builds 1-10</span>
+                <div class="features-list">
+                    <h4>Fonctionnalités</h4>
+                    <ul>
+                        <li>Statistiques temps réel (conversations, taux d'ouverture, revenus upsell)</li>
+                        <li>Statut des 10 workflows n8n avec indicateurs visuels</li>
+                        <li>Graphique des newsletters de la semaine</li>
+                        <li>Activité récente avec timeline</li>
+                        <li>Alertes concurrentielles et métriques ROI</li>
+                        <li>Actions rapides vers les différentes sections</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Page: Calendar -->
+            <div class="page-card">
+                <h3>
+                    <span style="font-size: 1.5rem;">📅</span>
+                    Calendar (Calendrier Éditorial)
+                    <span class="route">/calendar</span>
+                </h3>
+                <p class="description">Calendrier visuel drag & drop pour planifier newsletters et articles SEO.</p>
+                <span class="build-tag">Build 12</span>
+                <span class="build-tag">Build 2</span>
+                <span class="build-tag">Build 3</span>
+                <div class="features-list">
+                    <h4>Fonctionnalités</h4>
+                    <ul>
+                        <li>Vue calendrier mensuel interactive</li>
+                        <li>Drag & drop pour reprogrammer les contenus</li>
+                        <li>Modal d'édition avec modification IA</li>
+                        <li>Distinction visuelle newsletters (rose) / articles (violet)</li>
+                        <li>Filtres par type de contenu</li>
+                        <li>Navigation mois par mois</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Page: Planner -->
+            <div class="page-card">
+                <h3>
+                    <span style="font-size: 1.5rem;">📝</span>
+                    Content Planner
+                    <span class="route">/planner</span>
+                </h3>
+                <p class="description">Planification éditoriale sur 30 jours avec gestion des statuts.</p>
+                <span class="build-tag">Build 12</span>
+                <div class="features-list">
+                    <h4>Fonctionnalités</h4>
+                    <ul>
+                        <li>Liste des 30 prochains contenus programmés</li>
+                        <li>Gestion des statuts (Idée → Brouillon → Revue → Approuvé → Programmé)</li>
+                        <li>Indicateur J-X pour les deadlines</li>
+                        <li>Scores SEO et engagement pour chaque contenu</li>
+                        <li>Badge IA pour contenus générés automatiquement</li>
+                        <li>Modal d'édition avec prompt IA intégré</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Page: Newsletters -->
+            <div class="page-card">
+                <h3>
+                    <span style="font-size: 1.5rem;">📧</span>
+                    Newsletters
+                    <span class="route">/newsletters</span>
+                </h3>
+                <p class="description">Historique et performance des newsletters envoyées.</p>
+                <span class="build-tag">Build 2</span>
+                <div class="features-list">
+                    <h4>Fonctionnalités</h4>
+                    <ul>
+                        <li>Liste complète des newsletters envoyées</li>
+                        <li>Métriques: taux d'ouverture, clics, conversions</li>
+                        <li>Score de personnalisation IA</li>
+                        <li>Filtres par statut (Envoyé, Brouillon, Programmé)</li>
+                        <li>Statistiques globales (total envoyé, taux moyens)</li>
+                        <li>Prévisualisation des newsletters</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Page: Content -->
+            <div class="page-card">
+                <h3>
+                    <span style="font-size: 1.5rem;">📄</span>
+                    Content Factory SEO+GEO
+                    <span class="route">/content</span>
+                </h3>
+                <p class="description">Génération et gestion des articles optimisés SEO et GEO.</p>
+                <span class="build-tag">Build 3</span>
+                <div class="features-list">
+                    <h4>Fonctionnalités</h4>
+                    <ul>
+                        <li>Score SEO et GEO pour chaque article</li>
+                        <li>Compteur de mots générés</li>
+                        <li>Aperçu des images générées par IA</li>
+                        <li>Catégorisation par sujet (Destinations, Activités, Guides)</li>
+                        <li>Statut de publication</li>
+                        <li>Lien direct vers articles publiés</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Page: ROI -->
+            <div class="page-card">
+                <h3>
+                    <span style="font-size: 1.5rem;">📈</span>
+                    ROI Analyst
+                    <span class="route">/roi</span>
+                </h3>
+                <p class="description">Analyse ROI par route avec détection d'anomalies.</p>
+                <span class="build-tag">Build 4</span>
+                <div class="features-list">
+                    <h4>Fonctionnalités</h4>
+                    <ul>
+                        <li>Performance par route (PPT-LAX, PPT-CDG, PPT-NRT, etc.)</li>
+                        <li>Métriques: revenus, réservations, remplissage, ticket moyen</li>
+                        <li>Détection d'anomalies avec alertes visuelles</li>
+                        <li>Comparaison vs période précédente</li>
+                        <li>Tendances (hausse/baisse) avec pourcentages</li>
+                        <li>Filtres par période et par route</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Page: Conversations -->
+            <div class="page-card">
+                <h3>
+                    <span style="font-size: 1.5rem;">💬</span>
+                    Concierge Conversations
+                    <span class="route">/conversations</span>
+                </h3>
+                <p class="description">Historique des conversations du concierge IA multilingue.</p>
+                <span class="build-tag">Build 1</span>
+                <div class="features-list">
+                    <h4>Fonctionnalités</h4>
+                    <ul>
+                        <li>Historique complet des échanges client/IA</li>
+                        <li>Support multilingue (FR, EN, ES, JP, etc.)</li>
+                        <li>Score de satisfaction par conversation</li>
+                        <li>Catégorisation des sujets (Réservation, Information, Réclamation)</li>
+                        <li>Temps de réponse moyen</li>
+                        <li>Actions effectuées par l'IA</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Page: Competitors -->
+            <div class="page-card">
+                <h3>
+                    <span style="font-size: 1.5rem;">🎯</span>
+                    Competitor Intelligence
+                    <span class="route">/competitors</span>
+                </h3>
+                <p class="description">Veille concurrentielle automatisée avec comparaison des prix.</p>
+                <span class="build-tag">Build 7</span>
+                <div class="features-list">
+                    <h4>Fonctionnalités</h4>
+                    <ul>
+                        <li>Comparaison prix ATN vs concurrents (French Bee, United, etc.)</li>
+                        <li>Alertes automatiques sur mouvements tarifaires</li>
+                        <li>Position marché par route</li>
+                        <li>Historique des changements de prix</li>
+                        <li>Écart de prix en pourcentage et XPF</li>
+                        <li>Détection des promotions concurrentes</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Page: Upsell -->
+            <div class="page-card">
+                <h3>
+                    <span style="font-size: 1.5rem;">🎁</span>
+                    Upsell Engine
+                    <span class="route">/upsell</span>
+                </h3>
+                <p class="description">Moteur d'upsell automatisé avec tracking des conversions.</p>
+                <span class="build-tag">Build 10</span>
+                <div class="features-list">
+                    <h4>Fonctionnalités</h4>
+                    <ul>
+                        <li>Offres personnalisées par client</li>
+                        <li>Taux de conversion par type d'offre</li>
+                        <li>Revenus additionnels générés</li>
+                        <li>Segmentation client (Fidèle, Nouveau, Business)</li>
+                        <li>Types d'offres (Upgrade, Bagages, Assurance, Lounge)</li>
+                        <li>Statut d'envoi et réponse client</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Page: Reviews -->
+            <div class="page-card">
+                <h3>
+                    <span style="font-size: 1.5rem;">⭐</span>
+                    Avis Clients
+                    <span class="route">/reviews</span>
+                </h3>
+                <p class="description">Gestion des avis clients avec réponses IA générées.</p>
+                <span class="build-tag">Build 9</span>
+                <div class="features-list">
+                    <h4>Fonctionnalités</h4>
+                    <ul>
+                        <li>Agrégation multi-plateformes (TripAdvisor, Google, Skytrax)</li>
+                        <li>Analyse de sentiment automatique</li>
+                        <li>Réponses IA adaptées au ton (Reconnaissant, Empathique, Pro)</li>
+                        <li>Workflow d'approbation (En attente → Approuvé → Publié)</li>
+                        <li>Note moyenne et tendances</li>
+                        <li>Extraction automatique des sujets mentionnés</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Page: Social -->
+            <div class="page-card">
+                <h3>
+                    <span style="font-size: 1.5rem;">📱</span>
+                    Social Monitor
+                    <span class="route">/social</span>
+                </h3>
+                <p class="description">Surveillance des mentions sur les réseaux sociaux.</p>
+                <span class="build-tag">Build 6</span>
+                <div class="features-list">
+                    <h4>Fonctionnalités</h4>
+                    <ul>
+                        <li>Monitoring Twitter/X, Instagram, Facebook, LinkedIn</li>
+                        <li>Analyse de sentiment en temps réel</li>
+                        <li>Portée (reach) de chaque mention</li>
+                        <li>Priorisation automatique (High, Medium, Low)</li>
+                        <li>Suggestions de réponses IA</li>
+                        <li>Gestion des alertes négatives prioritaires</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Page: Flights -->
+            <div class="page-card">
+                <h3>
+                    <span style="font-size: 1.5rem;">✈️</span>
+                    Flight Notifier
+                    <span class="route">/flights</span>
+                </h3>
+                <p class="description">Alertes vols en temps réel avec notifications automatiques.</p>
+                <span class="build-tag">Build 8</span>
+                <div class="features-list">
+                    <h4>Fonctionnalités</h4>
+                    <ul>
+                        <li>Surveillance retards et annulations</li>
+                        <li>Notifications multi-canaux (SMS, Email, Push, WhatsApp)</li>
+                        <li>Compteur passagers impactés vs notifiés</li>
+                        <li>Historique des alertes envoyées</li>
+                        <li>Changements de porte et horaires</li>
+                        <li>Tableau de bord temps réel avec indicateur de surveillance</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Page: Bookings -->
+            <div class="page-card">
+                <h3>
+                    <span style="font-size: 1.5rem;">🎫</span>
+                    Booking Assistant
+                    <span class="route">/bookings</span>
+                </h3>
+                <p class="description">Assistant de réservation intelligent avec traitement des demandes.</p>
+                <span class="build-tag">Build 5</span>
+                <div class="features-list">
+                    <h4>Fonctionnalités</h4>
+                    <ul>
+                        <li>Traitement automatique des demandes de réservation</li>
+                        <li>Gestion des modifications et annulations</li>
+                        <li>Réponses IA personnalisées avec tarifs</li>
+                        <li>Distinction par classe (Poerava Business, Moana Premium/Economy)</li>
+                        <li>Suivi des sessions de conversation</li>
+                        <li>Statistiques de traitement (complété, en cours, échec)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Page: Reports -->
+            <div class="page-card">
+                <h3>
+                    <span style="font-size: 1.5rem;">📋</span>
+                    Reports
+                    <span class="route">/reports</span>
+                </h3>
+                <p class="description">Génération de rapports sur demande avec templates et IA.</p>
+                <span class="build-tag">Build 14</span>
+                <div class="features-list">
+                    <h4>Fonctionnalités</h4>
+                    <ul>
+                        <li>8 templates de rapports prédéfinis</li>
+                        <li>Génération de rapports personnalisés par IA</li>
+                        <li>Catégories: Performance, Contenu, Revenue, Opérations</li>
+                        <li>Programmation de rapports récurrents</li>
+                        <li>Historique des rapports générés</li>
+                        <li>Suggestions de prompts pour rapports custom</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Page: Settings -->
+            <div class="page-card">
+                <h3>
+                    <span style="font-size: 1.5rem;">⚙️</span>
+                    Settings
+                    <span class="route">/settings</span>
+                </h3>
+                <p class="description">Configuration du dashboard et des paramètres de génération.</p>
+                <span class="build-tag">Build 15</span>
+                <span class="build-tag">Build 11-14</span>
+                <div class="features-list">
+                    <h4>Fonctionnalités</h4>
+                    <ul>
+                        <li>Configuration Smart Generator (fréquence, quantité, avance)</li>
+                        <li>Seuils d'anomalie pour suggestions IA automatiques</li>
+                        <li>Gestion des clés API (Airtable, Supabase)</li>
+                        <li>Configuration n8n webhooks</li>
+                        <li>Préférences de notifications</li>
+                        <li>Langue et fuseau horaire (Pacific/Tahiti)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Composant ChatWidget -->
+        <div class="page-card">
+            <h3>
+                <span style="font-size: 1.5rem;">💬</span>
+                Chat Widget (Composant Global)
+                <span class="route">ChatWidget.tsx</span>
+            </h3>
+            <p class="description">Assistant IA flottant disponible sur toutes les pages du dashboard.</p>
+            <span class="build-tag">Build 13</span>
+            <div class="features-list">
+                <h4>Fonctionnalités</h4>
+                <ul>
+                    <li>Interface chat flottante (bottom-right)</li>
+                    <li>Actions rapides prédéfinies</li>
+                    <li>Connexion aux 10 workflows métier</li>
+                    <li>Réponses contextuelles avec boutons d'action</li>
+                    <li>Mode démo ou API réelle (configurable)</li>
+                    <li>Minimisation et notifications</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Améliorations suggérées -->
+        <div class="improvements-section">
+            <h2>💡 Idées d'Amélioration</h2>
+            <div class="improvement-grid">
+                <div class="improvement-card">
+                    <h4>
+                        🔄 Données Temps Réel
+                        <span class="priority">HAUTE</span>
+                    </h4>
+                    <p>Remplacer les données de démo par des connexions réelles aux APIs Airtable et n8n. Implémenter SWR ou React Query pour le cache et le polling.</p>
+                </div>
+
+                <div class="improvement-card">
+                    <h4>
+                        📊 Graphiques Interactifs
+                        <span class="priority">HAUTE</span>
+                    </h4>
+                    <p>Ajouter des graphiques avec Chart.js ou Recharts sur les pages ROI, Newsletters, et Overview pour visualiser les tendances.</p>
+                </div>
+
+                <div class="improvement-card">
+                    <h4>
+                        🔔 Notifications Push
+                        <span class="priority">MOYENNE</span>
+                    </h4>
+                    <p>Implémenter un système de notifications en temps réel (WebSocket) pour les alertes critiques (avis négatifs, retards vols, anomalies ROI).</p>
+                </div>
+
+                <div class="improvement-card">
+                    <h4>
+                        📱 PWA Mobile
+                        <span class="priority">MOYENNE</span>
+                    </h4>
+                    <p>Transformer le dashboard en Progressive Web App avec support offline et notifications push mobile.</p>
+                </div>
+
+                <div class="improvement-card">
+                    <h4>
+                        🎨 Mode Sombre
+                        <span class="priority">BASSE</span>
+                    </h4>
+                    <p>Ajouter un toggle light/dark mode avec persistence des préférences utilisateur.</p>
+                </div>
+
+                <div class="improvement-card">
+                    <h4>
+                        📤 Export PDF/Excel
+                        <span class="priority">MOYENNE</span>
+                    </h4>
+                    <p>Permettre l'export des rapports et données en PDF et Excel directement depuis chaque page.</p>
+                </div>
+
+                <div class="improvement-card">
+                    <h4>
+                        🔐 Authentification
+                        <span class="priority">HAUTE</span>
+                    </h4>
+                    <p>Ajouter un système de login avec différents niveaux d'accès (Admin, Marketing, Operations).</p>
+                </div>
+
+                <div class="improvement-card">
+                    <h4>
+                        📈 A/B Testing
+                        <span class="priority">BASSE</span>
+                    </h4>
+                    <p>Intégrer un système de A/B testing pour les newsletters et contenus SEO avec tracking des performances.</p>
+                </div>
+
+                <div class="improvement-card">
+                    <h4>
+                        🗓️ Intégration Calendrier
+                        <span class="priority">MOYENNE</span>
+                    </h4>
+                    <p>Synchroniser le calendrier éditorial avec Google Calendar ou Outlook pour les équipes marketing.</p>
+                </div>
+
+                <div class="improvement-card">
+                    <h4>
+                        🤖 Chat IA Amélioré
+                        <span class="priority">HAUTE</span>
+                    </h4>
+                    <p>Étendre les capacités du ChatWidget avec streaming des réponses, historique persistant, et actions directes sur les données.</p>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Dashboard Air Tahiti Nui - Généré le 28 janvier 2026</p>
+            <p>Développé par PACIFIK'AI avec Next.js 14, React 18, et n8n</p>
+        </footer>
+    </div>
+</body>
+</html>

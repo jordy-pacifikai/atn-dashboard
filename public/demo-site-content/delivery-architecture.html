@@ -1,0 +1,1445 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Architecture de Livraison | PACIFIK'AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2CCCD4;
+            --primary-dark: #1BA8AF;
+            --secondary: #1E1E2E;
+            --accent: #FF6B00;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --purple: #8B5CF6;
+            --pink: #EC4899;
+            --blue: #3B82F6;
+            --gray-50: #F9FAFB;
+            --gray-100: #F3F4F6;
+            --gray-200: #E5E7EB;
+            --gray-300: #D1D5DB;
+            --gray-400: #9CA3AF;
+            --gray-500: #6B7280;
+            --gray-600: #4B5563;
+            --gray-700: #374151;
+            --gray-800: #1F2937;
+            --gray-900: #111827;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-800);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--secondary) 0%, #2a2a4a 100%);
+            color: white;
+            padding: 60px 0 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%232CCCD4' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(44, 204, 212, 0.2);
+            border: 1px solid rgba(44, 204, 212, 0.3);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 24px;
+        }
+
+        .header h1 {
+            font-size: 48px;
+            font-weight: 900;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #fff 0%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            font-size: 20px;
+            opacity: 0.8;
+            max-width: 600px;
+        }
+
+        /* Navigation */
+        .nav-tabs {
+            display: flex;
+            gap: 8px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        .nav-tab {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .nav-tab:hover, .nav-tab.active {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        /* Main Content */
+        .main {
+            margin-top: -40px;
+            padding-bottom: 80px;
+        }
+
+        /* Section */
+        .section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 32px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+            border: 1px solid var(--gray-200);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 32px;
+            padding-bottom: 24px;
+            border-bottom: 2px solid var(--gray-100);
+        }
+
+        .section-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            flex-shrink: 0;
+        }
+
+        .section-icon.blue { background: linear-gradient(135deg, #DBEAFE 0%, #BFDBFE 100%); }
+        .section-icon.green { background: linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%); }
+        .section-icon.orange { background: linear-gradient(135deg, #FED7AA 0%, #FDBA74 100%); }
+        .section-icon.purple { background: linear-gradient(135deg, #E9D5FF 0%, #D8B4FE 100%); }
+        .section-icon.pink { background: linear-gradient(135deg, #FBCFE8 0%, #F9A8D4 100%); }
+        .section-icon.cyan { background: linear-gradient(135deg, #CFFAFE 0%, #A5F3FC 100%); }
+
+        .section-title h2 {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--gray-900);
+            margin-bottom: 4px;
+        }
+
+        .section-title p {
+            font-size: 14px;
+            color: var(--gray-500);
+        }
+
+        /* Architecture Diagram */
+        .architecture-diagram {
+            background: linear-gradient(135deg, var(--gray-900) 0%, #1a1a2e 100%);
+            border-radius: 16px;
+            padding: 40px;
+            color: white;
+            margin-bottom: 32px;
+        }
+
+        .diagram-row {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .diagram-box {
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 12px;
+            padding: 20px 32px;
+            text-align: center;
+            min-width: 200px;
+        }
+
+        .diagram-box.highlight {
+            background: rgba(44, 204, 212, 0.2);
+            border-color: var(--primary);
+        }
+
+        .diagram-box h4 {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--primary);
+        }
+
+        .diagram-box p {
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
+        .diagram-arrow {
+            display: flex;
+            justify-content: center;
+            margin: 16px 0;
+            font-size: 24px;
+            color: var(--primary);
+        }
+
+        /* Grid */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        @media (max-width: 1024px) {
+            .grid-3 { grid-template-columns: repeat(2, 1fr); }
+            .grid-4 { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 768px) {
+            .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+        }
+
+        /* Cards */
+        .card {
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 24px;
+            transition: all 0.3s;
+        }
+
+        .card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 8px 24px rgba(44, 204, 212, 0.1);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .card-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .card h3 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        .card p {
+            font-size: 13px;
+            color: var(--gray-600);
+            margin-bottom: 12px;
+        }
+
+        /* Data Source Cards */
+        .source-card {
+            background: white;
+            border: 2px solid var(--gray-200);
+            border-radius: 16px;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .source-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+        }
+
+        .source-card.recommended::before { background: var(--success); }
+        .source-card.alternative::before { background: var(--warning); }
+        .source-card.advanced::before { background: var(--purple); }
+
+        .source-card .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .source-card.recommended .badge {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .source-card.alternative .badge {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+
+        .source-card.advanced .badge {
+            background: rgba(139, 92, 246, 0.1);
+            color: var(--purple);
+        }
+
+        .source-card h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .source-card p {
+            font-size: 14px;
+            color: var(--gray-600);
+            margin-bottom: 16px;
+        }
+
+        .source-flow {
+            background: var(--gray-50);
+            border-radius: 8px;
+            padding: 16px;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 12px;
+            color: var(--gray-700);
+        }
+
+        /* Storage Table */
+        .storage-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .storage-table th,
+        .storage-table td {
+            padding: 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .storage-table th {
+            background: var(--gray-50);
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--gray-500);
+        }
+
+        .storage-table td {
+            font-size: 14px;
+        }
+
+        .storage-table tr:hover td {
+            background: var(--gray-50);
+        }
+
+        .storage-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .storage-badge.airtable {
+            background: #FCF3CF;
+            color: #B7950B;
+        }
+
+        .storage-badge.supabase {
+            background: #D5F5E3;
+            color: #1E8449;
+        }
+
+        .check-icon {
+            color: var(--success);
+            font-weight: bold;
+        }
+
+        /* Security Section */
+        .security-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 32px;
+        }
+
+        @media (max-width: 1024px) {
+            .security-grid { grid-template-columns: 1fr; }
+        }
+
+        .security-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            background: var(--gray-50);
+            border-radius: 10px;
+            margin-bottom: 12px;
+        }
+
+        .security-item .icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .security-item .icon.yes {
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .security-item .icon.warn {
+            background: rgba(245, 158, 11, 0.1);
+        }
+
+        .security-item h4 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .security-item p {
+            font-size: 12px;
+            color: var(--gray-500);
+        }
+
+        .recommendation-box {
+            background: linear-gradient(135deg, rgba(44, 204, 212, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+            border: 2px solid var(--primary);
+            border-radius: 16px;
+            padding: 24px;
+        }
+
+        .recommendation-box h4 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .recommendation-box ul {
+            list-style: none;
+            font-size: 14px;
+        }
+
+        .recommendation-box li {
+            padding: 8px 0;
+            padding-left: 24px;
+            position: relative;
+        }
+
+        .recommendation-box li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        /* Monitoring Section */
+        .monitoring-levels {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .monitoring-level {
+            display: flex;
+            align-items: stretch;
+            gap: 24px;
+            padding: 24px;
+            background: var(--gray-50);
+            border-radius: 16px;
+            border-left: 4px solid;
+        }
+
+        .monitoring-level.level-1 { border-color: var(--blue); }
+        .monitoring-level.level-2 { border-color: var(--purple); }
+        .monitoring-level.level-3 { border-color: var(--danger); }
+
+        .monitoring-level .level-badge {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 900;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .monitoring-level.level-1 .level-badge { background: var(--blue); }
+        .monitoring-level.level-2 .level-badge { background: var(--purple); }
+        .monitoring-level.level-3 .level-badge { background: var(--danger); }
+
+        .monitoring-level .level-content {
+            flex: 1;
+        }
+
+        .monitoring-level h4 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .monitoring-level p {
+            font-size: 13px;
+            color: var(--gray-600);
+            margin-bottom: 12px;
+        }
+
+        .monitoring-level .tools {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .monitoring-level .tool {
+            background: white;
+            border: 1px solid var(--gray-200);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .monitoring-level .audience {
+            background: white;
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 24px;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 16px;
+            text-align: center;
+            border: 1px solid var(--gray-200);
+        }
+
+        .comparison-table th {
+            background: var(--gray-900);
+            color: white;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .comparison-table th:first-child {
+            text-align: left;
+        }
+
+        .comparison-table td:first-child {
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .comparison-table tr:nth-child(even) td {
+            background: var(--gray-50);
+        }
+
+        .comparison-table .highlight-col {
+            background: rgba(16, 185, 129, 0.1) !important;
+        }
+
+        /* Checklist */
+        .checklist {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .checklist { grid-template-columns: 1fr; }
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: var(--gray-50);
+            border-radius: 10px;
+            border: 1px solid var(--gray-200);
+        }
+
+        .checklist-item.done {
+            background: rgba(16, 185, 129, 0.05);
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+
+        .checklist-item.pending {
+            background: rgba(245, 158, 11, 0.05);
+            border-color: rgba(245, 158, 11, 0.3);
+        }
+
+        .checklist-item .check {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .checklist-item.done .check {
+            background: var(--success);
+            color: white;
+        }
+
+        .checklist-item.pending .check {
+            background: var(--gray-200);
+            color: var(--gray-500);
+        }
+
+        .checklist-item span {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* FAQ Section */
+        .faq-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .faq-grid { grid-template-columns: 1fr; }
+        }
+
+        .faq-item {
+            background: linear-gradient(135deg, var(--gray-50) 0%, white 100%);
+            border: 1px solid var(--gray-200);
+            border-radius: 16px;
+            padding: 24px;
+        }
+
+        .faq-item h4 {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .faq-item h4::before {
+            content: 'Q';
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            background: var(--primary);
+            color: white;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .faq-item p {
+            font-size: 14px;
+            color: var(--gray-600);
+            padding-left: 38px;
+        }
+
+        .faq-item strong {
+            color: var(--gray-900);
+        }
+
+        /* Template Section */
+        .template-tree {
+            background: var(--gray-900);
+            border-radius: 12px;
+            padding: 24px;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 13px;
+            color: #E5E7EB;
+            overflow-x: auto;
+        }
+
+        .template-tree .folder {
+            color: var(--primary);
+        }
+
+        .template-tree .file {
+            color: #FCD34D;
+        }
+
+        .template-tree .comment {
+            color: var(--gray-500);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--gray-900);
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        .footer p {
+            font-size: 14px;
+            opacity: 0.6;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section {
+            animation: fadeInUp 0.6s ease;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="header-badge">
+                    <span>Documentation Interne</span>
+                </div>
+                <h1>Architecture de Livraison</h1>
+                <p>Guide complet pour livrer des solutions IA aux clients : sources de donnees, stockage, securite et monitoring.</p>
+
+                <div class="nav-tabs">
+                    <button class="nav-tab active" onclick="scrollToSection('architecture')">Vue d'ensemble</button>
+                    <button class="nav-tab" onclick="scrollToSection('sources')">Sources Donnees</button>
+                    <button class="nav-tab" onclick="scrollToSection('stockage')">Stockage</button>
+                    <button class="nav-tab" onclick="scrollToSection('securite')">Securite</button>
+                    <button class="nav-tab" onclick="scrollToSection('monitoring')">Monitoring</button>
+                    <button class="nav-tab" onclick="scrollToSection('checklist')">Checklist ATN</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+
+            <!-- Architecture Overview -->
+            <section class="section" id="architecture">
+                <div class="section-header">
+                    <div class="section-icon cyan">
+                        <span>🏗️</span>
+                    </div>
+                    <div class="section-title">
+                        <h2>Vue d'Ensemble de l'Architecture</h2>
+                        <p>Comment les donnees circulent entre le client et ton infrastructure</p>
+                    </div>
+                </div>
+
+                <div class="architecture-diagram">
+                    <div class="diagram-row">
+                        <div class="diagram-box" style="min-width: 500px;">
+                            <h4>CLIENT (Air Tahiti Nui)</h4>
+                            <p>Google Sheets | CSV Exports | APIs Existantes</p>
+                        </div>
+                    </div>
+
+                    <div class="diagram-arrow">↓ ↑</div>
+
+                    <div class="diagram-row">
+                        <div class="diagram-box highlight">
+                            <h4>n8n (Orchestration)</h4>
+                            <p>7 Workflows actifs<br>Hostinger self-hosted</p>
+                        </div>
+                    </div>
+
+                    <div class="diagram-arrow">↓ ↑</div>
+
+                    <div class="diagram-row">
+                        <div class="diagram-box">
+                            <h4>Supabase</h4>
+                            <p>Vector Store<br>Chat Memory</p>
+                        </div>
+                        <div class="diagram-box">
+                            <h4>Airtable</h4>
+                            <p>Business Data<br>KPIs & Logs</p>
+                        </div>
+                        <div class="diagram-box">
+                            <h4>Dashboard HTML</h4>
+                            <p>Interface Client<br>Temps Reel</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-icon" style="background: rgba(59, 130, 246, 0.1);">💬</div>
+                            <h3>Build 1</h3>
+                        </div>
+                        <p>Concierge IA Multilingue</p>
+                        <code style="font-size: 11px; color: var(--gray-500);">je438i45tMSWsl5T</code>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-icon" style="background: rgba(236, 72, 153, 0.1);">✉️</div>
+                            <h3>Build 2</h3>
+                        </div>
+                        <p>Newsletter Personnalisee</p>
+                        <code style="font-size: 11px; color: var(--gray-500);">wLWXgfjyJ6OZXmmP</code>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-icon" style="background: rgba(6, 182, 212, 0.1);">📝</div>
+                            <h3>Build 3</h3>
+                        </div>
+                        <p>Content Factory SEO+GEO</p>
+                        <code style="font-size: 11px; color: var(--gray-500);">QtQySUs5cIBaZ2VL</code>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-icon" style="background: rgba(139, 92, 246, 0.1);">📊</div>
+                            <h3>Build 4</h3>
+                        </div>
+                        <p>Analyste ROI</p>
+                        <code style="font-size: 11px; color: var(--gray-500);">J9xK3rAR2T6jjjQ7</code>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Data Sources -->
+            <section class="section" id="sources">
+                <div class="section-header">
+                    <div class="section-icon blue">
+                        <span>📊</span>
+                    </div>
+                    <div class="section-title">
+                        <h2>Sources de Donnees Client</h2>
+                        <p>3 methodes pour recuperer les donnees necessaires a tes workflows</p>
+                    </div>
+                </div>
+
+                <div class="grid-3">
+                    <div class="source-card recommended">
+                        <span class="badge">Recommande</span>
+                        <h3>Option A: Partage d'Acces</h3>
+                        <p>Le client partage un acces en lecture seule. n8n lit directement depuis leur systeme.</p>
+                        <div class="source-flow">
+                            Client partage Google Sheet<br>
+                            → n8n node "Google Sheets"<br>
+                            → Donnees temps reel<br>
+                            → Zero transfert manuel
+                        </div>
+                        <ul style="margin-top: 16px; font-size: 13px; color: var(--gray-600); padding-left: 20px;">
+                            <li>Liste clients newsletter</li>
+                            <li>Donnees CRM existantes</li>
+                            <li>Planning editorial</li>
+                        </ul>
+                    </div>
+
+                    <div class="source-card alternative">
+                        <span class="badge">Alternative</span>
+                        <h3>Option B: Upload Manuel</h3>
+                        <p>Le client upload ses fichiers via un formulaire ou dashboard.</p>
+                        <div class="source-flow">
+                            Dashboard avec upload<br>
+                            → n8n Webhook recoit<br>
+                            → Parse CSV/Excel<br>
+                            → Traitement automatique
+                        </div>
+                        <ul style="margin-top: 16px; font-size: 13px; color: var(--gray-600); padding-left: 20px;">
+                            <li>Export CSV mensuel ventes</li>
+                            <li>Fichiers ponctuels</li>
+                            <li>Donnees historiques</li>
+                        </ul>
+                    </div>
+
+                    <div class="source-card advanced">
+                        <span class="badge">Avance</span>
+                        <h3>Option C: API Directe</h3>
+                        <p>Connexion directe aux APIs existantes du client (Amadeus, Sabre, etc.)</p>
+                        <div class="source-flow">
+                            Client fournit API Key<br>
+                            → n8n HTTP Request<br>
+                            → Donnees temps reel<br>
+                            → Synchronisation auto
+                        </div>
+                        <ul style="margin-top: 16px; font-size: 13px; color: var(--gray-600); padding-left: 20px;">
+                            <li>Reservations live</li>
+                            <li>Inventaire vols</li>
+                            <li>Donnees pricing</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div style="margin-top: 32px; padding: 24px; background: linear-gradient(135deg, rgba(255, 107, 0, 0.1) 0%, rgba(255, 107, 0, 0.05) 100%); border-radius: 12px; border-left: 4px solid var(--accent);">
+                    <h4 style="font-size: 16px; font-weight: 700; color: var(--accent); margin-bottom: 12px;">💡 Strategie pour ATN</h4>
+                    <p style="font-size: 14px; color: var(--gray-700);">
+                        <strong>Phase 1 (Demo):</strong> Google Sheets partage = le plus simple pour demarrer<br>
+                        <strong>Phase 2 (Production):</strong> Demander acces API Amadeus/Sabre pour donnees temps reel
+                    </p>
+                </div>
+            </section>
+
+            <!-- Storage -->
+            <section class="section" id="stockage">
+                <div class="section-header">
+                    <div class="section-icon green">
+                        <span>💾</span>
+                    </div>
+                    <div class="section-title">
+                        <h2>Stockage des Outputs</h2>
+                        <p>Ou sont stockees les donnees generees par tes workflows</p>
+                    </div>
+                </div>
+
+                <table class="storage-table">
+                    <thead>
+                        <tr>
+                            <th>Type de Donnee</th>
+                            <th>Ou Stocker</th>
+                            <th>Table/Collection</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Newsletters generees</strong></td>
+                            <td><span class="storage-badge airtable">Airtable</span></td>
+                            <td><code>Newsletter_Logs</code></td>
+                            <td><span class="check-icon">✓</span> Configure</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Articles SEO</strong></td>
+                            <td><span class="storage-badge airtable">Airtable</span></td>
+                            <td><code>SEO_Content</code></td>
+                            <td><span class="check-icon">✓</span> Configure</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Alertes ROI</strong></td>
+                            <td><span class="storage-badge airtable">Airtable</span></td>
+                            <td><code>ROI_Alerts</code></td>
+                            <td><span class="check-icon">✓</span> Configure</td>
+                        </tr>
+                        <tr>
+                            <td><strong>KPIs Dashboard</strong></td>
+                            <td><span class="storage-badge airtable">Airtable</span></td>
+                            <td><code>Dashboard</code></td>
+                            <td><span class="check-icon">✓</span> Configure</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Conversations chatbot</strong></td>
+                            <td><span class="storage-badge supabase">Supabase</span></td>
+                            <td><code>n8n_chat_histories</code></td>
+                            <td><span class="check-icon">✓</span> Configure</td>
+                        </tr>
+                        <tr>
+                            <td><strong>FAQ / Knowledge Base</strong></td>
+                            <td><span class="storage-badge supabase">Supabase</span></td>
+                            <td><code>atn_faq_embeddings</code></td>
+                            <td><span class="check-icon">✓</span> 34 docs</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Calendrier editorial</strong></td>
+                            <td><span class="storage-badge airtable">Airtable</span></td>
+                            <td><code>Content_Calendar</code></td>
+                            <td style="color: var(--warning);">⏳ A ajouter</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="grid-2" style="margin-top: 32px;">
+                    <div class="card" style="border-color: #FCD34D;">
+                        <div class="card-header">
+                            <div class="card-icon" style="background: #FCF3CF;">📋</div>
+                            <h3>Airtable (Business)</h3>
+                        </div>
+                        <p>Base ATN: <code>appWd0x5YZPHKL0VK</code></p>
+                        <ul style="font-size: 13px; color: var(--gray-600); margin-top: 12px;">
+                            <li>Interface client-friendly</li>
+                            <li>Vues Calendar disponibles</li>
+                            <li>Partage lecture seule facile</li>
+                            <li>API REST native</li>
+                        </ul>
+                    </div>
+                    <div class="card" style="border-color: #10B981;">
+                        <div class="card-header">
+                            <div class="card-icon" style="background: #D5F5E3;">🗄️</div>
+                            <h3>Supabase (Technique)</h3>
+                        </div>
+                        <p>Host: <code>ogsimsfqwibcmotaeevb</code></p>
+                        <ul style="font-size: 13px; color: var(--gray-600); margin-top: 12px;">
+                            <li>Vector search (pgvector)</li>
+                            <li>PostgreSQL full power</li>
+                            <li>Memoire conversationnelle</li>
+                            <li>RPC functions</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Security -->
+            <section class="section" id="securite">
+                <div class="section-header">
+                    <div class="section-icon orange">
+                        <span>🔒</span>
+                    </div>
+                    <div class="section-title">
+                        <h2>Securite Airtable</h2>
+                        <p>Est-ce securise ? Oui, avec quelques precautions</p>
+                    </div>
+                </div>
+
+                <div class="security-grid">
+                    <div>
+                        <div class="security-item">
+                            <div class="icon yes">✓</div>
+                            <div>
+                                <h4>Encryption TLS + AES-256</h4>
+                                <p>Donnees chiffrees en transit et au repos</p>
+                            </div>
+                        </div>
+                        <div class="security-item">
+                            <div class="icon yes">✓</div>
+                            <div>
+                                <h4>SOC 2 Type II Certifie</h4>
+                                <p>Audit de securite independant valide</p>
+                            </div>
+                        </div>
+                        <div class="security-item">
+                            <div class="icon yes">✓</div>
+                            <div>
+                                <h4>Conforme RGPD</h4>
+                                <p>Hebergement EU disponible</p>
+                            </div>
+                        </div>
+                        <div class="security-item">
+                            <div class="icon yes">✓</div>
+                            <div>
+                                <h4>2FA Disponible</h4>
+                                <p>Authentification a deux facteurs</p>
+                            </div>
+                        </div>
+                        <div class="security-item">
+                            <div class="icon warn">⚠</div>
+                            <div>
+                                <h4>Audit Logs (Enterprise only)</h4>
+                                <p>Upgrade vers Team ($20/mois) pour logs complets</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="recommendation-box">
+                        <h4>💡 Recommandation pour ATN</h4>
+                        <ul>
+                            <li><strong>Airtable Team</strong> ($20/mois) = audit logs + 2FA enforce</li>
+                            <li>Creer <strong>base DEDIEE</strong> par client (isolation)</li>
+                            <li>Token <strong>read-only</strong> pour dashboards publics</li>
+                            <li>Credentials dans <strong>n8n manager</strong> (jamais hardcode)</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Monitoring -->
+            <section class="section" id="monitoring">
+                <div class="section-header">
+                    <div class="section-icon purple">
+                        <span>📈</span>
+                    </div>
+                    <div class="section-title">
+                        <h2>Monitoring</h2>
+                        <p>Faut-il Grafana ? Non, pas pour l'instant</p>
+                    </div>
+                </div>
+
+                <div class="monitoring-levels">
+                    <div class="monitoring-level level-1">
+                        <div class="level-badge">1</div>
+                        <div class="level-content">
+                            <h4>Dashboard Client (Airtable)</h4>
+                            <p>KPIs temps reel, alertes actives, calendrier editorial</p>
+                            <div class="tools">
+                                <span class="tool">Airtable Dashboard View</span>
+                                <span class="tool">dashboard.html</span>
+                                <span class="tool">Vues partagees</span>
+                            </div>
+                        </div>
+                        <div class="audience">
+                            👥 Client + Toi
+                        </div>
+                    </div>
+
+                    <div class="monitoring-level level-2">
+                        <div class="level-badge">2</div>
+                        <div class="level-content">
+                            <h4>Monitoring Technique (Interne)</h4>
+                            <p>Executions n8n, queries Supabase, metrics Hostinger</p>
+                            <div class="tools">
+                                <span class="tool">n8n Executions</span>
+                                <span class="tool">Supabase Dashboard</span>
+                                <span class="tool">Hostinger Metrics</span>
+                            </div>
+                        </div>
+                        <div class="audience">
+                            👤 Toi seulement
+                        </div>
+                    </div>
+
+                    <div class="monitoring-level level-3">
+                        <div class="level-badge">3</div>
+                        <div class="level-content">
+                            <h4>Alertes Automatiques (n8n Error Trigger)</h4>
+                            <p>Workflow echoue → Email/Slack immediat</p>
+                            <div class="tools">
+                                <span class="tool">Error Trigger Node</span>
+                                <span class="tool">Slack Notification</span>
+                                <span class="tool">Email Alert</span>
+                            </div>
+                        </div>
+                        <div class="audience">
+                            🤖 Automatique
+                        </div>
+                    </div>
+                </div>
+
+                <h3 style="font-size: 18px; font-weight: 700; margin: 40px 0 20px;">Grafana vs Alternatives</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Solution</th>
+                            <th>Complexite</th>
+                            <th>Cout</th>
+                            <th>Pour qui</th>
+                            <th>Verdict</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Grafana</td>
+                            <td>⚠️ Haute</td>
+                            <td>$0-299/mois</td>
+                            <td>DevOps, 10+ services</td>
+                            <td>Pas maintenant</td>
+                        </tr>
+                        <tr>
+                            <td>Dashboard Airtable</td>
+                            <td class="highlight-col">✓ Simple</td>
+                            <td class="highlight-col">$0-20/mois</td>
+                            <td class="highlight-col">Toi (1-5 clients)</td>
+                            <td class="highlight-col"><strong>✓ Recommande</strong></td>
+                        </tr>
+                        <tr>
+                            <td>n8n Execution Logs</td>
+                            <td>✓ Natif</td>
+                            <td>$0</td>
+                            <td>Debugging workflows</td>
+                            <td>✓ Utiliser</td>
+                        </tr>
+                        <tr>
+                            <td>Supabase Dashboard</td>
+                            <td>✓ Natif</td>
+                            <td>$0</td>
+                            <td>Monitoring DB</td>
+                            <td>✓ Utiliser</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div style="margin-top: 24px; padding: 20px; background: var(--gray-50); border-radius: 12px; border-left: 4px solid var(--purple);">
+                    <h4 style="font-size: 14px; font-weight: 700; color: var(--purple); margin-bottom: 8px;">Quand passer a Grafana ?</h4>
+                    <p style="font-size: 13px; color: var(--gray-600);">
+                        10+ clients actifs | 100+ workflows | SLA contractuel (&lt;99.9% uptime) | Metriques custom (latence P95, etc.)
+                    </p>
+                </div>
+            </section>
+
+            <!-- Checklist ATN -->
+            <section class="section" id="checklist">
+                <div class="section-header">
+                    <div class="section-icon pink">
+                        <span>✅</span>
+                    </div>
+                    <div class="section-title">
+                        <h2>Checklist Livraison ATN</h2>
+                        <p>Ce qui est pret vs ce qui reste a faire</p>
+                    </div>
+                </div>
+
+                <div class="checklist">
+                    <div class="checklist-item done">
+                        <div class="check">✓</div>
+                        <span>4 workflows n8n fonctionnels</span>
+                    </div>
+                    <div class="checklist-item done">
+                        <div class="check">✓</div>
+                        <span>Base Airtable ATN configuree</span>
+                    </div>
+                    <div class="checklist-item done">
+                        <div class="check">✓</div>
+                        <span>Tables de logging (Newsletter, SEO, ROI)</span>
+                    </div>
+                    <div class="checklist-item done">
+                        <div class="check">✓</div>
+                        <span>Dashboard HTML avec mode demo</span>
+                    </div>
+                    <div class="checklist-item done">
+                        <div class="check">✓</div>
+                        <span>Supabase FAQ embeddings (34 docs)</span>
+                    </div>
+                    <div class="checklist-item done">
+                        <div class="check">✓</div>
+                        <span>Chatbot multilingue (5 langues)</span>
+                    </div>
+                    <div class="checklist-item done">
+                        <div class="check">✓</div>
+                        <span>Script video Loom prepare</span>
+                    </div>
+                    <div class="checklist-item done">
+                        <div class="check">✓</div>
+                        <span>Email prospection redige</span>
+                    </div>
+                    <div class="checklist-item pending">
+                        <div class="check">○</div>
+                        <span>Vue Calendar dans Airtable</span>
+                    </div>
+                    <div class="checklist-item pending">
+                        <div class="check">○</div>
+                        <span>Workflow Error Handler</span>
+                    </div>
+                    <div class="checklist-item pending">
+                        <div class="check">○</div>
+                        <span>Enregistrer video Loom (5 min)</span>
+                    </div>
+                    <div class="checklist-item pending">
+                        <div class="check">○</div>
+                        <span>Envoyer email a Torea Colas</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FAQ -->
+            <section class="section">
+                <div class="section-header">
+                    <div class="section-icon cyan">
+                        <span>❓</span>
+                    </div>
+                    <div class="section-title">
+                        <h2>Questions Frequentes</h2>
+                        <p>Reponses directes a tes interrogations</p>
+                    </div>
+                </div>
+
+                <div class="faq-grid">
+                    <div class="faq-item">
+                        <h4>Comment recuperer les donnees client ?</h4>
+                        <p><strong>Google Sheets partage</strong> (Phase 1) ou <strong>API directe</strong> (Phase 2 - Amadeus/Sabre)</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>Ou stocker les outputs ?</h4>
+                        <p><strong>Airtable</strong> pour business data (newsletters, articles, KPIs) + <strong>Supabase</strong> pour technique (vectors, memory)</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>Airtable est-il securise ?</h4>
+                        <p><strong>OUI</strong> - SOC 2, AES-256, RGPD conforme. Upgrade Team ($20/mois) pour audit logs complets.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>Grafana est-il necessaire ?</h4>
+                        <p><strong>NON</strong> pour l'instant. n8n logs + Airtable Dashboard suffisent pour 1-5 clients.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>Faut-il un dashboard + calendrier ?</h4>
+                        <p><strong>OUI</strong> mais utilise <strong>Airtable Calendar View</strong> (gratuit) - pas besoin de le coder.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>Comment isoler les clients ?</h4>
+                        <p>1 base Airtable <strong>DEDIEE</strong> par client + prefixe <code>[CLIENT]</code> sur chaque workflow n8n.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Template -->
+            <section class="section">
+                <div class="section-header">
+                    <div class="section-icon green">
+                        <span>📁</span>
+                    </div>
+                    <div class="section-title">
+                        <h2>Template de Livraison Client</h2>
+                        <p>Structure a dupliquer pour chaque nouveau client</p>
+                    </div>
+                </div>
+
+                <div class="template-tree">
+<pre>
+<span class="folder">📁 Infrastructure Client [NOM]</span>
+│
+├── <span class="folder">🗄️ BASE AIRTABLE DEDIEE</span>
+│   ├── <span class="file">Contacts</span> <span class="comment"># CRM</span>
+│   ├── <span class="file">Newsletter_Logs</span> <span class="comment"># Build 2 outputs</span>
+│   ├── <span class="file">SEO_Content</span> <span class="comment"># Build 3 outputs</span>
+│   ├── <span class="file">ROI_Alerts</span> <span class="comment"># Build 4 outputs</span>
+│   ├── <span class="file">Dashboard</span> <span class="comment"># KPIs consolides</span>
+│   └── <span class="file">Content_Calendar</span> <span class="comment"># Planning editorial</span>
+│
+├── <span class="folder">🔧 WORKFLOWS n8n</span>
+│   ├── <span class="file">[CLIENT] Build 1 - Chatbot</span>
+│   ├── <span class="file">[CLIENT] Build 2 - Newsletter</span>
+│   ├── <span class="file">[CLIENT] Build 3 - SEO</span>
+│   ├── <span class="file">[CLIENT] Build 4 - ROI</span>
+│   └── <span class="file">[CLIENT] Error Handler</span> <span class="comment"># Alertes Slack/Email</span>
+│
+├── <span class="folder">💾 SUPABASE</span>
+│   ├── <span class="file">[client]_faq_embeddings</span> <span class="comment"># Vector store</span>
+│   └── <span class="file">[client]_chat_histories</span> <span class="comment"># Memory</span>
+│
+├── <span class="folder">📊 DASHBOARD</span>
+│   └── <span class="file">[client]/demo-site/dashboard.html</span>
+│
+└── <span class="folder">📋 DOCUMENTATION</span>
+    └── <span class="file">[client]/DELIVERY_CHECKLIST.md</span>
+</pre>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>PACIFIK'AI - Documentation Architecture de Livraison</p>
+            <p style="margin-top: 8px;">Derniere mise a jour: Janvier 2026</p>
+        </div>
+    </footer>
+
+    <script>
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+
+            // Update active tab
+            document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        // Intersection Observer for nav tabs
+        const sections = document.querySelectorAll('.section[id]');
+        const navTabs = document.querySelectorAll('.nav-tab');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    navTabs.forEach(tab => {
+                        tab.classList.remove('active');
+                        if (tab.getAttribute('onclick')?.includes(entry.target.id)) {
+                            tab.classList.add('active');
+                        }
+                    });
+                }
+            });
+        }, { threshold: 0.3 });
+
+        sections.forEach(section => observer.observe(section));
+    </script>
+</body>
+</html>
