@@ -1,18 +1,37 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
+import { createClient, SupabaseClient } from '@supabase/supabase-js'
 
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY!
-const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY!
-const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY!
-const AIRTABLE_BASE_ID = process.env.AIRTABLE_BASE_ID || 'appWd0x5YZPHKL0VK'
+// Lazy init pour éviter erreur au build
+let supabase: SupabaseClient | null = null
+function getSupabase(): SupabaseClient | null {
+  if (!supabase) {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const key = process.env.SUPABASE_SERVICE_ROLE_KEY
+    if (url && key) {
+      supabase = createClient(url, key)
+    }
+  }
+  return supabase
+}
 
-const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY)
+function getAnthropicKey(): string | undefined {
+  return process.env.ANTHROPIC_API_KEY
+}
+
+function getAirtableConfig(): { apiKey: string | undefined; baseId: string } {
+  return {
+    apiKey: process.env.AIRTABLE_API_KEY,
+    baseId: process.env.AIRTABLE_BASE_ID || 'appWd0x5YZPHKL0VK'
+  }
+}
 
 // Simple keyword search in FAQ content
 async function searchFAQ(query: string, limit = 5): Promise<string[]> {
+  const sb = getSupabase()
+  if (!sb) return []
+
   try {
-    const { data, error } = await supabase
+    const { data, error } = await sb
       .from('atn_faq_embeddings')
       .select('content')
       .limit(limit)
@@ -39,11 +58,14 @@ async function searchFAQ(query: string, limit = 5): Promise<string[]> {
 
 // Log conversation to Airtable
 async function logConversation(session: string, question: string, response: string, responseTime: number, tokens: number) {
+  const { apiKey, baseId } = getAirtableConfig()
+  if (!apiKey) return
+
   try {
-    await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/Concierge_Logs`, {
+    await fetch(`https://api.airtable.com/v0/${baseId}/Concierge_Logs`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${AIRTABLE_API_KEY}`,
+        'Authorization': `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -78,11 +100,19 @@ export async function POST(request: NextRequest) {
       ? `\n\nInformations pertinentes sur Air Tahiti Nui:\n${faqResults.map((r, i) => `${i + 1}. ${r}`).join('\n')}`
       : ''
 
+    const anthropicKey = getAnthropicKey()
+    if (!anthropicKey) {
+      return NextResponse.json({
+        success: false,
+        error: 'Anthropic API key not configured',
+      }, { status: 500 })
+    }
+
     // Call Claude API
     const claudeResponse = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
-        'x-api-key': ANTHROPIC_API_KEY,
+        'x-api-key': anthropicKey,
         'anthropic-version': '2023-06-01',
         'Content-Type': 'application/json',
       },

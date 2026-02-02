@@ -1,11 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
+import { createClient, SupabaseClient } from '@supabase/supabase-js'
 
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY!
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || 'AIzaSyBJia0MZzP9JqCD9PoBe7M8MwpRXrCwjjQ'
 
-const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY)
+// Lazy init pour éviter erreur au build
+let supabase: SupabaseClient | null = null
+function getSupabase(): SupabaseClient | null {
+  if (!supabase) {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const key = process.env.SUPABASE_SERVICE_ROLE_KEY
+    if (url && key) {
+      supabase = createClient(url, key)
+    }
+  }
+  return supabase
+}
 
 // Generate embedding using Google Gemini
 async function generateEmbedding(text: string): Promise<number[]> {
@@ -33,6 +42,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Query required' }, { status: 400 })
     }
 
+    const sb = getSupabase()
+    if (!sb) {
+      // Si pas de Supabase configuré, retourner résultat vide
+      return NextResponse.json({ results: [] })
+    }
+
     // Generate embedding for the query
     const embedding = await generateEmbedding(query)
 
@@ -41,7 +56,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Search in Supabase using vector similarity
-    const { data, error } = await supabase.rpc('match_atn_faq', {
+    const { data, error } = await sb.rpc('match_atn_faq', {
       query_embedding: embedding,
       match_threshold: 0.5,
       match_count: limit,
@@ -49,7 +64,7 @@ export async function POST(request: NextRequest) {
 
     if (error) {
       // Fallback: simple text search if RPC doesn't exist
-      const { data: fallbackData, error: fallbackError } = await supabase
+      const { data: fallbackData, error: fallbackError } = await sb
         .from('atn_faq_embeddings')
         .select('content')
         .textSearch('content', query.split(' ').join(' | '))
