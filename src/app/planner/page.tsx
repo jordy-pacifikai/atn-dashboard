@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { ListTodo, Mail, FileText, Eye, Edit3, Trash2, Send, Clock, CheckCircle, AlertCircle, Sparkles, Calendar, Filter, Plane, Hotel, Activity, Car, UtensilsCrossed, Loader2 } from 'lucide-react'
+import Modal from '@/components/Modal'
 
 interface PlannerItem {
   id: string
@@ -240,7 +241,7 @@ export default function PlannerPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="card">
           <p className="text-sm text-slate-500">Cette semaine</p>
           <p className="text-2xl font-bold">{thisWeek.length}</p>
@@ -337,8 +338,8 @@ export default function PlannerPage() {
 
       {/* Preview Modal */}
       {showPreview && selectedItem && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl w-full max-w-2xl max-h-[80vh] overflow-auto">
+        <Modal onClose={() => { setShowPreview(false); setSelectedItem(null); }}>
+          <div className="bg-white rounded-xl w-full max-w-2xl max-h-[80vh] overflow-auto" onClick={e => e.stopPropagation()}>
             <div className="sticky top-0 bg-white border-b p-4 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 {(() => {
@@ -392,18 +393,18 @@ export default function PlannerPage() {
               >
                 Modifier
               </button>
-              <button className="btn-primary">
+              <button className="flex items-center gap-2 px-4 py-2 bg-atn-primary text-white rounded-lg text-sm font-medium hover:bg-opacity-90 disabled:opacity-50 transition-all">
                 Confirmer
               </button>
             </div>
           </div>
-        </div>
+        </Modal>
       )}
 
       {/* Editor Modal */}
       {showEditor && selectedItem && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl w-full max-w-lg p-6 space-y-4">
+        <Modal onClose={() => { setShowEditor(false); setSelectedItem(null); }}>
+          <div className="bg-white rounded-xl w-full max-w-lg p-6 space-y-4" onClick={e => e.stopPropagation()}>
             <h2 className="text-xl font-bold">Modifier: {selectedItem.title}</h2>
 
             <div className="space-y-4">
@@ -463,12 +464,12 @@ export default function PlannerPage() {
               >
                 Annuler
               </button>
-              <button className="btn-primary">
+              <button className="flex items-center gap-2 px-4 py-2 bg-atn-primary text-white rounded-lg text-sm font-medium hover:bg-opacity-90 disabled:opacity-50 transition-all">
                 Enregistrer
               </button>
             </div>
           </div>
-        </div>
+        </Modal>
       )}
     </div>
   )

@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { Calendar as CalendarIcon, ChevronLeft, ChevronRight, Mail, FileText, GripVertical, Clock, Edit3, Trash2, Plus, X, Eye, ExternalLink, BarChart3, Globe, Target, Tag, Send, Users } from 'lucide-react'
+import Modal from '@/components/Modal'
 
 interface ScheduledContent {
   id: string
@@ -711,11 +712,8 @@ function ContentCard({
 // Newsletter Email Preview Modal
 function NewsletterPreviewModal({ item, onClose }: { item: ScheduledContent; onClose: () => void }) {
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={onClose}>
-      <div
-        className="bg-white rounded-xl w-full max-w-3xl max-h-[90vh] overflow-hidden flex flex-col"
-        onClick={e => e.stopPropagation()}
-      >
+    <Modal onClose={onClose}>
+      <div className="bg-white rounded-xl w-full max-w-3xl max-h-[90vh] overflow-hidden flex flex-col">
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b bg-slate-50">
           <div className="flex items-center gap-3">
@@ -830,7 +828,7 @@ function NewsletterPreviewModal({ item, onClose }: { item: ScheduledContent; onC
           </button>
         </div>
       </div>
-    </div>
+    </Modal>
   )
 }
 
@@ -882,11 +880,8 @@ function ArticlePreviewModal({ item, onClose }: { item: ScheduledContent; onClos
   }
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={onClose}>
-      <div
-        className="bg-white rounded-xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col"
-        onClick={e => e.stopPropagation()}
-      >
+    <Modal onClose={onClose}>
+      <div className="bg-white rounded-xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b bg-slate-50">
           <div className="flex items-center gap-3">
@@ -1005,7 +1000,7 @@ function ArticlePreviewModal({ item, onClose }: { item: ScheduledContent; onClos
           </button>
         </div>
       </div>
-    </div>
+    </Modal>
   )
 }
 
@@ -1094,7 +1089,7 @@ export default function CalendarPage() {
           <p className="text-slate-500">Planifiez newsletters et articles - glissez-déposez pour réorganiser</p>
         </div>
         <button
-          className="btn-primary flex items-center gap-2"
+          className="flex items-center gap-2 px-4 py-2 bg-atn-primary text-white rounded-lg text-sm font-medium hover:bg-opacity-90 disabled:opacity-50 transition-all flex items-center gap-2"
           onClick={() => {
             setSelectedContent(null)
             setShowEditor(true)
@@ -1198,7 +1193,7 @@ export default function CalendarPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="card">
           <p className="text-sm text-slate-500">Newsletters ce mois</p>
           <p className="text-2xl font-bold text-pink-600">
@@ -1302,7 +1297,7 @@ function ContentEditorModal({
   }
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    <Modal onClose={onClose}>
       <div className="bg-white rounded-xl w-full max-w-lg p-6 space-y-4">
         <h2 className="text-xl font-bold">
           {content ? 'Modifier le contenu' : 'Nouveau contenu'}
@@ -1406,12 +1401,12 @@ function ContentEditorModal({
           </button>
           <button
             onClick={() => onSave(formData as ScheduledContent)}
-            className="btn-primary"
+            className="flex items-center gap-2 px-4 py-2 bg-atn-primary text-white rounded-lg text-sm font-medium hover:bg-opacity-90 disabled:opacity-50 transition-all"
           >
             {content ? 'Enregistrer' : 'Créer'}
           </button>
         </div>
       </div>
-    </div>
+    </Modal>
   )
 }

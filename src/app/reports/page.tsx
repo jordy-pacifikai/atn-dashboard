@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { FileBarChart, Download, Calendar, Clock, Loader2, CheckCircle, Mail, FileText, TrendingUp, Users, Plane, Star, ShoppingCart, Eye } from 'lucide-react'
+import Modal from '@/components/Modal'
 
 interface AIReport {
   id: string
@@ -386,8 +387,8 @@ export default function ReportsPage() {
 
       {/* Report Detail Modal */}
       {selectedReport && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl w-full max-w-3xl max-h-[80vh] overflow-auto">
+        <Modal onClose={() => setSelectedReport(null)}>
+          <div className="bg-white rounded-xl w-full max-w-3xl max-h-[80vh] overflow-auto" onClick={e => e.stopPropagation()}>
             <div className="sticky top-0 bg-white border-b p-4 flex items-center justify-between">
               <div>
                 <h2 className="font-semibold">{selectedReport.title}</h2>
@@ -421,13 +422,13 @@ export default function ReportsPage() {
               </button>
               <button
                 onClick={() => setSelectedReport(null)}
-                className="btn-primary"
+                className="flex items-center gap-2 px-4 py-2 bg-atn-primary text-white rounded-lg text-sm font-medium hover:bg-opacity-90 disabled:opacity-50 transition-all"
               >
                 Fermer
               </button>
             </div>
           </div>
-        </div>
+        </Modal>
       )}
 
       {/* Scheduled reports */}

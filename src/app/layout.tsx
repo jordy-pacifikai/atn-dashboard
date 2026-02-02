@@ -15,6 +15,11 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: 'ATN Dashboard - AI Agents Monitor',
   description: 'Dashboard de monitoring des agents IA Air Tahiti Nui',
+  icons: {
+    icon: '/favicon.svg',
+    shortcut: '/favicon.svg',
+    apple: '/favicon.svg',
+  },
 }
 
 export default function RootLayout({
@@ -39,6 +44,8 @@ export default function RootLayout({
             </MainContent>
             <ChatWidget />
           </div>
+          {/* Portal container for modals - rendered outside the layout flow */}
+          <div id="modal-root" />
         </Providers>
       </body>
     </html>

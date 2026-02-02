@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { FileText, Image, TrendingUp, Globe, ExternalLink, X, Clock, Tag, RefreshCw, Loader2 } from 'lucide-react'
+import Modal from '@/components/Modal'
 
 interface ContentArticle {
   id: string
@@ -288,8 +289,8 @@ const statusConfig: Record<string, { label: string; color: string }> = {
 
 function ArticlePreviewModal({ article, onClose }: { article: ContentArticle; onClose: () => void }) {
   return (
-    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
+    <Modal onClose={onClose}>
+      <div className="bg-white rounded-xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col" onClick={e => e.stopPropagation()}>
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b bg-slate-50">
           <div className="flex items-center gap-4">
@@ -420,7 +421,7 @@ function ArticlePreviewModal({ article, onClose }: { article: ContentArticle; on
           </div>
           <div className="flex gap-2">
             {article.status === 'published' && (
-              <button className="btn-primary flex items-center gap-2">
+              <button className="flex items-center gap-2 px-4 py-2 bg-atn-primary text-white rounded-lg text-sm font-medium hover:bg-opacity-90 disabled:opacity-50 transition-all flex items-center gap-2">
                 <ExternalLink className="w-4 h-4" />
                 Voir sur le site
               </button>
@@ -428,7 +429,7 @@ function ArticlePreviewModal({ article, onClose }: { article: ContentArticle; on
           </div>
         </div>
       </div>
-    </div>
+    </Modal>
   )
 }
 
@@ -573,7 +574,7 @@ export default function ContentPage() {
         <button
           onClick={syncContent}
           disabled={syncing}
-          className="btn-primary flex items-center gap-2"
+          className="flex items-center gap-2 px-4 py-2 bg-atn-primary text-white rounded-lg text-sm font-medium hover:bg-opacity-90 disabled:opacity-50 transition-all flex items-center gap-2"
         >
           {syncing ? (
             <Loader2 className="w-4 h-4 animate-spin" />
@@ -584,7 +585,7 @@ export default function ContentPage() {
         </button>
       </div>
 
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="card">
           <p className="text-sm text-slate-500">Articles publiés</p>
           <p className="text-2xl font-bold">{publishedCount}</p>
