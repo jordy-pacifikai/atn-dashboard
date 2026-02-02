@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { FlaskConical, Trophy, Users, BarChart3, Play, Pause, CheckCircle, Clock, AlertCircle } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { FlaskConical, Trophy, Users, BarChart3, Play, Pause, CheckCircle, Clock, AlertCircle, RefreshCw, Loader2 } from 'lucide-react'
 
 interface Variant {
   id: string
@@ -29,7 +29,7 @@ interface ABTest {
   minSampleSize: number
 }
 
-const demoTests: ABTest[] = [
+const fallbackTests: ABTest[] = [
   {
     id: '1',
     name: 'Objet Email Newsletter',
@@ -258,11 +258,67 @@ function TestCard({ test }: { test: ABTest }) {
 }
 
 export default function ABTestsPage() {
+  const [tests, setTests] = useState<ABTest[]>([])
+  const [loading, setLoading] = useState(true)
+  const [syncing, setSyncing] = useState(false)
+
+  // Fetch AB tests from Airtable
+  const fetchTests = async () => {
+    try {
+      const response = await fetch('/api/airtable?table=AB_Tests&sortField=Start_Date&sortDir=desc&limit=50')
+      const data = await response.json()
+
+      if (data.records && data.records.length > 0) {
+        const mapped: ABTest[] = data.records.map((record: { id: string; fields: Record<string, unknown> }) => ({
+          id: record.id,
+          name: (record.fields.Name as string) || 'Test',
+          type: ((record.fields.Type as string)?.toLowerCase() || 'email') as ABTest['type'],
+          status: ((record.fields.Status as string)?.toLowerCase() || 'draft') as ABTest['status'],
+          startDate: (record.fields.Start_Date as string) || new Date().toISOString(),
+          endDate: (record.fields.End_Date as string) || undefined,
+          variants: (record.fields.Variants as Variant[]) || [],
+          winner: (record.fields.Winner as string) || undefined,
+          confidence: (record.fields.Confidence as number) || 0,
+          minSampleSize: (record.fields.Min_Sample_Size as number) || 10000,
+        }))
+        setTests(mapped)
+      } else {
+        setTests(fallbackTests)
+      }
+    } catch (error) {
+      console.error('Error fetching AB tests:', error)
+      setTests(fallbackTests)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Refresh AB tests (trigger n8n workflow)
+  const refreshTests = async () => {
+    setSyncing(true)
+    try {
+      await fetch('https://n8n.srv1140766.hstgr.cloud/webhook/atn-ab-test-engine', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'refresh' })
+      })
+      await fetchTests()
+    } catch (error) {
+      console.error('Error refreshing AB tests:', error)
+    } finally {
+      setSyncing(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchTests()
+  }, [])
+
   const stats = {
-    running: demoTests.filter(t => t.status === 'running').length,
-    completed: demoTests.filter(t => t.status === 'completed').length,
+    running: tests.filter(t => t.status === 'running').length,
+    completed: tests.filter(t => t.status === 'completed').length,
     avgLift: '+14.6%',
-    totalRevenue: demoTests.reduce((acc, t) => acc + t.variants.reduce((a, v) => a + v.metrics.revenue, 0), 0),
+    totalRevenue: tests.reduce((acc, t) => acc + t.variants.reduce((a, v) => a + v.metrics.revenue, 0), 0),
   }
 
   return (
@@ -275,10 +331,24 @@ export default function ABTestsPage() {
           </h1>
           <p className="text-slate-500">Build 22: Tests A/B avec analyse statistique</p>
         </div>
-        <button className="flex items-center gap-2 px-4 py-2 bg-atn-primary text-white rounded-lg hover:bg-opacity-90">
-          <FlaskConical className="w-4 h-4" />
-          Nouveau test
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={refreshTests}
+            disabled={syncing}
+            className="flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200 disabled:opacity-50"
+          >
+            {syncing ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <RefreshCw className="w-4 h-4" />
+            )}
+            {syncing ? 'Sync...' : 'Actualiser'}
+          </button>
+          <button className="flex items-center gap-2 px-4 py-2 bg-atn-primary text-white rounded-lg hover:bg-opacity-90">
+            <FlaskConical className="w-4 h-4" />
+            Nouveau test
+          </button>
+        </div>
       </div>
 
       <div className="grid grid-cols-4 gap-4">
@@ -312,9 +382,20 @@ export default function ABTestsPage() {
       </div>
 
       <div className="space-y-4">
-        {demoTests.map(test => (
-          <TestCard key={test.id} test={test} />
-        ))}
+        {loading ? (
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="w-8 h-8 animate-spin text-atn-primary" />
+            <span className="ml-3 text-slate-500">Chargement des tests A/B...</span>
+          </div>
+        ) : tests.length === 0 ? (
+          <div className="text-center py-12 text-slate-500">
+            Aucun test A/B configuré
+          </div>
+        ) : (
+          tests.map(test => (
+            <TestCard key={test.id} test={test} />
+          ))
+        )}
       </div>
     </div>
   )

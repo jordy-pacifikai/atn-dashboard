@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { Users, Twitter, Instagram, Facebook, Linkedin, TrendingUp, MessageCircle, Send } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { Users, Twitter, Instagram, Facebook, Linkedin, TrendingUp, MessageCircle, Send, RefreshCw, Loader2 } from 'lucide-react'
 
 interface SocialMention {
   id: string
@@ -17,7 +17,7 @@ interface SocialMention {
   date: string
 }
 
-const demoMentions: SocialMention[] = [
+const fallbackMentions: SocialMention[] = [
   {
     id: '1',
     platform: 'Twitter/X',
@@ -185,8 +185,63 @@ function MentionCard({ mention, onRespond }: { mention: SocialMention; onRespond
 }
 
 export default function SocialPage() {
-  const [mentions, setMentions] = useState(demoMentions)
+  const [mentions, setMentions] = useState<SocialMention[]>([])
   const [filterPlatform, setFilterPlatform] = useState<string | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [syncing, setSyncing] = useState(false)
+
+  // Fetch social mentions from Airtable
+  const fetchMentions = async () => {
+    try {
+      const response = await fetch('/api/airtable?table=Social_Mentions&sortField=Date&sortDir=desc&limit=50')
+      const data = await response.json()
+
+      if (data.records && data.records.length > 0) {
+        const mapped: SocialMention[] = data.records.map((record: { id: string; fields: Record<string, unknown> }) => ({
+          id: record.id,
+          platform: (record.fields.Platform as string) || 'Twitter/X',
+          author: (record.fields.Author as string) || '@unknown',
+          content: (record.fields.Content as string) || '',
+          sentiment: ((record.fields.Sentiment as string)?.toLowerCase() || 'neutral') as 'positive' | 'neutral' | 'negative',
+          sentimentScore: (record.fields.Sentiment_Score as number) || 50,
+          reach: (record.fields.Reach as number) || 0,
+          priority: ((record.fields.Priority as string)?.toLowerCase() || 'medium') as 'high' | 'medium' | 'low',
+          responseSuggested: (record.fields.Response_Suggested as string) || '',
+          status: ((record.fields.Status as string)?.toLowerCase() || 'pending') as 'pending' | 'responded' | 'ignored',
+          date: (record.fields.Date as string) || new Date().toISOString(),
+        }))
+        setMentions(mapped)
+      } else {
+        setMentions(fallbackMentions)
+      }
+    } catch (error) {
+      console.error('Error fetching social mentions:', error)
+      setMentions(fallbackMentions)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Sync social mentions (trigger n8n workflow)
+  const syncMentions = async () => {
+    setSyncing(true)
+    try {
+      await fetch('https://n8n.srv1140766.hstgr.cloud/webhook/atn-social-monitor', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'scan' })
+      })
+      await fetchMentions()
+    } catch (error) {
+      console.error('Error syncing social mentions:', error)
+    } finally {
+      setSyncing(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchMentions()
+  }, [])
 
   const handleRespond = (id: string) => {
     setMentions(mentions.map(m =>
@@ -200,7 +255,7 @@ export default function SocialPage() {
 
   // Stats
   const totalReach = mentions.reduce((acc, m) => acc + m.reach, 0)
-  const avgSentiment = Math.round(mentions.reduce((acc, m) => acc + m.sentimentScore, 0) / mentions.length)
+  const avgSentiment = mentions.length > 0 ? Math.round(mentions.reduce((acc, m) => acc + m.sentimentScore, 0) / mentions.length) : 0
   const pendingCount = mentions.filter(m => m.status === 'pending').length
   const negativeCount = mentions.filter(m => m.sentiment === 'negative').length
 
@@ -215,6 +270,18 @@ export default function SocialPage() {
           </h1>
           <p className="text-slate-500">Build 6: Surveillance des réseaux sociaux</p>
         </div>
+        <button
+          onClick={syncMentions}
+          disabled={syncing}
+          className="flex items-center gap-2 px-4 py-2 bg-atn-primary text-white rounded-lg hover:bg-opacity-90 disabled:opacity-50"
+        >
+          {syncing ? (
+            <Loader2 className="w-4 h-4 animate-spin" />
+          ) : (
+            <RefreshCw className="w-4 h-4" />
+          )}
+          {syncing ? 'Scan en cours...' : 'Scanner les réseaux'}
+        </button>
       </div>
 
       {/* Stats */}
@@ -266,13 +333,24 @@ export default function SocialPage() {
 
       {/* Liste des mentions */}
       <div className="space-y-4">
-        {filteredMentions.map(mention => (
-          <MentionCard
-            key={mention.id}
-            mention={mention}
-            onRespond={() => handleRespond(mention.id)}
-          />
-        ))}
+        {loading ? (
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="w-8 h-8 animate-spin text-atn-primary" />
+            <span className="ml-3 text-slate-500">Chargement des mentions...</span>
+          </div>
+        ) : filteredMentions.length === 0 ? (
+          <div className="text-center py-12 text-slate-500">
+            Aucune mention trouvée
+          </div>
+        ) : (
+          filteredMentions.map(mention => (
+            <MentionCard
+              key={mention.id}
+              mention={mention}
+              onRespond={() => handleRespond(mention.id)}
+            />
+          ))
+        )}
       </div>
     </div>
   )

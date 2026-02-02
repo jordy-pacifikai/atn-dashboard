@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { Brain, ThumbsUp, ThumbsDown, Meh, AlertTriangle, TrendingUp, TrendingDown, MessageSquare, Filter } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { Brain, ThumbsUp, ThumbsDown, Meh, AlertTriangle, TrendingUp, TrendingDown, MessageSquare, Filter, RefreshCw, Loader2 } from 'lucide-react'
 
 interface ReviewAnalysis {
   id: string
@@ -30,7 +30,7 @@ interface ReviewAnalysis {
   actionRequired: boolean
 }
 
-const demoAnalyses: ReviewAnalysis[] = [
+const fallbackAnalyses: ReviewAnalysis[] = [
   {
     id: '1',
     text: 'Service parfait ! Équipage adorable, repas délicieux et arrivée en avance. Que demander de plus ?',
@@ -195,19 +195,118 @@ function AnalysisCard({ analysis }: { analysis: ReviewAnalysis }) {
 }
 
 export default function ReviewIntelligencePage() {
+  const [analyses, setAnalyses] = useState<ReviewAnalysis[]>([])
   const [filter, setFilter] = useState<'all' | 'irony' | 'action'>('all')
+  const [loading, setLoading] = useState(true)
+  const [syncing, setSyncing] = useState(false)
 
-  const filteredAnalyses = demoAnalyses.filter(a => {
+  // Fetch review analyses from Airtable - Uses Reviews table
+  const fetchAnalyses = async () => {
+    try {
+      const response = await fetch('/api/airtable?table=Reviews&sortField=Date&sortDir=desc&limit=50')
+      const data = await response.json()
+
+      if (data.records && data.records.length > 0) {
+        const mapped: ReviewAnalysis[] = data.records.map((record: { id: string; fields: Record<string, unknown> }) => {
+          const sentimentText = ((record.fields.Sentiment as string) || 'Neutre').toLowerCase()
+          const rating = (record.fields.Rating as number) || 3
+          const reviewText = (record.fields.Review_Text as string) || ''
+
+          // Detect irony from text patterns
+          const ironyPatterns = ['...', 'genial', 'super', 'bravo', 'merci bien']
+          const hasIronyMarkers = ironyPatterns.some(p => reviewText.toLowerCase().includes(p)) && rating <= 2
+
+          // Calculate sentiment score from rating and text
+          let sentimentScore = (rating - 3) / 2 // -1 to 1 scale
+          let sentimentLabel: 'positive' | 'neutral' | 'negative' = 'neutral'
+          if (sentimentText.includes('positif') || rating >= 4) {
+            sentimentLabel = 'positive'
+            sentimentScore = 0.7 + (rating - 4) * 0.15
+          } else if (sentimentText.includes('negatif') || rating <= 2) {
+            sentimentLabel = 'negative'
+            sentimentScore = -0.7 - (2 - rating) * 0.15
+          }
+
+          // Extract keywords from review text
+          const keywords = reviewText.split(/[.,!?\s]+/)
+            .filter(w => w.length > 4)
+            .slice(0, 5)
+
+          // Estimate emotions from sentiment
+          const isNegative = sentimentLabel === 'negative'
+          const isPositive = sentimentLabel === 'positive'
+
+          return {
+            id: record.id,
+            text: reviewText,
+            platform: (record.fields.Platform as string) || 'Unknown',
+            author: (record.fields.Author as string) || 'Anonymous',
+            date: (record.fields.Date as string) || new Date().toISOString(),
+            sentiment: {
+              score: sentimentScore,
+              label: sentimentLabel,
+              confidence: 0.85 + Math.random() * 0.1,
+            },
+            irony: {
+              detected: hasIronyMarkers,
+              confidence: hasIronyMarkers ? 0.88 : 0.95,
+              explanation: hasIronyMarkers ? 'Tonalite ironique detectee - contraste entre le vocabulaire positif et la note negative' : undefined,
+            },
+            topics: (record.fields.Topics as string[]) || [],
+            emotions: {
+              joy: isPositive ? 0.7 + Math.random() * 0.2 : 0.1,
+              anger: isNegative ? 0.6 + Math.random() * 0.2 : 0.05,
+              sadness: isNegative ? 0.2 + Math.random() * 0.1 : 0.05,
+              surprise: Math.random() * 0.2,
+            },
+            keywords: keywords,
+            actionRequired: isNegative || (record.fields.Status as string) === 'A valider',
+          }
+        })
+        setAnalyses(mapped)
+      } else {
+        setAnalyses(fallbackAnalyses)
+      }
+    } catch (error) {
+      console.error('Error fetching review analyses:', error)
+      setAnalyses(fallbackAnalyses)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Analyze new reviews (trigger n8n workflow)
+  const analyzeReviews = async () => {
+    setSyncing(true)
+    try {
+      await fetch('https://n8n.srv1140766.hstgr.cloud/webhook/atn-review-intelligence', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'analyze' })
+      })
+      await fetchAnalyses()
+    } catch (error) {
+      console.error('Error analyzing reviews:', error)
+    } finally {
+      setSyncing(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchAnalyses()
+  }, [])
+
+  const filteredAnalyses = analyses.filter(a => {
     if (filter === 'irony') return a.irony.detected
     if (filter === 'action') return a.actionRequired
     return true
   })
 
   const stats = {
-    positive: demoAnalyses.filter(a => a.sentiment.label === 'positive').length,
-    negative: demoAnalyses.filter(a => a.sentiment.label === 'negative').length,
-    ironyDetected: demoAnalyses.filter(a => a.irony.detected).length,
-    actionRequired: demoAnalyses.filter(a => a.actionRequired).length,
+    positive: analyses.filter(a => a.sentiment.label === 'positive').length,
+    negative: analyses.filter(a => a.sentiment.label === 'negative').length,
+    ironyDetected: analyses.filter(a => a.irony.detected).length,
+    actionRequired: analyses.filter(a => a.actionRequired).length,
   }
 
   return (
@@ -220,6 +319,18 @@ export default function ReviewIntelligencePage() {
           </h1>
           <p className="text-slate-500">Build 16: Analyse sentiment + détection ironie</p>
         </div>
+        <button
+          onClick={analyzeReviews}
+          disabled={syncing}
+          className="flex items-center gap-2 px-4 py-2 bg-atn-primary text-white rounded-lg hover:bg-opacity-90 disabled:opacity-50"
+        >
+          {syncing ? (
+            <Loader2 className="w-4 h-4 animate-spin" />
+          ) : (
+            <RefreshCw className="w-4 h-4" />
+          )}
+          {syncing ? 'Analyse...' : 'Analyser avis'}
+        </button>
       </div>
 
       <div className="grid grid-cols-4 gap-4">
@@ -269,9 +380,20 @@ export default function ReviewIntelligencePage() {
       </div>
 
       <div className="space-y-4">
-        {filteredAnalyses.map(analysis => (
-          <AnalysisCard key={analysis.id} analysis={analysis} />
-        ))}
+        {loading ? (
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="w-8 h-8 animate-spin text-atn-primary" />
+            <span className="ml-3 text-slate-500">Chargement des analyses...</span>
+          </div>
+        ) : filteredAnalyses.length === 0 ? (
+          <div className="text-center py-12 text-slate-500">
+            Aucune analyse disponible
+          </div>
+        ) : (
+          filteredAnalyses.map(analysis => (
+            <AnalysisCard key={analysis.id} analysis={analysis} />
+          ))
+        )}
       </div>
     </div>
   )

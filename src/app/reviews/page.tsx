@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { Star, MessageCircle, ThumbsUp, ThumbsDown, Send, CheckCircle } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { Star, MessageCircle, ThumbsUp, ThumbsDown, Send, CheckCircle, RefreshCw, Loader2 } from 'lucide-react'
 
 // Types
 interface Review {
@@ -18,8 +18,8 @@ interface Review {
   date: string
 }
 
-// Données de démo
-const demoReviews: Review[] = [
+// Fallback data for demo when no Airtable data
+const fallbackReviews: Review[] = [
   {
     id: '1',
     platform: 'TripAdvisor',
@@ -206,8 +206,65 @@ function ReviewCard({ review, onApprove, onReject }: {
 }
 
 export default function ReviewsPage() {
-  const [reviews, setReviews] = useState(demoReviews)
+  const [reviews, setReviews] = useState<Review[]>([])
   const [filterStatus, setFilterStatus] = useState<string | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [syncing, setSyncing] = useState(false)
+
+  // Fetch reviews from Airtable
+  const fetchReviews = async () => {
+    try {
+      const response = await fetch('/api/airtable?table=Reviews&sortField=Date&sortDir=desc&limit=50')
+      const data = await response.json()
+
+      if (data.records && data.records.length > 0) {
+        const mappedReviews: Review[] = data.records.map((record: { id: string; fields: Record<string, unknown> }) => ({
+          id: record.id,
+          platform: (record.fields.Platform as string) || 'Google',
+          author: (record.fields.Author as string) || 'Anonyme',
+          rating: (record.fields.Rating as number) || 3,
+          text: (record.fields.Review_Text as string) || '',
+          sentiment: ((record.fields.Sentiment as string)?.toLowerCase() || 'neutral') as 'positive' | 'neutral' | 'negative',
+          topics: (record.fields.Topics as string[]) || [],
+          responseGenerated: (record.fields.Response_Generated as string) || '',
+          responseTone: (record.fields.Response_Tone as string) || 'Professionnel',
+          status: ((record.fields.Status as string)?.toLowerCase() || 'pending') as 'pending' | 'approved' | 'published' | 'rejected',
+          date: (record.fields.Date as string) || new Date().toISOString(),
+        }))
+        setReviews(mappedReviews)
+      } else {
+        // Use fallback data if no Airtable records
+        setReviews(fallbackReviews)
+      }
+    } catch (error) {
+      console.error('Error fetching reviews:', error)
+      setReviews(fallbackReviews)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Sync reviews (trigger n8n workflow)
+  const syncReviews = async () => {
+    setSyncing(true)
+    try {
+      await fetch('https://n8n.srv1140766.hstgr.cloud/webhook/atn-review-responder', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'sync' })
+      })
+      // Refetch after sync
+      await fetchReviews()
+    } catch (error) {
+      console.error('Error syncing reviews:', error)
+    } finally {
+      setSyncing(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchReviews()
+  }, [])
 
   const handleApprove = (id: string) => {
     setReviews(reviews.map(r =>
@@ -241,6 +298,18 @@ export default function ReviewsPage() {
           </h1>
           <p className="text-slate-500">Build 9: Review Responder</p>
         </div>
+        <button
+          onClick={syncReviews}
+          disabled={syncing}
+          className="flex items-center gap-2 px-4 py-2 bg-atn-primary text-white rounded-lg hover:bg-opacity-90 disabled:opacity-50"
+        >
+          {syncing ? (
+            <Loader2 className="w-4 h-4 animate-spin" />
+          ) : (
+            <RefreshCw className="w-4 h-4" />
+          )}
+          {syncing ? 'Synchronisation...' : 'Synchroniser'}
+        </button>
       </div>
 
       {/* Stats */}
@@ -286,14 +355,25 @@ export default function ReviewsPage() {
 
       {/* Liste des avis */}
       <div className="space-y-4">
-        {filteredReviews.map(review => (
-          <ReviewCard
-            key={review.id}
-            review={review}
-            onApprove={() => handleApprove(review.id)}
-            onReject={() => handleReject(review.id)}
-          />
-        ))}
+        {loading ? (
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="w-8 h-8 animate-spin text-atn-primary" />
+            <span className="ml-3 text-slate-500">Chargement des avis...</span>
+          </div>
+        ) : filteredReviews.length === 0 ? (
+          <div className="text-center py-12 text-slate-500">
+            Aucun avis trouvé
+          </div>
+        ) : (
+          filteredReviews.map(review => (
+            <ReviewCard
+              key={review.id}
+              review={review}
+              onApprove={() => handleApprove(review.id)}
+              onReject={() => handleReject(review.id)}
+            />
+          ))
+        )}
       </div>
     </div>
   )

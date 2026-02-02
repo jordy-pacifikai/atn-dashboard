@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { FileText, Image, TrendingUp, Globe, ExternalLink, X, Clock, Tag } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { FileText, Image, TrendingUp, Globe, ExternalLink, X, Clock, Tag, RefreshCw, Loader2 } from 'lucide-react'
 
 interface ContentArticle {
   id: string
@@ -21,7 +21,7 @@ interface ContentArticle {
   readingTime: number
 }
 
-const demoArticles: ContentArticle[] = [
+const fallbackArticles: ContentArticle[] = [
   {
     id: '1',
     topic: 'Bora Bora',
@@ -489,17 +489,76 @@ function ArticleCard({ article, onClick }: { article: ContentArticle; onClick: (
 }
 
 export default function ContentPage() {
+  const [articles, setArticles] = useState<ContentArticle[]>([])
   const [filterStatus, setFilterStatus] = useState<string | null>(null)
   const [selectedArticle, setSelectedArticle] = useState<ContentArticle | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [syncing, setSyncing] = useState(false)
+
+  // Fetch articles from Airtable
+  const fetchArticles = async () => {
+    try {
+      const response = await fetch('/api/airtable?table=SEO_Content&sortField=Date&sortDir=desc&limit=50')
+      const data = await response.json()
+
+      if (data.records && data.records.length > 0) {
+        const mapped: ContentArticle[] = data.records.map((record: { id: string; fields: Record<string, unknown> }) => ({
+          id: record.id,
+          topic: (record.fields.Topic as string) || 'Général',
+          title: (record.fields.Title as string) || 'Article sans titre',
+          excerpt: (record.fields.Excerpt as string) || '',
+          seoScore: (record.fields.SEO_Score as number) || 80,
+          geoScore: (record.fields.GEO_Score as number) || 75,
+          wordCount: (record.fields.Word_Count as number) || 500,
+          imageUrl: (record.fields.Image_URL as string) || null,
+          status: ((record.fields.Status as string)?.toLowerCase() || 'draft') as 'draft' | 'published' | 'scheduled',
+          date: (record.fields.Date as string) || new Date().toISOString(),
+          fullContent: (record.fields.Full_Content as string) || '',
+          metaDescription: (record.fields.Meta_Description as string) || '',
+          keywords: (record.fields.Keywords as string[]) || [],
+          readingTime: (record.fields.Reading_Time as number) || 5,
+        }))
+        setArticles(mapped)
+      } else {
+        setArticles(fallbackArticles)
+      }
+    } catch (error) {
+      console.error('Error fetching articles:', error)
+      setArticles(fallbackArticles)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Sync content (trigger n8n workflow)
+  const syncContent = async () => {
+    setSyncing(true)
+    try {
+      await fetch('https://n8n.srv1140766.hstgr.cloud/webhook/atn-content-factory', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'sync' })
+      })
+      await fetchArticles()
+    } catch (error) {
+      console.error('Error syncing content:', error)
+    } finally {
+      setSyncing(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchArticles()
+  }, [])
 
   const filteredArticles = filterStatus
-    ? demoArticles.filter(a => a.status === filterStatus)
-    : demoArticles
+    ? articles.filter(a => a.status === filterStatus)
+    : articles
 
   // Stats
-  const publishedCount = demoArticles.filter(a => a.status === 'published').length
-  const avgSeoScore = Math.round(demoArticles.reduce((acc, a) => acc + a.seoScore, 0) / demoArticles.length)
-  const totalWords = demoArticles.reduce((acc, a) => acc + a.wordCount, 0)
+  const publishedCount = articles.filter(a => a.status === 'published').length
+  const avgSeoScore = articles.length > 0 ? Math.round(articles.reduce((acc, a) => acc + a.seoScore, 0) / articles.length) : 0
+  const totalWords = articles.reduce((acc, a) => acc + a.wordCount, 0)
 
   return (
     <div className="space-y-6">
@@ -511,9 +570,17 @@ export default function ContentPage() {
           </h1>
           <p className="text-slate-500">Build 3: Génération d'articles optimisés • Cliquez pour lire l'article complet</p>
         </div>
-        <button className="btn-primary flex items-center gap-2">
-          <FileText className="w-4 h-4" />
-          Nouvel article
+        <button
+          onClick={syncContent}
+          disabled={syncing}
+          className="btn-primary flex items-center gap-2"
+        >
+          {syncing ? (
+            <Loader2 className="w-4 h-4 animate-spin" />
+          ) : (
+            <RefreshCw className="w-4 h-4" />
+          )}
+          {syncing ? 'Génération...' : 'Générer contenu'}
         </button>
       </div>
 
@@ -532,7 +599,7 @@ export default function ContentPage() {
         </div>
         <div className="card">
           <p className="text-sm text-slate-500">Images IA</p>
-          <p className="text-2xl font-bold">{demoArticles.filter(a => a.imageUrl).length}</p>
+          <p className="text-2xl font-bold">{articles.filter(a => a.imageUrl).length}</p>
         </div>
       </div>
 
@@ -549,13 +616,24 @@ export default function ContentPage() {
       </div>
 
       <div className="space-y-4">
-        {filteredArticles.map(article => (
-          <ArticleCard
-            key={article.id}
-            article={article}
-            onClick={() => setSelectedArticle(article)}
-          />
-        ))}
+        {loading ? (
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="w-8 h-8 animate-spin text-atn-primary" />
+            <span className="ml-3 text-slate-500">Chargement des articles...</span>
+          </div>
+        ) : filteredArticles.length === 0 ? (
+          <div className="text-center py-12 text-slate-500">
+            Aucun article trouvé
+          </div>
+        ) : (
+          filteredArticles.map(article => (
+            <ArticleCard
+              key={article.id}
+              article={article}
+              onClick={() => setSelectedArticle(article)}
+            />
+          ))
+        )}
       </div>
 
       {/* Article Preview Modal */}

@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { Plane, Clock, AlertTriangle, CheckCircle, Bell, Send, Users } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { Plane, Clock, AlertTriangle, CheckCircle, Bell, Send, Users, RefreshCw, Loader2 } from 'lucide-react'
 
 interface FlightAlert {
   id: string
@@ -16,7 +16,7 @@ interface FlightAlert {
   date: string
 }
 
-const demoAlerts: FlightAlert[] = [
+const fallbackAlerts: FlightAlert[] = [
   {
     id: '1',
     flightNumber: 'TN1',
@@ -173,8 +173,62 @@ function AlertCard({ alert, onSendNotifications }: { alert: FlightAlert; onSendN
 }
 
 export default function FlightsPage() {
-  const [alerts, setAlerts] = useState(demoAlerts)
+  const [alerts, setAlerts] = useState<FlightAlert[]>([])
   const [filterType, setFilterType] = useState<string | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [syncing, setSyncing] = useState(false)
+
+  // Fetch flight alerts from Airtable
+  const fetchAlerts = async () => {
+    try {
+      const response = await fetch('/api/airtable?table=Flight_Alerts&sortField=Date&sortDir=desc&limit=50')
+      const data = await response.json()
+
+      if (data.records && data.records.length > 0) {
+        const mapped: FlightAlert[] = data.records.map((record: { id: string; fields: Record<string, unknown> }) => ({
+          id: record.id,
+          flightNumber: (record.fields.Flight_Number as string) || 'TN1',
+          route: (record.fields.Route as string) || 'PPT-LAX',
+          alertType: ((record.fields.Alert_Type as string)?.toLowerCase() || 'delay') as FlightAlert['alertType'],
+          delayMinutes: (record.fields.Delay_Minutes as number) || 0,
+          passengersAffected: (record.fields.Passengers_Affected as number) || 0,
+          notificationsSent: (record.fields.Notifications_Sent as number) || 0,
+          channels: (record.fields.Channels as string[]) || ['Email'],
+          status: ((record.fields.Status as string)?.toLowerCase() || 'pending') as 'sent' | 'pending' | 'failed',
+          date: (record.fields.Date as string) || new Date().toISOString(),
+        }))
+        setAlerts(mapped)
+      } else {
+        setAlerts(fallbackAlerts)
+      }
+    } catch (error) {
+      console.error('Error fetching flight alerts:', error)
+      setAlerts(fallbackAlerts)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Sync flight status (trigger n8n workflow)
+  const syncFlightStatus = async () => {
+    setSyncing(true)
+    try {
+      await fetch('https://n8n.srv1140766.hstgr.cloud/webhook/atn-flight-notifier', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'check_all' })
+      })
+      await fetchAlerts()
+    } catch (error) {
+      console.error('Error syncing flight status:', error)
+    } finally {
+      setSyncing(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchAlerts()
+  }, [])
 
   const handleSendNotifications = (id: string) => {
     setAlerts(alerts.map(a =>
@@ -203,9 +257,23 @@ export default function FlightsPage() {
           </h1>
           <p className="text-slate-500">Build 8: Alertes vols en temps réel</p>
         </div>
-        <div className="flex items-center gap-2">
-          <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
-          <span className="text-sm text-slate-600">Surveillance active</span>
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
+            <span className="text-sm text-slate-600">Surveillance active</span>
+          </div>
+          <button
+            onClick={syncFlightStatus}
+            disabled={syncing}
+            className="flex items-center gap-2 px-4 py-2 bg-atn-primary text-white rounded-lg hover:bg-opacity-90 disabled:opacity-50"
+          >
+            {syncing ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <RefreshCw className="w-4 h-4" />
+            )}
+            {syncing ? 'Vérification...' : 'Vérifier les vols'}
+          </button>
         </div>
       </div>
 
@@ -251,13 +319,24 @@ export default function FlightsPage() {
 
       {/* Liste des alertes */}
       <div className="space-y-4">
-        {filteredAlerts.map(alert => (
-          <AlertCard
-            key={alert.id}
-            alert={alert}
-            onSendNotifications={() => handleSendNotifications(alert.id)}
-          />
-        ))}
+        {loading ? (
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="w-8 h-8 animate-spin text-atn-primary" />
+            <span className="ml-3 text-slate-500">Chargement des alertes vols...</span>
+          </div>
+        ) : filteredAlerts.length === 0 ? (
+          <div className="text-center py-12 text-slate-500">
+            Aucune alerte vol en cours
+          </div>
+        ) : (
+          filteredAlerts.map(alert => (
+            <AlertCard
+              key={alert.id}
+              alert={alert}
+              onSendNotifications={() => handleSendNotifications(alert.id)}
+            />
+          ))
+        )}
       </div>
     </div>
   )

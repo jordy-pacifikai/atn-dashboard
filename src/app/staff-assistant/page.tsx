@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { UserCog, MessageSquare, Send, FileText, HelpCircle, Clock, CheckCircle, Search, Book, Settings } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { UserCog, MessageSquare, Send, FileText, HelpCircle, Clock, CheckCircle, Search, Book, Settings, Loader2 } from 'lucide-react'
 
 interface StaffQuery {
   id: string
@@ -17,44 +17,15 @@ interface StaffQuery {
   helpful: boolean | null
 }
 
-const demoQueries: StaffQuery[] = [
-  {
-    id: '1',
-    employee: { name: 'Vaiana Teriitahi', department: 'Service Client', role: 'Agent' },
-    query: 'Quelle est la procédure pour un passager qui a perdu son passeport avant l\'embarquement ?',
-    response: 'En cas de perte de passeport avant embarquement :\n\n1. Diriger le passager vers le bureau de police de l\'aéroport\n2. Contacter le superviseur de vol\n3. Le passager peut voyager avec une déclaration de perte + pièce d\'identité complémentaire sur les vols domestiques uniquement\n4. Pour les vols internationaux, un passeport temporaire est requis\n\nDélai moyen : 2-4 heures pour un passeport d\'urgence',
-    category: 'procedures',
-    timestamp: '2026-01-29T10:30:00',
-    helpful: true,
-  },
-  {
-    id: '2',
-    employee: { name: 'Teiki Moana', department: 'Opérations', role: 'Coordinateur' },
-    query: 'Comment modifier les affectations d\'équipage dans le système Amadeus ?',
-    response: 'Pour modifier les affectations d\'équipage dans Amadeus Altéa :\n\n1. Accéder au module Crew Management (CM)\n2. Sélectionner le vol concerné via le code vol\n3. Cliquer sur "Crew Assignment"\n4. Modifier l\'affectation via le bouton "Edit"\n5. Valider les qualifications requises\n6. Confirmer et notifier l\'équipage\n\nNote: Modifications < 24h nécessitent validation superviseur.',
-    category: 'technical',
-    timestamp: '2026-01-29T09:15:00',
-    helpful: true,
-  },
-  {
-    id: '3',
-    employee: { name: 'Marie Hiro', department: 'RH', role: 'Assistante' },
-    query: 'Quels sont les documents requis pour une demande de congé maternité ?',
-    response: 'Documents requis pour le congé maternité ATN :\n\n1. Certificat médical de grossesse (date prévue accouchement)\n2. Formulaire interne CM-MAT-01\n3. Copie de la carte vitale\n4. RIB pour les indemnités\n\nDélai de dépôt : minimum 2 mois avant date prévue\nDurée légale : 16 semaines (6 avant + 10 après)\n\nContact RH : rh@airtahitinui.pf',
-    category: 'hr',
-    timestamp: '2026-01-29T08:45:00',
-    helpful: null,
-  },
-  {
-    id: '4',
-    employee: { name: 'Raihau Tetuanui', department: 'Piste', role: 'Agent de piste' },
-    query: 'Procédure de dégivrage sur le 787 Dreamliner',
-    response: 'Procédure de dégivrage Boeing 787 Dreamliner :\n\n1. Vérifier les conditions météo (temp < 3°C avec précipitations)\n2. Commander fluide Type I ou Type IV selon conditions\n3. Zones prioritaires : bords d\'attaque, stabilisateurs, gouvernes\n4. Temps holdover selon fluide et météo (voir tableau HOLDOVER)\n5. Inspection visuelle post-dégivrage obligatoire\n6. Report au commandant de bord\n\nAttention: Le 787 a des surfaces composites - pression réduite requise.',
-    category: 'operations',
-    timestamp: '2026-01-28T22:00:00',
-    helpful: true,
-  },
-]
+// Mapping des catégories Airtable vers les catégories du composant
+const categoryMapping: Record<string, 'procedures' | 'hr' | 'technical' | 'operations'> = {
+  'Procedure': 'procedures',
+  'Planning': 'operations',
+  'Conges': 'hr',
+  'Formation': 'hr',
+  'IT': 'technical',
+  'Autre': 'procedures',
+}
 
 const categories = [
   { id: 'all', label: 'Toutes', icon: HelpCircle },
@@ -122,18 +93,58 @@ export default function StaffAssistantPage() {
   const [selectedCategory, setSelectedCategory] = useState('all')
   const [searchQuery, setSearchQuery] = useState('')
   const [newQuestion, setNewQuestion] = useState('')
+  const [queries, setQueries] = useState<StaffQuery[]>([])
+  const [loading, setLoading] = useState(true)
 
-  const filteredQueries = demoQueries.filter(q => {
+  useEffect(() => {
+    async function fetchStaffRequests() {
+      try {
+        const res = await fetch('/api/airtable?table=Staff_Requests&view=Grid%20view')
+        if (res.ok) {
+          const data = await res.json()
+          const mapped: StaffQuery[] = data.records.map((r: any) => ({
+            id: r.id,
+            employee: {
+              name: r.fields.Employee_Name || 'Employé',
+              department: r.fields.Department || 'N/A',
+              role: r.fields.Employee_ID || '',
+            },
+            query: r.fields.Question || '',
+            response: r.fields.Response || '',
+            category: categoryMapping[r.fields.Category] || 'procedures',
+            timestamp: r.fields.Date || new Date().toISOString(),
+            helpful: r.fields.Status === 'answered' ? true : null,
+          }))
+          setQueries(mapped)
+        }
+      } catch (err) {
+        console.error('Error fetching staff requests:', err)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchStaffRequests()
+  }, [])
+
+  const filteredQueries = queries.filter(q => {
     if (selectedCategory !== 'all' && q.category !== selectedCategory) return false
     if (searchQuery && !q.query.toLowerCase().includes(searchQuery.toLowerCase())) return false
     return true
   })
 
   const stats = {
-    total: demoQueries.length,
-    helpful: demoQueries.filter(q => q.helpful === true).length,
-    procedures: demoQueries.filter(q => q.category === 'procedures').length,
+    total: queries.length,
+    helpful: queries.filter(q => q.helpful === true).length,
+    procedures: queries.filter(q => q.category === 'procedures').length,
     avgResponseTime: '< 5s',
+  }
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="w-8 h-8 animate-spin text-cyan-500" />
+      </div>
+    )
   }
 
   return (

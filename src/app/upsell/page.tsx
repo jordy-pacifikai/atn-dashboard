@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { ShoppingCart, TrendingUp, DollarSign, Target, Send } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { ShoppingCart, TrendingUp, DollarSign, Target, Send, RefreshCw, Loader2 } from 'lucide-react'
 
 interface UpsellOffer {
   id: string
@@ -17,7 +17,7 @@ interface UpsellOffer {
   date: string
 }
 
-const demoOffers: UpsellOffer[] = [
+const fallbackOffers: UpsellOffer[] = [
   {
     id: '1',
     customerEmail: 'marie.dupont@email.com',
@@ -175,18 +175,74 @@ function OfferCard({ offer }: { offer: UpsellOffer }) {
 }
 
 export default function UpsellPage() {
+  const [offers, setOffers] = useState<UpsellOffer[]>([])
   const [filterStatus, setFilterStatus] = useState<string | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [syncing, setSyncing] = useState(false)
+
+  // Fetch upsell offers from Airtable
+  const fetchOffers = async () => {
+    try {
+      const response = await fetch('/api/airtable?table=Upsell_Offers&sortField=Date&sortDir=desc&limit=50')
+      const data = await response.json()
+
+      if (data.records && data.records.length > 0) {
+        const mapped: UpsellOffer[] = data.records.map((record: { id: string; fields: Record<string, unknown> }) => ({
+          id: record.id,
+          customerEmail: (record.fields.Customer_Email as string) || 'contact@email.com',
+          customerSegment: (record.fields.Customer_Segment as string) || 'General',
+          bookingValue: (record.fields.Booking_Value as number) || 0,
+          offerType: (record.fields.Offer_Type as string) || 'Upgrade classe',
+          offerValue: (record.fields.Offer_Value as number) || 0,
+          personalizationScore: (record.fields.Personalization_Score as number) || 50,
+          offerText: (record.fields.Offer_Text as string) || '',
+          status: ((record.fields.Status as string)?.toLowerCase() || 'sent') as UpsellOffer['status'],
+          revenueGenerated: (record.fields.Revenue_Generated as number) || 0,
+          date: (record.fields.Date as string) || new Date().toISOString(),
+        }))
+        setOffers(mapped)
+      } else {
+        setOffers(fallbackOffers)
+      }
+    } catch (error) {
+      console.error('Error fetching upsell offers:', error)
+      setOffers(fallbackOffers)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Generate new upsell offers (trigger n8n workflow)
+  const generateOffers = async () => {
+    setSyncing(true)
+    try {
+      await fetch('https://n8n.srv1140766.hstgr.cloud/webhook/atn-upsell-engine', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'generate' })
+      })
+      await fetchOffers()
+    } catch (error) {
+      console.error('Error generating upsell offers:', error)
+    } finally {
+      setSyncing(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchOffers()
+  }, [])
 
   const filteredOffers = filterStatus
-    ? demoOffers.filter(o => o.status === filterStatus)
-    : demoOffers
+    ? offers.filter(o => o.status === filterStatus)
+    : offers
 
   // Stats
-  const totalOffers = demoOffers.length
-  const convertedCount = demoOffers.filter(o => o.status === 'converted').length
-  const conversionRate = Math.round((convertedCount / totalOffers) * 100)
-  const totalRevenue = demoOffers.reduce((acc, o) => acc + o.revenueGenerated, 0)
-  const avgScore = Math.round(demoOffers.reduce((acc, o) => acc + o.personalizationScore, 0) / totalOffers)
+  const totalOffers = offers.length
+  const convertedCount = offers.filter(o => o.status === 'converted').length
+  const conversionRate = totalOffers > 0 ? Math.round((convertedCount / totalOffers) * 100) : 0
+  const totalRevenue = offers.reduce((acc, o) => acc + o.revenueGenerated, 0)
+  const avgScore = totalOffers > 0 ? Math.round(offers.reduce((acc, o) => acc + o.personalizationScore, 0) / totalOffers) : 0
 
   return (
     <div className="space-y-6">
@@ -198,9 +254,17 @@ export default function UpsellPage() {
           </h1>
           <p className="text-slate-500">Build 10: Offres personnalisées intelligentes</p>
         </div>
-        <button className="btn-primary flex items-center gap-2">
-          <Send className="w-4 h-4" />
-          Nouvelle campagne
+        <button
+          onClick={generateOffers}
+          disabled={syncing}
+          className="btn-primary flex items-center gap-2"
+        >
+          {syncing ? (
+            <Loader2 className="w-4 h-4 animate-spin" />
+          ) : (
+            <Send className="w-4 h-4" />
+          )}
+          {syncing ? 'Génération...' : 'Nouvelle campagne'}
         </button>
       </div>
 
@@ -242,9 +306,20 @@ export default function UpsellPage() {
       </div>
 
       <div className="space-y-4">
-        {filteredOffers.map(offer => (
-          <OfferCard key={offer.id} offer={offer} />
-        ))}
+        {loading ? (
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="w-8 h-8 animate-spin text-atn-primary" />
+            <span className="ml-3 text-slate-500">Chargement des offres...</span>
+          </div>
+        ) : filteredOffers.length === 0 ? (
+          <div className="text-center py-12 text-slate-500">
+            Aucune offre d'upsell
+          </div>
+        ) : (
+          filteredOffers.map(offer => (
+            <OfferCard key={offer.id} offer={offer} />
+          ))
+        )}
       </div>
     </div>
   )

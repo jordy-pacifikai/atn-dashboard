@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { TrendingUp, TrendingDown, AlertTriangle, DollarSign, Plane, ExternalLink } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { TrendingUp, TrendingDown, AlertTriangle, DollarSign, Plane, ExternalLink, RefreshCw, Loader2 } from 'lucide-react'
 
 interface CompetitorAlert {
   id: string
@@ -17,7 +17,7 @@ interface CompetitorAlert {
   date: string
 }
 
-const demoAlerts: CompetitorAlert[] = [
+const fallbackAlerts: CompetitorAlert[] = [
   {
     id: '1',
     competitor: 'Air France',
@@ -182,8 +182,63 @@ function AlertCard({ alert, onTakeAction }: { alert: CompetitorAlert; onTakeActi
 }
 
 export default function CompetitorsPage() {
-  const [alerts, setAlerts] = useState(demoAlerts)
+  const [alerts, setAlerts] = useState<CompetitorAlert[]>([])
   const [filterPriority, setFilterPriority] = useState<string | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [syncing, setSyncing] = useState(false)
+
+  // Fetch alerts from Airtable
+  const fetchAlerts = async () => {
+    try {
+      const response = await fetch('/api/airtable?table=Competitor_Intel&sortField=Date&sortDir=desc&limit=50')
+      const data = await response.json()
+
+      if (data.records && data.records.length > 0) {
+        const mapped: CompetitorAlert[] = data.records.map((record: { id: string; fields: Record<string, unknown> }) => ({
+          id: record.id,
+          competitor: (record.fields.Competitor as string) || 'Inconnu',
+          route: (record.fields.Route as string) || 'PPT-CDG',
+          theirPrice: (record.fields.Their_Price as number) || 1500,
+          ourPrice: (record.fields.Our_Price as number) || 1400,
+          priceDiff: (record.fields.Price_Diff as number) || 0,
+          alertType: ((record.fields.Alert_Type as string)?.toLowerCase() || 'price_lower') as 'price_lower' | 'new_promo' | 'schedule_change' | 'new_route',
+          recommendation: (record.fields.Recommendation as string) || '',
+          priority: ((record.fields.Priority as string)?.toLowerCase() || 'medium') as 'urgent' | 'high' | 'medium' | 'low',
+          status: ((record.fields.Status as string)?.toLowerCase() || 'new') as 'new' | 'analyzing' | 'action_taken' | 'ignored',
+          date: (record.fields.Date as string) || new Date().toISOString(),
+        }))
+        setAlerts(mapped)
+      } else {
+        setAlerts(fallbackAlerts)
+      }
+    } catch (error) {
+      console.error('Error fetching competitor intel:', error)
+      setAlerts(fallbackAlerts)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Sync competitor intel (trigger n8n workflow)
+  const syncCompetitors = async () => {
+    setSyncing(true)
+    try {
+      await fetch('https://n8n.srv1140766.hstgr.cloud/webhook/atn-competitor-intel', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'scan' })
+      })
+      await fetchAlerts()
+    } catch (error) {
+      console.error('Error syncing competitors:', error)
+    } finally {
+      setSyncing(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchAlerts()
+  }, [])
 
   const handleTakeAction = (id: string) => {
     setAlerts(alerts.map(a =>
@@ -198,7 +253,7 @@ export default function CompetitorsPage() {
   // Stats
   const urgentCount = alerts.filter(a => a.priority === 'urgent' || a.priority === 'high').length
   const competitorsCheaper = alerts.filter(a => a.priceDiff < 0).length
-  const avgPriceDiff = Math.round(alerts.reduce((acc, a) => acc + a.priceDiff, 0) / alerts.length)
+  const avgPriceDiff = alerts.length > 0 ? Math.round(alerts.reduce((acc, a) => acc + a.priceDiff, 0) / alerts.length) : 0
 
   return (
     <div className="space-y-6">
@@ -211,6 +266,18 @@ export default function CompetitorsPage() {
           </h1>
           <p className="text-slate-500">Build 7: Veille des prix et promotions</p>
         </div>
+        <button
+          onClick={syncCompetitors}
+          disabled={syncing}
+          className="flex items-center gap-2 px-4 py-2 bg-atn-primary text-white rounded-lg hover:bg-opacity-90 disabled:opacity-50"
+        >
+          {syncing ? (
+            <Loader2 className="w-4 h-4 animate-spin" />
+          ) : (
+            <RefreshCw className="w-4 h-4" />
+          )}
+          {syncing ? 'Scan en cours...' : 'Lancer un scan'}
+        </button>
       </div>
 
       {/* Stats */}
@@ -252,13 +319,24 @@ export default function CompetitorsPage() {
 
       {/* Liste des alertes */}
       <div className="space-y-4">
-        {filteredAlerts.map(alert => (
-          <AlertCard
-            key={alert.id}
-            alert={alert}
-            onTakeAction={() => handleTakeAction(alert.id)}
-          />
-        ))}
+        {loading ? (
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="w-8 h-8 animate-spin text-atn-primary" />
+            <span className="ml-3 text-slate-500">Chargement des alertes...</span>
+          </div>
+        ) : filteredAlerts.length === 0 ? (
+          <div className="text-center py-12 text-slate-500">
+            Aucune alerte trouvée
+          </div>
+        ) : (
+          filteredAlerts.map(alert => (
+            <AlertCard
+              key={alert.id}
+              alert={alert}
+              onTakeAction={() => handleTakeAction(alert.id)}
+            />
+          ))
+        )}
       </div>
     </div>
   )

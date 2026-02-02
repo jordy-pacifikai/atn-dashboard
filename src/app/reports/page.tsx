@@ -1,7 +1,20 @@
 'use client'
 
-import { useState } from 'react'
-import { FileBarChart, Download, Calendar, Clock, Loader2, CheckCircle, Mail, FileText, TrendingUp, Users, Plane, Star, ShoppingCart } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { FileBarChart, Download, Calendar, Clock, Loader2, CheckCircle, Mail, FileText, TrendingUp, Users, Plane, Star, ShoppingCart, Eye } from 'lucide-react'
+
+interface AIReport {
+  id: string
+  reportId: string
+  title: string
+  type: 'Weekly' | 'Monthly' | 'Quarterly' | 'Custom'
+  period: string
+  summary: string
+  keyMetrics: string
+  recommendations: string
+  generatedAt: string
+  status: 'generated' | 'reviewed' | 'archived'
+}
 
 interface ReportTemplate {
   id: string
@@ -13,7 +26,7 @@ interface ReportTemplate {
   lastGenerated?: string
 }
 
-const reportTemplates: ReportTemplate[] = [
+const defaultReportTemplates: ReportTemplate[] = [
   {
     id: 'daily-summary',
     name: 'Résumé quotidien',
@@ -21,7 +34,6 @@ const reportTemplates: ReportTemplate[] = [
     icon: FileBarChart,
     category: 'performance',
     frequency: 'Quotidien',
-    lastGenerated: '2026-01-28T08:00:00',
   },
   {
     id: 'weekly-marketing',
@@ -30,7 +42,6 @@ const reportTemplates: ReportTemplate[] = [
     icon: Mail,
     category: 'content',
     frequency: 'Hebdomadaire',
-    lastGenerated: '2026-01-27T09:00:00',
   },
   {
     id: 'roi-analysis',
@@ -39,7 +50,6 @@ const reportTemplates: ReportTemplate[] = [
     icon: TrendingUp,
     category: 'revenue',
     frequency: 'Hebdomadaire',
-    lastGenerated: '2026-01-27T09:00:00',
   },
   {
     id: 'customer-satisfaction',
@@ -56,7 +66,6 @@ const reportTemplates: ReportTemplate[] = [
     icon: ShoppingCart,
     category: 'revenue',
     frequency: 'Hebdomadaire',
-    lastGenerated: '2026-01-27T09:00:00',
   },
   {
     id: 'competitor-intel',
@@ -73,7 +82,6 @@ const reportTemplates: ReportTemplate[] = [
     icon: Plane,
     category: 'operations',
     frequency: 'Quotidien',
-    lastGenerated: '2026-01-28T06:00:00',
   },
   {
     id: 'content-seo',
@@ -171,10 +179,44 @@ export default function ReportsPage() {
   const [filterCategory, setFilterCategory] = useState<string | null>(null)
   const [customPrompt, setCustomPrompt] = useState('')
   const [isCustomGenerating, setIsCustomGenerating] = useState(false)
+  const [aiReports, setAIReports] = useState<AIReport[]>([])
+  const [loading, setLoading] = useState(true)
+  const [selectedReport, setSelectedReport] = useState<AIReport | null>(null)
+
+  useEffect(() => {
+    async function fetchAIReports() {
+      try {
+        const res = await fetch('/api/airtable?table=AI_Reports&view=Grid%20view')
+        if (res.ok) {
+          const data = await res.json()
+          const mapped: AIReport[] = data.records.map((r: any) => ({
+            id: r.id,
+            reportId: r.fields.Report_ID || '',
+            title: r.fields.Title || '',
+            type: r.fields.Type || 'Weekly',
+            period: r.fields.Period || '',
+            summary: r.fields.Summary || '',
+            keyMetrics: r.fields.Key_Metrics || '',
+            recommendations: r.fields.Recommendations || '',
+            generatedAt: r.fields.Generated_At || new Date().toISOString(),
+            status: r.fields.Status || 'generated',
+          }))
+          // Sort by generated date descending
+          mapped.sort((a, b) => new Date(b.generatedAt).getTime() - new Date(a.generatedAt).getTime())
+          setAIReports(mapped)
+        }
+      } catch (err) {
+        console.error('Error fetching AI reports:', err)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchAIReports()
+  }, [])
 
   const filteredReports = filterCategory
-    ? reportTemplates.filter(r => r.category === filterCategory)
-    : reportTemplates
+    ? defaultReportTemplates.filter(r => r.category === filterCategory)
+    : defaultReportTemplates
 
   const handleGenerate = async (reportId: string) => {
     setGeneratingId(reportId)
@@ -290,31 +332,103 @@ export default function ReportsPage() {
         ))}
       </div>
 
-      {/* Recent reports */}
+      {/* AI Generated Reports from Airtable */}
       <div className="card">
-        <h2 className="font-semibold mb-4">Rapports récents</h2>
-        <div className="space-y-3">
-          {[
-            { name: 'Résumé quotidien - 28 Jan 2026', size: '245 KB', time: 'Il y a 2h' },
-            { name: 'Performance Marketing - Semaine 4', size: '1.2 MB', time: 'Hier' },
-            { name: 'Analyse ROI - Janvier 2026', size: '890 KB', time: 'Il y a 2 jours' },
-            { name: 'Opérations vols - 27 Jan 2026', size: '156 KB', time: 'Il y a 2 jours' },
-          ].map((report, i) => (
-            <div key={i} className="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
-              <div className="flex items-center gap-3">
-                <FileBarChart className="w-5 h-5 text-slate-400" />
-                <div>
-                  <p className="text-sm font-medium">{report.name}</p>
-                  <p className="text-xs text-slate-500">{report.size} • {report.time}</p>
+        <h2 className="font-semibold mb-4">Rapports IA générés</h2>
+        {loading ? (
+          <div className="flex items-center justify-center py-8">
+            <Loader2 className="w-6 h-6 animate-spin text-blue-500" />
+          </div>
+        ) : aiReports.length === 0 ? (
+          <p className="text-sm text-slate-500 text-center py-8">Aucun rapport généré</p>
+        ) : (
+          <div className="space-y-3">
+            {aiReports.map((report) => (
+              <div key={report.id} className="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
+                <div className="flex items-center gap-3">
+                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                    report.type === 'Weekly' ? 'bg-blue-100' :
+                    report.type === 'Monthly' ? 'bg-purple-100' :
+                    report.type === 'Quarterly' ? 'bg-emerald-100' : 'bg-amber-100'
+                  }`}>
+                    <FileBarChart className={`w-5 h-5 ${
+                      report.type === 'Weekly' ? 'text-blue-600' :
+                      report.type === 'Monthly' ? 'text-purple-600' :
+                      report.type === 'Quarterly' ? 'text-emerald-600' : 'text-amber-600'
+                    }`} />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium">{report.title}</p>
+                    <p className="text-xs text-slate-500">{report.period} • {new Date(report.generatedAt).toLocaleDateString('fr-FR')}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className={`px-2 py-0.5 rounded text-xs ${
+                    report.status === 'reviewed' ? 'bg-emerald-100 text-emerald-700' :
+                    report.status === 'archived' ? 'bg-slate-100 text-slate-600' :
+                    'bg-blue-100 text-blue-700'
+                  }`}>
+                    {report.status === 'reviewed' ? 'Validé' : report.status === 'archived' ? 'Archivé' : 'Nouveau'}
+                  </span>
+                  <button
+                    onClick={() => setSelectedReport(report)}
+                    className="p-2 hover:bg-white rounded-lg"
+                    title="Voir le rapport"
+                  >
+                    <Eye className="w-4 h-4 text-slate-500" />
+                  </button>
                 </div>
               </div>
-              <button className="p-2 hover:bg-white rounded-lg">
-                <Download className="w-4 h-4 text-slate-500" />
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Report Detail Modal */}
+      {selectedReport && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl w-full max-w-3xl max-h-[80vh] overflow-auto">
+            <div className="sticky top-0 bg-white border-b p-4 flex items-center justify-between">
+              <div>
+                <h2 className="font-semibold">{selectedReport.title}</h2>
+                <p className="text-sm text-slate-500">{selectedReport.period}</p>
+              </div>
+              <button
+                onClick={() => setSelectedReport(null)}
+                className="p-2 hover:bg-slate-100 rounded-lg"
+              >
+                ✕
               </button>
             </div>
-          ))}
+            <div className="p-6 space-y-6">
+              <div>
+                <h3 className="font-medium text-sm text-slate-500 mb-2">Résumé</h3>
+                <p className="text-slate-700">{selectedReport.summary}</p>
+              </div>
+              <div>
+                <h3 className="font-medium text-sm text-slate-500 mb-2">Métriques clés</h3>
+                <pre className="p-4 bg-slate-50 rounded-lg text-sm whitespace-pre-wrap">{selectedReport.keyMetrics}</pre>
+              </div>
+              <div>
+                <h3 className="font-medium text-sm text-slate-500 mb-2">Recommandations</h3>
+                <pre className="p-4 bg-blue-50 rounded-lg text-sm whitespace-pre-wrap text-blue-800">{selectedReport.recommendations}</pre>
+              </div>
+            </div>
+            <div className="border-t p-4 flex justify-end gap-3">
+              <button className="px-4 py-2 border border-slate-200 rounded-lg flex items-center gap-2">
+                <Download className="w-4 h-4" />
+                Télécharger PDF
+              </button>
+              <button
+                onClick={() => setSelectedReport(null)}
+                className="btn-primary"
+              >
+                Fermer
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Scheduled reports */}
       <div className="card">

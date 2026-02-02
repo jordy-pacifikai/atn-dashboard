@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { Target, TrendingUp, TrendingDown, User, Mail, MousePointer, Calendar, Star, Filter, ArrowUpRight } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { Target, TrendingUp, TrendingDown, User, Mail, MousePointer, Calendar, Star, Filter, ArrowUpRight, RefreshCw, Loader2 } from 'lucide-react'
 
 interface Lead {
   id: string
@@ -20,7 +20,7 @@ interface Lead {
   conversionProbability: number
 }
 
-const demoLeads: Lead[] = [
+const fallbackLeads: Lead[] = [
   {
     id: '1',
     email: 'marie.dupont@email.com',
@@ -217,17 +217,88 @@ function LeadCard({ lead }: { lead: Lead }) {
 }
 
 export default function LeadScoringPage() {
+  const [leads, setLeads] = useState<Lead[]>([])
   const [filterGrade, setFilterGrade] = useState<Lead['grade'] | 'all'>('all')
+  const [loading, setLoading] = useState(true)
+  const [syncing, setSyncing] = useState(false)
+
+  // Fetch leads from Airtable Lead_Scores table
+  const fetchLeads = async () => {
+    try {
+      const response = await fetch('/api/airtable?table=Lead_Scores&view=Grid%20view')
+      const data = await response.json()
+
+      if (data.records && data.records.length > 0) {
+        const mapped: Lead[] = data.records.map((record: { id: string; fields: Record<string, unknown> }) => {
+          const score = (record.fields.Score as number) || 0
+          // Determine grade based on score and segment
+          let grade: 'A' | 'B' | 'C' | 'D' = 'D'
+          const segment = record.fields.Segment as string
+          if (segment === 'Hot' || score >= 80) grade = 'A'
+          else if (segment === 'Warm' || score >= 50) grade = 'B'
+          else if (score >= 20) grade = 'C'
+
+          return {
+            id: record.id,
+            email: (record.fields.Email as string) || 'contact@email.com',
+            name: (record.fields.Customer_ID as string) || 'Prospect',
+            score: score,
+            grade: grade,
+            lastActivity: (record.fields.Updated_At as string) || new Date().toISOString(),
+            activities: [{
+              type: 'pageview' as const,
+              description: (record.fields.Last_Activity as string) || 'Activité récente',
+              points: Math.round(score / 10),
+              timestamp: (record.fields.Updated_At as string) || new Date().toISOString(),
+            }],
+            predictedValue: (record.fields.Predicted_Value as number) || 0,
+            conversionProbability: Math.min(score, 95),
+          }
+        })
+        // Sort by score descending
+        mapped.sort((a, b) => b.score - a.score)
+        setLeads(mapped)
+      } else {
+        setLeads(fallbackLeads)
+      }
+    } catch (error) {
+      console.error('Error fetching leads:', error)
+      setLeads(fallbackLeads)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Recalculate scores (trigger n8n workflow)
+  const recalculateScores = async () => {
+    setSyncing(true)
+    try {
+      await fetch('https://n8n.srv1140766.hstgr.cloud/webhook/atn-lead-scoring', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'recalculate' })
+      })
+      await fetchLeads()
+    } catch (error) {
+      console.error('Error recalculating scores:', error)
+    } finally {
+      setSyncing(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchLeads()
+  }, [])
 
   const filteredLeads = filterGrade === 'all'
-    ? demoLeads
-    : demoLeads.filter(l => l.grade === filterGrade)
+    ? leads
+    : leads.filter(l => l.grade === filterGrade)
 
   const stats = {
-    total: demoLeads.length,
-    hotLeads: demoLeads.filter(l => l.grade === 'A').length,
-    avgScore: Math.round(demoLeads.reduce((acc, l) => acc + l.score, 0) / demoLeads.length),
-    totalPredictedValue: demoLeads.reduce((acc, l) => acc + l.predictedValue, 0),
+    total: leads.length,
+    hotLeads: leads.filter(l => l.grade === 'A').length,
+    avgScore: leads.length > 0 ? Math.round(leads.reduce((acc, l) => acc + l.score, 0) / leads.length) : 0,
+    totalPredictedValue: leads.reduce((acc, l) => acc + l.predictedValue, 0),
   }
 
   return (
@@ -240,6 +311,18 @@ export default function LeadScoringPage() {
           </h1>
           <p className="text-slate-500">Build 23: Scoring comportemental prospects</p>
         </div>
+        <button
+          onClick={recalculateScores}
+          disabled={syncing}
+          className="flex items-center gap-2 px-4 py-2 bg-atn-primary text-white rounded-lg hover:bg-opacity-90 disabled:opacity-50"
+        >
+          {syncing ? (
+            <Loader2 className="w-4 h-4 animate-spin" />
+          ) : (
+            <RefreshCw className="w-4 h-4" />
+          )}
+          {syncing ? 'Calcul en cours...' : 'Recalculer les scores'}
+        </button>
       </div>
 
       <div className="grid grid-cols-4 gap-4">
@@ -302,9 +385,20 @@ export default function LeadScoringPage() {
 
       {/* Liste des leads */}
       <div className="space-y-4">
-        {filteredLeads.map(lead => (
-          <LeadCard key={lead.id} lead={lead} />
-        ))}
+        {loading ? (
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="w-8 h-8 animate-spin text-atn-primary" />
+            <span className="ml-3 text-slate-500">Chargement des leads...</span>
+          </div>
+        ) : filteredLeads.length === 0 ? (
+          <div className="text-center py-12 text-slate-500">
+            Aucun lead trouvé
+          </div>
+        ) : (
+          filteredLeads.map(lead => (
+            <LeadCard key={lead.id} lead={lead} />
+          ))
+        )}
       </div>
     </div>
   )

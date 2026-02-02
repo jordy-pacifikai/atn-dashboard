@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { Plane, Users, Calendar, CreditCard, MessageSquare } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { Plane, Users, Calendar, CreditCard, MessageSquare, RefreshCw, Loader2 } from 'lucide-react'
 
 interface BookingRequest {
   id: string
@@ -16,7 +16,7 @@ interface BookingRequest {
   date: string
 }
 
-const demoBookings: BookingRequest[] = [
+const fallbackBookings: BookingRequest[] = [
   {
     id: '1',
     sessionId: 'ses_booking_001',
@@ -145,17 +145,72 @@ function BookingCard({ booking }: { booking: BookingRequest }) {
 }
 
 export default function BookingsPage() {
+  const [bookings, setBookings] = useState<BookingRequest[]>([])
   const [filterType, setFilterType] = useState<string | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [syncing, setSyncing] = useState(false)
+
+  // Fetch bookings from Airtable
+  const fetchBookings = async () => {
+    try {
+      const response = await fetch('/api/airtable?table=Booking_Logs&sortField=Date&sortDir=desc&limit=50')
+      const data = await response.json()
+
+      if (data.records && data.records.length > 0) {
+        const mapped: BookingRequest[] = data.records.map((record: { id: string; fields: Record<string, unknown> }) => ({
+          id: record.id,
+          sessionId: (record.fields.Session_ID as string) || 'ses_unknown',
+          requestType: ((record.fields.Request_Type as string)?.toLowerCase() || 'information') as BookingRequest['requestType'],
+          route: (record.fields.Route as string) || 'PPT-LAX',
+          class: (record.fields.Class as string) || 'Moana Economy',
+          passengers: (record.fields.Passengers as number) || 1,
+          request: (record.fields.Request as string) || '',
+          response: (record.fields.Response as string) || '',
+          status: ((record.fields.Status as string)?.toLowerCase() || 'pending') as 'completed' | 'pending' | 'failed',
+          date: (record.fields.Date as string) || new Date().toISOString(),
+        }))
+        setBookings(mapped)
+      } else {
+        setBookings(fallbackBookings)
+      }
+    } catch (error) {
+      console.error('Error fetching bookings:', error)
+      setBookings(fallbackBookings)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Sync booking data (trigger n8n workflow)
+  const syncBookings = async () => {
+    setSyncing(true)
+    try {
+      await fetch('https://n8n.srv1140766.hstgr.cloud/webhook/atn-booking-assistant', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'sync' })
+      })
+      await fetchBookings()
+    } catch (error) {
+      console.error('Error syncing bookings:', error)
+    } finally {
+      setSyncing(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchBookings()
+  }, [])
 
   const filteredBookings = filterType
-    ? demoBookings.filter(b => b.requestType === filterType)
-    : demoBookings
+    ? bookings.filter(b => b.requestType === filterType)
+    : bookings
 
   // Stats
-  const totalRequests = demoBookings.length
-  const completedCount = demoBookings.filter(b => b.status === 'completed').length
-  const reservationCount = demoBookings.filter(b => b.requestType === 'reservation').length
-  const totalPassengers = demoBookings.reduce((acc, b) => acc + b.passengers, 0)
+  const totalRequests = bookings.length
+  const completedCount = bookings.filter(b => b.status === 'completed').length
+  const reservationCount = bookings.filter(b => b.requestType === 'reservation').length
+  const totalPassengers = bookings.reduce((acc, b) => acc + b.passengers, 0)
 
   return (
     <div className="space-y-6">
@@ -167,6 +222,18 @@ export default function BookingsPage() {
           </h1>
           <p className="text-slate-500">Build 5: Assistant de réservation intelligent</p>
         </div>
+        <button
+          onClick={syncBookings}
+          disabled={syncing}
+          className="flex items-center gap-2 px-4 py-2 bg-atn-primary text-white rounded-lg hover:bg-opacity-90 disabled:opacity-50"
+        >
+          {syncing ? (
+            <Loader2 className="w-4 h-4 animate-spin" />
+          ) : (
+            <RefreshCw className="w-4 h-4" />
+          )}
+          {syncing ? 'Synchronisation...' : 'Actualiser'}
+        </button>
       </div>
 
       <div className="grid grid-cols-4 gap-4">
@@ -207,9 +274,20 @@ export default function BookingsPage() {
       </div>
 
       <div className="space-y-4">
-        {filteredBookings.map(booking => (
-          <BookingCard key={booking.id} booking={booking} />
-        ))}
+        {loading ? (
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="w-8 h-8 animate-spin text-atn-primary" />
+            <span className="ml-3 text-slate-500">Chargement des demandes...</span>
+          </div>
+        ) : filteredBookings.length === 0 ? (
+          <div className="text-center py-12 text-slate-500">
+            Aucune demande de réservation
+          </div>
+        ) : (
+          filteredBookings.map(booking => (
+            <BookingCard key={booking.id} booking={booking} />
+          ))
+        )}
       </div>
     </div>
   )

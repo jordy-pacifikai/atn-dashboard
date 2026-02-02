@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { GitBranch, Play, Pause, Users, Mail, Clock, CheckCircle, ArrowRight, Plus, MoreVertical } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { GitBranch, Play, Pause, Clock, ArrowRight, Plus, MoreVertical, RefreshCw, Loader2 } from 'lucide-react'
 
 interface JourneyStep {
   id: string
@@ -25,7 +25,7 @@ interface Journey {
   lastTriggered: string
 }
 
-const demoJourneys: Journey[] = [
+const fallbackJourneys: Journey[] = [
   {
     id: '1',
     name: 'Post-Réservation',
@@ -181,11 +181,69 @@ function JourneyCard({ journey }: { journey: Journey }) {
 }
 
 export default function JourneysPage() {
+  const [journeys, setJourneys] = useState<Journey[]>([])
+  const [loading, setLoading] = useState(true)
+  const [syncing, setSyncing] = useState(false)
+
+  // Fetch journeys from Airtable
+  const fetchJourneys = async () => {
+    try {
+      const response = await fetch('/api/airtable?table=Journeys&sortField=Last_Triggered&sortDir=desc&limit=50')
+      const data = await response.json()
+
+      if (data.records && data.records.length > 0) {
+        const mapped: Journey[] = data.records.map((record: { id: string; fields: Record<string, unknown> }) => ({
+          id: record.id,
+          name: (record.fields.Name as string) || 'Journey',
+          trigger: (record.fields.Trigger as string) || '',
+          status: ((record.fields.Status as string)?.toLowerCase() || 'draft') as Journey['status'],
+          steps: (record.fields.Steps as JourneyStep[]) || [],
+          stats: {
+            entered: (record.fields.Stats_Entered as number) || 0,
+            completed: (record.fields.Stats_Completed as number) || 0,
+            inProgress: (record.fields.Stats_InProgress as number) || 0,
+            conversionRate: (record.fields.Stats_ConversionRate as number) || 0,
+          },
+          lastTriggered: (record.fields.Last_Triggered as string) || new Date().toISOString(),
+        }))
+        setJourneys(mapped)
+      } else {
+        setJourneys(fallbackJourneys)
+      }
+    } catch (error) {
+      console.error('Error fetching journeys:', error)
+      setJourneys(fallbackJourneys)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Sync journeys (trigger n8n workflow)
+  const syncJourneys = async () => {
+    setSyncing(true)
+    try {
+      await fetch('https://n8n.srv1140766.hstgr.cloud/webhook/atn-journey-orchestrator', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'sync' })
+      })
+      await fetchJourneys()
+    } catch (error) {
+      console.error('Error syncing journeys:', error)
+    } finally {
+      setSyncing(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchJourneys()
+  }, [])
+
   const stats = {
-    activeJourneys: demoJourneys.filter(j => j.status === 'active').length,
-    totalInJourney: demoJourneys.reduce((acc, j) => acc + j.stats.inProgress, 0),
-    completedToday: 156,
-    avgConversion: (demoJourneys.reduce((acc, j) => acc + j.stats.conversionRate, 0) / demoJourneys.length).toFixed(1),
+    activeJourneys: journeys.filter(j => j.status === 'active').length,
+    totalInJourney: journeys.reduce((acc, j) => acc + j.stats.inProgress, 0),
+    completedToday: journeys.reduce((acc, j) => acc + j.stats.completed, 0),
+    avgConversion: journeys.length > 0 ? (journeys.reduce((acc, j) => acc + j.stats.conversionRate, 0) / journeys.length).toFixed(1) : '0',
   }
 
   return (
@@ -198,10 +256,24 @@ export default function JourneysPage() {
           </h1>
           <p className="text-slate-500">Build 21: Séquences automatisées multi-étapes</p>
         </div>
-        <button className="flex items-center gap-2 px-4 py-2 bg-atn-primary text-white rounded-lg hover:bg-opacity-90">
-          <Plus className="w-4 h-4" />
-          Nouveau Journey
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={syncJourneys}
+            disabled={syncing}
+            className="flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200 disabled:opacity-50"
+          >
+            {syncing ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <RefreshCw className="w-4 h-4" />
+            )}
+            {syncing ? 'Sync...' : 'Actualiser'}
+          </button>
+          <button className="flex items-center gap-2 px-4 py-2 bg-atn-primary text-white rounded-lg hover:bg-opacity-90">
+            <Plus className="w-4 h-4" />
+            Nouveau Journey
+          </button>
+        </div>
       </div>
 
       <div className="grid grid-cols-4 gap-4">
@@ -224,9 +296,20 @@ export default function JourneysPage() {
       </div>
 
       <div className="space-y-4">
-        {demoJourneys.map(journey => (
-          <JourneyCard key={journey.id} journey={journey} />
-        ))}
+        {loading ? (
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="w-8 h-8 animate-spin text-atn-primary" />
+            <span className="ml-3 text-slate-500">Chargement des journeys...</span>
+          </div>
+        ) : journeys.length === 0 ? (
+          <div className="text-center py-12 text-slate-500">
+            Aucun journey configuré
+          </div>
+        ) : (
+          journeys.map(journey => (
+            <JourneyCard key={journey.id} journey={journey} />
+          ))
+        )}
       </div>
     </div>
   )

@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { Shield, User, Mail, Bell, Plane, Settings, CheckCircle, XCircle, Clock, Search, Download } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { Shield, User, Mail, Bell, Plane, Settings, CheckCircle, XCircle, Clock, Search, Download, RefreshCw, Loader2 } from 'lucide-react'
 
 interface CustomerPreferences {
   id: string
@@ -26,7 +26,7 @@ interface CustomerPreferences {
   frequency: 'daily' | 'weekly' | 'monthly' | 'never'
 }
 
-const demoCustomers: CustomerPreferences[] = [
+const fallbackCustomers: CustomerPreferences[] = [
   {
     id: '1',
     email: 'marie.dupont@email.com',
@@ -230,18 +230,78 @@ function CustomerCard({ customer }: { customer: CustomerPreferences }) {
 }
 
 export default function PreferencesPage() {
+  const [customers, setCustomers] = useState<CustomerPreferences[]>([])
   const [searchQuery, setSearchQuery] = useState('')
+  const [loading, setLoading] = useState(true)
+  const [syncing, setSyncing] = useState(false)
 
-  const filteredCustomers = demoCustomers.filter(c =>
+  // Fetch preferences from Airtable
+  const fetchPreferences = async () => {
+    try {
+      const response = await fetch('/api/airtable?table=Customer_Preferences&sortField=Last_Updated&sortDir=desc&limit=100')
+      const data = await response.json()
+
+      if (data.records && data.records.length > 0) {
+        const mapped: CustomerPreferences[] = data.records.map((record: { id: string; fields: Record<string, unknown> }) => ({
+          id: record.id,
+          email: (record.fields.Email as string) || 'contact@email.com',
+          name: (record.fields.Name as string) || 'Client',
+          lastUpdated: (record.fields.Last_Updated as string) || new Date().toISOString(),
+          consentStatus: ((record.fields.Consent_Status as string)?.toLowerCase() || 'partial') as CustomerPreferences['consentStatus'],
+          preferences: (record.fields.Preferences as CustomerPreferences['preferences']) || [],
+          communicationChannels: {
+            email: (record.fields.Channel_Email as boolean) ?? true,
+            sms: (record.fields.Channel_SMS as boolean) ?? false,
+            push: (record.fields.Channel_Push as boolean) ?? false,
+            mail: (record.fields.Channel_Mail as boolean) ?? false,
+          },
+          interests: (record.fields.Interests as string[]) || [],
+          language: (record.fields.Language as string) || 'FR',
+          frequency: ((record.fields.Frequency as string)?.toLowerCase() || 'weekly') as CustomerPreferences['frequency'],
+        }))
+        setCustomers(mapped)
+      } else {
+        setCustomers(fallbackCustomers)
+      }
+    } catch (error) {
+      console.error('Error fetching preferences:', error)
+      setCustomers(fallbackCustomers)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Sync preferences (trigger n8n workflow)
+  const syncPreferences = async () => {
+    setSyncing(true)
+    try {
+      await fetch('https://n8n.srv1140766.hstgr.cloud/webhook/atn-preference-center', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'sync' })
+      })
+      await fetchPreferences()
+    } catch (error) {
+      console.error('Error syncing preferences:', error)
+    } finally {
+      setSyncing(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchPreferences()
+  }, [])
+
+  const filteredCustomers = customers.filter(c =>
     c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     c.email.toLowerCase().includes(searchQuery.toLowerCase())
   )
 
   const stats = {
-    total: demoCustomers.length,
-    fullConsent: demoCustomers.filter(c => c.consentStatus === 'full').length,
-    partialConsent: demoCustomers.filter(c => c.consentStatus === 'partial').length,
-    optedOut: demoCustomers.filter(c => c.frequency === 'never').length,
+    total: customers.length,
+    fullConsent: customers.filter(c => c.consentStatus === 'full').length,
+    partialConsent: customers.filter(c => c.consentStatus === 'partial').length,
+    optedOut: customers.filter(c => c.frequency === 'never').length,
   }
 
   return (
@@ -254,10 +314,24 @@ export default function PreferencesPage() {
           </h1>
           <p className="text-slate-500">Build 25: Gestion préférences client RGPD</p>
         </div>
-        <button className="flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200">
-          <Download className="w-4 h-4" />
-          Export RGPD
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={syncPreferences}
+            disabled={syncing}
+            className="flex items-center gap-2 px-4 py-2 bg-atn-primary text-white rounded-lg hover:bg-opacity-90 disabled:opacity-50"
+          >
+            {syncing ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <RefreshCw className="w-4 h-4" />
+            )}
+            {syncing ? 'Sync...' : 'Actualiser'}
+          </button>
+          <button className="flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200">
+            <Download className="w-4 h-4" />
+            Export RGPD
+          </button>
+        </div>
       </div>
 
       <div className="grid grid-cols-4 gap-4">
@@ -305,9 +379,20 @@ export default function PreferencesPage() {
 
       {/* Liste des clients */}
       <div className="space-y-4">
-        {filteredCustomers.map(customer => (
-          <CustomerCard key={customer.id} customer={customer} />
-        ))}
+        {loading ? (
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="w-8 h-8 animate-spin text-atn-primary" />
+            <span className="ml-3 text-slate-500">Chargement des préférences...</span>
+          </div>
+        ) : filteredCustomers.length === 0 ? (
+          <div className="text-center py-12 text-slate-500">
+            Aucun client trouvé
+          </div>
+        ) : (
+          filteredCustomers.map(customer => (
+            <CustomerCard key={customer.id} customer={customer} />
+          ))
+        )}
       </div>
     </div>
   )

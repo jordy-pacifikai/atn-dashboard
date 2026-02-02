@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { TrendingUp, TrendingDown, AlertTriangle, DollarSign, BarChart3 } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { TrendingUp, TrendingDown, AlertTriangle, BarChart3, RefreshCw, Loader2 } from 'lucide-react'
 
 interface RoiAlert {
   id: string
@@ -18,7 +18,7 @@ interface RoiAlert {
   date: string
 }
 
-const demoAlerts: RoiAlert[] = [
+const fallbackAlerts: RoiAlert[] = [
   {
     id: '1',
     destination: 'PPT-LAX',
@@ -126,17 +126,74 @@ function AlertCard({ alert }: { alert: RoiAlert }) {
 }
 
 export default function RoiPage() {
+  const [alerts, setAlerts] = useState<RoiAlert[]>([])
   const [filterStatus, setFilterStatus] = useState<string | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [syncing, setSyncing] = useState(false)
+
+  // Fetch ROI alerts from Airtable
+  const fetchAlerts = async () => {
+    try {
+      const response = await fetch('/api/airtable?table=ROI_Alerts&sortField=Date&sortDir=desc&limit=50')
+      const data = await response.json()
+
+      if (data.records && data.records.length > 0) {
+        const mapped: RoiAlert[] = data.records.map((record: { id: string; fields: Record<string, unknown> }) => ({
+          id: record.id,
+          destination: (record.fields.Destination as string) || 'PPT-LAX',
+          variation: (record.fields.Variation as string) || '0%',
+          status: ((record.fields.Status as string)?.toLowerCase() || 'stable') as RoiAlert['status'],
+          trend: ((record.fields.Trend as string)?.toLowerCase() || 'stable') as 'up' | 'down' | 'stable',
+          action: (record.fields.Action as string) || '',
+          metrics: {
+            bookings: (record.fields.Bookings as number) || 0,
+            revenue: (record.fields.Revenue as number) || 0,
+            avgTicket: (record.fields.Avg_Ticket as number) || 0,
+          },
+          date: (record.fields.Date as string) || new Date().toISOString(),
+        }))
+        setAlerts(mapped)
+      } else {
+        setAlerts(fallbackAlerts)
+      }
+    } catch (error) {
+      console.error('Error fetching ROI alerts:', error)
+      setAlerts(fallbackAlerts)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Refresh ROI analysis (trigger n8n workflow)
+  const refreshAnalysis = async () => {
+    setSyncing(true)
+    try {
+      await fetch('https://n8n.srv1140766.hstgr.cloud/webhook/atn-roi-analyst', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'analyze' })
+      })
+      await fetchAlerts()
+    } catch (error) {
+      console.error('Error refreshing ROI analysis:', error)
+    } finally {
+      setSyncing(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchAlerts()
+  }, [])
 
   const filteredAlerts = filterStatus
-    ? demoAlerts.filter(a => a.status === filterStatus)
-    : demoAlerts
+    ? alerts.filter(a => a.status === filterStatus)
+    : alerts
 
   // Stats
-  const totalRevenue = demoAlerts.reduce((acc, a) => acc + a.metrics.revenue, 0)
-  const totalBookings = demoAlerts.reduce((acc, a) => acc + a.metrics.bookings, 0)
-  const criticalCount = demoAlerts.filter(a => a.status === 'critical' || a.status === 'warning').length
-  const growthRoutes = demoAlerts.filter(a => a.trend === 'up').length
+  const totalRevenue = alerts.reduce((acc, a) => acc + a.metrics.revenue, 0)
+  const totalBookings = alerts.reduce((acc, a) => acc + a.metrics.bookings, 0)
+  const criticalCount = alerts.filter(a => a.status === 'critical' || a.status === 'warning').length
+  const growthRoutes = alerts.filter(a => a.trend === 'up').length
 
   return (
     <div className="space-y-6">
@@ -148,6 +205,18 @@ export default function RoiPage() {
           </h1>
           <p className="text-slate-500">Build 4: Analyse des performances par route</p>
         </div>
+        <button
+          onClick={refreshAnalysis}
+          disabled={syncing}
+          className="flex items-center gap-2 px-4 py-2 bg-atn-primary text-white rounded-lg hover:bg-opacity-90 disabled:opacity-50"
+        >
+          {syncing ? (
+            <Loader2 className="w-4 h-4 animate-spin" />
+          ) : (
+            <RefreshCw className="w-4 h-4" />
+          )}
+          {syncing ? 'Analyse en cours...' : 'Actualiser l\'analyse'}
+        </button>
       </div>
 
       <div className="grid grid-cols-4 gap-4">
@@ -182,9 +251,20 @@ export default function RoiPage() {
       </div>
 
       <div className="space-y-4">
-        {filteredAlerts.map(alert => (
-          <AlertCard key={alert.id} alert={alert} />
-        ))}
+        {loading ? (
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="w-8 h-8 animate-spin text-atn-primary" />
+            <span className="ml-3 text-slate-500">Chargement des analyses ROI...</span>
+          </div>
+        ) : filteredAlerts.length === 0 ? (
+          <div className="text-center py-12 text-slate-500">
+            Aucune alerte ROI
+          </div>
+        ) : (
+          filteredAlerts.map(alert => (
+            <AlertCard key={alert.id} alert={alert} />
+          ))
+        )}
       </div>
     </div>
   )

@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { BarChart3, TrendingUp, DollarSign, MousePointer, Mail, Share2, Search, Globe, Filter } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { BarChart3, TrendingUp, DollarSign, MousePointer, Mail, Share2, Search, Globe, Filter, RefreshCw, Loader2 } from 'lucide-react'
 
 interface TouchpointData {
   channel: string
@@ -15,7 +15,15 @@ interface TouchpointData {
   revenue: number
 }
 
-const demoData: TouchpointData[] = [
+const channelIcons: Record<string, typeof Globe> = {
+  'Google Ads': Search,
+  'Email Marketing': Mail,
+  'Organic Search': Globe,
+  'Social Media': Share2,
+  'Direct': MousePointer,
+}
+
+const fallbackData: TouchpointData[] = [
   {
     channel: 'Google Ads',
     icon: Search,
@@ -176,10 +184,64 @@ function ModelComparison({ data }: { data: TouchpointData[] }) {
 }
 
 export default function AttributionPage() {
+  const [data, setData] = useState<TouchpointData[]>([])
   const [selectedModel, setSelectedModel] = useState<ModelType>('positionBased')
+  const [loading, setLoading] = useState(true)
+  const [syncing, setSyncing] = useState(false)
 
-  const totalRevenue = demoData.reduce((acc, d) => acc + d.revenue, 0)
-  const totalConversions = demoData.reduce((acc, d) => acc + d.conversions, 0)
+  // Fetch attribution data from Airtable
+  const fetchAttribution = async () => {
+    try {
+      const response = await fetch('/api/airtable?table=Attribution_Data&sortField=Channel&sortDir=asc&limit=50')
+      const result = await response.json()
+
+      if (result.records && result.records.length > 0) {
+        const mapped: TouchpointData[] = result.records.map((record: { id: string; fields: Record<string, unknown> }) => ({
+          channel: (record.fields.Channel as string) || 'Unknown',
+          icon: channelIcons[(record.fields.Channel as string)] || Globe,
+          firstTouch: (record.fields.First_Touch as number) || 0,
+          lastTouch: (record.fields.Last_Touch as number) || 0,
+          linear: (record.fields.Linear as number) || 0,
+          timeDecay: (record.fields.Time_Decay as number) || 0,
+          positionBased: (record.fields.Position_Based as number) || 0,
+          conversions: (record.fields.Conversions as number) || 0,
+          revenue: (record.fields.Revenue as number) || 0,
+        }))
+        setData(mapped)
+      } else {
+        setData(fallbackData)
+      }
+    } catch (error) {
+      console.error('Error fetching attribution:', error)
+      setData(fallbackData)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Refresh attribution (trigger n8n workflow)
+  const refreshAttribution = async () => {
+    setSyncing(true)
+    try {
+      await fetch('https://n8n.srv1140766.hstgr.cloud/webhook/atn-attribution-tracker', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'refresh' })
+      })
+      await fetchAttribution()
+    } catch (error) {
+      console.error('Error refreshing attribution:', error)
+    } finally {
+      setSyncing(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchAttribution()
+  }, [])
+
+  const totalRevenue = data.reduce((acc, d) => acc + d.revenue, 0)
+  const totalConversions = data.reduce((acc, d) => acc + d.conversions, 0)
 
   return (
     <div className="space-y-6">
@@ -191,12 +253,24 @@ export default function AttributionPage() {
           </h1>
           <p className="text-slate-500">Build 24: Multi-touch attribution 5 modèles</p>
         </div>
+        <button
+          onClick={refreshAttribution}
+          disabled={syncing}
+          className="flex items-center gap-2 px-4 py-2 bg-atn-primary text-white rounded-lg hover:bg-opacity-90 disabled:opacity-50"
+        >
+          {syncing ? (
+            <Loader2 className="w-4 h-4 animate-spin" />
+          ) : (
+            <RefreshCw className="w-4 h-4" />
+          )}
+          {syncing ? 'Calcul...' : 'Recalculer'}
+        </button>
       </div>
 
       <div className="grid grid-cols-4 gap-4">
         <div className="card">
           <p className="text-sm text-slate-500">Canaux trackés</p>
-          <p className="text-2xl font-bold">{demoData.length}</p>
+          <p className="text-2xl font-bold">{data.length}</p>
         </div>
         <div className="card">
           <p className="text-sm text-slate-500">Conversions totales</p>
@@ -237,17 +311,30 @@ export default function AttributionPage() {
       </div>
 
       {/* Attribution par canal */}
-      <div>
-        <h2 className="font-semibold mb-4">Attribution par canal - {modelLabels[selectedModel]}</h2>
-        <div className="grid grid-cols-2 gap-4">
-          {demoData.map(data => (
-            <ChannelCard key={data.channel} data={data} model={selectedModel} />
-          ))}
+      {loading ? (
+        <div className="flex items-center justify-center py-12">
+          <Loader2 className="w-8 h-8 animate-spin text-atn-primary" />
+          <span className="ml-3 text-slate-500">Chargement des données d'attribution...</span>
         </div>
-      </div>
+      ) : data.length === 0 ? (
+        <div className="text-center py-12 text-slate-500">
+          Aucune donnée d'attribution
+        </div>
+      ) : (
+        <>
+          <div>
+            <h2 className="font-semibold mb-4">Attribution par canal - {modelLabels[selectedModel]}</h2>
+            <div className="grid grid-cols-2 gap-4">
+              {data.map(d => (
+                <ChannelCard key={d.channel} data={d} model={selectedModel} />
+              ))}
+            </div>
+          </div>
 
-      {/* Tableau comparatif */}
-      <ModelComparison data={demoData} />
+          {/* Tableau comparatif */}
+          <ModelComparison data={data} />
+        </>
+      )}
     </div>
   )
 }

@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { Mail, Send, Users, TrendingUp, Eye, X, ExternalLink } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { Mail, Send, Users, TrendingUp, Eye, X, ExternalLink, RefreshCw, Loader2 } from 'lucide-react'
 
 interface NewsletterLog {
   id: string
@@ -22,7 +22,7 @@ interface NewsletterLog {
   ctaUrl: string
 }
 
-const demoNewsletters: NewsletterLog[] = [
+const fallbackNewsletters: NewsletterLog[] = [
   {
     id: '1',
     contact: 'marie.dupont@email.com',
@@ -327,17 +327,77 @@ function NewsletterCard({ newsletter, onClick }: { newsletter: NewsletterLog; on
 }
 
 export default function NewslettersPage() {
+  const [newsletters, setNewsletters] = useState<NewsletterLog[]>([])
   const [filterSegment, setFilterSegment] = useState<string | null>(null)
   const [selectedNewsletter, setSelectedNewsletter] = useState<NewsletterLog | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [syncing, setSyncing] = useState(false)
+
+  // Fetch newsletters from Airtable
+  const fetchNewsletters = async () => {
+    try {
+      const response = await fetch('/api/airtable?table=Newsletter_Logs&sortField=Date&sortDir=desc&limit=50')
+      const data = await response.json()
+
+      if (data.records && data.records.length > 0) {
+        const mapped: NewsletterLog[] = data.records.map((record: { id: string; fields: Record<string, unknown> }) => ({
+          id: record.id,
+          contact: (record.fields.Contact as string) || 'contact@email.com',
+          segment: (record.fields.Segment as string) || 'General',
+          emailPreview: (record.fields.Email_Preview as string) || '',
+          personalizationScore: (record.fields.Personalization_Score as number) || 80,
+          engagementScore: (record.fields.Engagement_Score as number) || 70,
+          wordCount: (record.fields.Word_Count as number) || 200,
+          status: ((record.fields.Status as string)?.toLowerCase() || 'pending') as 'sent' | 'opened' | 'clicked' | 'pending',
+          date: (record.fields.Date as string) || new Date().toISOString(),
+          subject: (record.fields.Subject as string) || 'Newsletter Air Tahiti Nui',
+          headline: (record.fields.Headline as string) || 'Ia Orana !',
+          fullContent: (record.fields.Full_Content as string) || '',
+          imageUrl: (record.fields.Image_URL as string) || 'https://images.unsplash.com/photo-1589197331516-4d84b72ebde3?w=800',
+          ctaText: (record.fields.CTA_Text as string) || 'Découvrir',
+          ctaUrl: (record.fields.CTA_URL as string) || 'https://www.airtahitinui.com',
+        }))
+        setNewsletters(mapped)
+      } else {
+        setNewsletters(fallbackNewsletters)
+      }
+    } catch (error) {
+      console.error('Error fetching newsletters:', error)
+      setNewsletters(fallbackNewsletters)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Sync newsletters (trigger n8n workflow)
+  const syncNewsletters = async () => {
+    setSyncing(true)
+    try {
+      await fetch('https://n8n.srv1140766.hstgr.cloud/webhook/atn-newsletter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'sync' })
+      })
+      await fetchNewsletters()
+    } catch (error) {
+      console.error('Error syncing newsletters:', error)
+    } finally {
+      setSyncing(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchNewsletters()
+  }, [])
 
   const filteredNewsletters = filterSegment
-    ? demoNewsletters.filter(n => n.segment === filterSegment)
-    : demoNewsletters
+    ? newsletters.filter(n => n.segment === filterSegment)
+    : newsletters
 
   // Stats
-  const totalSent = demoNewsletters.filter(n => n.status !== 'pending').length
-  const avgPersonalization = Math.round(demoNewsletters.reduce((acc, n) => acc + n.personalizationScore, 0) / demoNewsletters.length)
-  const openRate = Math.round((demoNewsletters.filter(n => n.status === 'opened' || n.status === 'clicked').length / totalSent) * 100)
+  const totalSent = newsletters.filter(n => n.status !== 'pending').length
+  const avgPersonalization = newsletters.length > 0 ? Math.round(newsletters.reduce((acc, n) => acc + n.personalizationScore, 0) / newsletters.length) : 0
+  const openRate = totalSent > 0 ? Math.round((newsletters.filter(n => n.status === 'opened' || n.status === 'clicked').length / totalSent) * 100) : 0
 
   return (
     <div className="space-y-6">
@@ -349,9 +409,17 @@ export default function NewslettersPage() {
           </h1>
           <p className="text-slate-500">Build 2: Hyper-personnalisation par segment • Cliquez pour voir l'email complet</p>
         </div>
-        <button className="btn-primary flex items-center gap-2">
-          <Send className="w-4 h-4" />
-          Nouvelle campagne
+        <button
+          onClick={syncNewsletters}
+          disabled={syncing}
+          className="btn-primary flex items-center gap-2"
+        >
+          {syncing ? (
+            <Loader2 className="w-4 h-4 animate-spin" />
+          ) : (
+            <RefreshCw className="w-4 h-4" />
+          )}
+          {syncing ? 'Synchronisation...' : 'Synchroniser'}
         </button>
       </div>
 
@@ -393,13 +461,24 @@ export default function NewslettersPage() {
       </div>
 
       <div className="space-y-4">
-        {filteredNewsletters.map(newsletter => (
-          <NewsletterCard
-            key={newsletter.id}
-            newsletter={newsletter}
-            onClick={() => setSelectedNewsletter(newsletter)}
-          />
-        ))}
+        {loading ? (
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="w-8 h-8 animate-spin text-atn-primary" />
+            <span className="ml-3 text-slate-500">Chargement des newsletters...</span>
+          </div>
+        ) : filteredNewsletters.length === 0 ? (
+          <div className="text-center py-12 text-slate-500">
+            Aucune newsletter trouvée
+          </div>
+        ) : (
+          filteredNewsletters.map(newsletter => (
+            <NewsletterCard
+              key={newsletter.id}
+              newsletter={newsletter}
+              onClick={() => setSelectedNewsletter(newsletter)}
+            />
+          ))
+        )}
       </div>
 
       {/* Email Preview Modal */}
