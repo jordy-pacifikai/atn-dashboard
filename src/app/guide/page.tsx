@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import {
@@ -13,6 +13,20 @@ import {
   Headphones, Route, Compass
 } from 'lucide-react'
 import SidebarGuide from '@/components/SidebarGuide'
+
+// Component to handle search params (must be wrapped in Suspense)
+function GuideAutoLauncher({ onAutoLaunch }: { onAutoLaunch: () => void }) {
+  const searchParams = useSearchParams()
+
+  useEffect(() => {
+    const autoLaunch = searchParams.get('sidebar') === 'true' || searchParams.get('auto') === 'true'
+    if (autoLaunch) {
+      onAutoLaunch()
+    }
+  }, [searchParams, onAutoLaunch])
+
+  return null
+}
 
 // ============ GLOSSAIRE DES TERMES ============
 const glossary = [
@@ -693,15 +707,6 @@ export default function GuidePage() {
   const [searchTerm, setSearchTerm] = useState('')
   const [filterCategory, setFilterCategory] = useState<string | null>(null)
   const [showSidebarGuide, setShowSidebarGuide] = useState(false)
-  const searchParams = useSearchParams()
-
-  // Auto-launch sidebar guide if ?sidebar=true or ?auto=true
-  useEffect(() => {
-    const autoLaunch = searchParams.get('sidebar') === 'true' || searchParams.get('auto') === 'true'
-    if (autoLaunch) {
-      setShowSidebarGuide(true)
-    }
-  }, [searchParams])
 
   const toggleCategory = (cat: string) => {
     setExpandedCategories(prev =>
@@ -744,6 +749,11 @@ export default function GuidePage() {
 
   return (
     <div className="space-y-6 max-w-5xl">
+      {/* Auto-launch handler wrapped in Suspense */}
+      <Suspense fallback={null}>
+        <GuideAutoLauncher onAutoLaunch={() => setShowSidebarGuide(true)} />
+      </Suspense>
+
       {/* Sidebar Guide Modal */}
       <SidebarGuide
         isOpen={showSidebarGuide}
