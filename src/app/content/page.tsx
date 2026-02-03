@@ -572,6 +572,7 @@ export default function ContentPage() {
           <p className="text-slate-500">Build 3: Génération d'articles optimisés • Cliquez pour lire l'article complet</p>
         </div>
         <button
+          data-guide="content-btn-generate"
           onClick={syncContent}
           disabled={syncing}
           className="flex items-center gap-2 px-4 py-2 bg-atn-primary text-white rounded-lg text-sm font-medium hover:bg-opacity-90 disabled:opacity-50 transition-all flex items-center gap-2"

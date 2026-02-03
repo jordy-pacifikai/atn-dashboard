@@ -280,6 +280,15 @@ const pageConfigs: PageConfig[] = [
     demoScript: 'Chaque email est unique, généré par l\'IA selon le profil du client. Un couple en lune de miel ne reçoit pas le même email qu\'une famille ou un plongeur.',
     elements: [
       {
+        id: 'news-btn-sync',
+        selector: '[data-guide="news-btn-sync"]',
+        name: 'Bouton Synchroniser',
+        description: 'Synchroniser les newsletters avec Brevo',
+        interpretation: 'Cliquez pour récupérer les dernières statistiques d\'envoi et d\'ouverture.',
+        source: 'API Brevo',
+        status: 'ok',
+      },
+      {
         id: 'news-kpi-sent',
         selector: '[data-guide="news-kpi-sent"]',
         name: 'KPI Emails Envoyés',
@@ -384,6 +393,16 @@ const pageConfigs: PageConfig[] = [
     demoScript: 'L\'IA génère des articles optimisés SEO sur vos destinations. 8 articles ce mois = 8 opportunités de ranking Google.',
     elements: [
       {
+        id: 'content-btn-generate',
+        selector: '[data-guide="content-btn-generate"]',
+        name: 'Bouton Générer',
+        description: 'Lancer la génération de contenu SEO',
+        interpretation: 'Cliquez pour générer un nouvel article optimisé pour le référencement.',
+        roiImpact: '+45% trafic organique',
+        source: 'Workflow n8n Build 3',
+        status: 'ok',
+      },
+      {
         id: 'content-kpi-published',
         selector: '[data-guide="content-kpi-published"]',
         name: 'KPI Articles Publiés',
@@ -449,6 +468,15 @@ const pageConfigs: PageConfig[] = [
     globalROI: '100% avis répondus',
     demoScript: 'Chaque avis reçoit une réponse personnalisée en moins de 2h. Positif: remerciement + invitation à revenir. Négatif: excuse + solution.',
     elements: [
+      {
+        id: 'reviews-btn-sync',
+        selector: '[data-guide="reviews-btn-sync"]',
+        name: 'Bouton Synchroniser',
+        description: 'Synchroniser les avis depuis Google et TripAdvisor',
+        interpretation: 'Cliquez pour récupérer les derniers avis et générer les réponses IA.',
+        source: 'API Google Business + TripAdvisor',
+        status: 'ok',
+      },
       {
         id: 'reviews-kpi-avgrating',
         selector: '[data-guide="reviews-kpi-avgrating"]',
@@ -621,6 +649,15 @@ const pageConfigs: PageConfig[] = [
     demoScript: 'Dès qu\'un vol est retardé ou annulé, tous les passagers concernés sont notifiés automatiquement par SMS, email et push.',
     elements: [
       {
+        id: 'flights-btn-sync',
+        selector: '[data-guide="flights-btn-sync"]',
+        name: 'Bouton Synchroniser',
+        description: 'Synchroniser les données de vols',
+        interpretation: 'Cliquez pour récupérer les dernières alertes et statuts de vols.',
+        source: 'API GDS (Amadeus/Sabre)',
+        status: 'ok',
+      },
+      {
         id: 'flights-kpi-affected',
         selector: '[data-guide="flights-kpi-affected"]',
         name: 'KPI Passagers Impactés',
@@ -696,6 +733,15 @@ const pageConfigs: PageConfig[] = [
     globalROI: '+50% engagement',
     demoScript: 'Toutes les mentions de votre marque sont analysées. L\'IA génère des réponses adaptées au sentiment et à la plateforme.',
     elements: [
+      {
+        id: 'social-btn-scan',
+        selector: '[data-guide="social-btn-scan"]',
+        name: 'Bouton Scanner',
+        description: 'Lancer un scan des réseaux sociaux',
+        interpretation: 'Cliquez pour récupérer les dernières mentions de votre marque.',
+        source: 'API Meta + Twitter',
+        status: 'ok',
+      },
       {
         id: 'social-kpi-reach',
         selector: '[data-guide="social-kpi-reach"]',

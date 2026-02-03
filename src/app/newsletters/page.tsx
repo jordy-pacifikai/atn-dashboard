@@ -417,6 +417,7 @@ export default function NewslettersPage() {
           <p className="text-slate-500">Build 2: Hyper-personnalisation par segment • Cliquez pour voir l'email complet</p>
         </div>
         <button
+          data-guide="news-btn-sync"
           onClick={syncNewsletters}
           disabled={syncing}
           className="flex items-center gap-2 px-4 py-2 bg-atn-primary text-white rounded-lg text-sm font-medium hover:bg-opacity-90 disabled:opacity-50 transition-all"

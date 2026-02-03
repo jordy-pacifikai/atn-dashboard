@@ -299,6 +299,7 @@ export default function ReviewsPage() {
           <p className="text-slate-500">Build 9: Review Responder</p>
         </div>
         <button
+          data-guide="reviews-btn-sync"
           onClick={syncReviews}
           disabled={syncing}
           className="flex items-center gap-2 px-4 py-2 bg-atn-primary text-white rounded-lg text-sm font-medium hover:bg-opacity-90 disabled:opacity-50 transition-all"
