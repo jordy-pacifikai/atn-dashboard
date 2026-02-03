@@ -333,7 +333,7 @@ export default function ReviewIntelligencePage() {
         </button>
       </div>
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div data-guide="reviews-stats" className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="card">
           <div className="flex items-center gap-2 mb-1">
             <ThumbsUp className="w-4 h-4 text-emerald-600" />
@@ -364,7 +364,7 @@ export default function ReviewIntelligencePage() {
         </div>
       </div>
 
-      <div className="flex gap-2">
+      <div data-guide="reviews-filters" className="flex gap-2">
         {(['all', 'irony', 'action'] as const).map(f => (
           <button
             key={f}
@@ -379,7 +379,7 @@ export default function ReviewIntelligencePage() {
         ))}
       </div>
 
-      <div className="space-y-4">
+      <div data-guide="reviews-list" className="space-y-4">
         {loading ? (
           <div className="flex items-center justify-center py-12">
             <Loader2 className="w-8 h-8 animate-spin text-atn-primary" />

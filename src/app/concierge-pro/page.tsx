@@ -181,7 +181,7 @@ export default function ConciergeProPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div data-guide="concierge-stats" className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="card">
           <p className="text-sm text-slate-500">Conversations actives</p>
           <p className="text-2xl font-bold text-blue-600">{stats.active}</p>
@@ -202,7 +202,7 @@ export default function ConciergeProPage() {
 
       <div className="grid grid-cols-3 gap-6">
         {/* Liste des conversations */}
-        <div className="card">
+        <div data-guide="concierge-conversations" className="card">
           <h2 className="font-semibold mb-4 flex items-center gap-2">
             <MessageSquare className="w-5 h-5" />
             Conversations
@@ -220,7 +220,7 @@ export default function ConciergeProPage() {
         </div>
 
         {/* Conversation sélectionnée */}
-        <div className="col-span-2 card">
+        <div data-guide="concierge-chat" className="col-span-2 card">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-atn-primary/10 rounded-full flex items-center justify-center">

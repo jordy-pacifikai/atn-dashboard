@@ -241,7 +241,7 @@ export default function PlannerPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div data-guide="planner-stats" className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="card">
           <p className="text-sm text-slate-500">Cette semaine</p>
           <p className="text-2xl font-bold">{thisWeek.length}</p>
@@ -262,7 +262,7 @@ export default function PlannerPage() {
       </div>
 
       {/* Filters */}
-      <div className="flex items-center gap-4">
+      <div data-guide="planner-filters" className="flex items-center gap-4">
         <div className="flex items-center gap-2">
           <Filter className="w-4 h-4 text-slate-400" />
           <span className="text-sm text-slate-600">Filtres:</span>
@@ -317,7 +317,7 @@ export default function PlannerPage() {
       </div>
 
       {/* Content list */}
-      <div className="space-y-2">
+      <div data-guide="planner-list" className="space-y-2">
         {filteredItems.map(item => (
           <PlannerRow
             key={item.id}

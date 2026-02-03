@@ -276,7 +276,7 @@ export default function JourneysPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div data-guide="journeys-stats" className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="card">
           <p className="text-sm text-slate-500">Journeys actifs</p>
           <p className="text-2xl font-bold text-emerald-600">{stats.activeJourneys}</p>
@@ -295,7 +295,7 @@ export default function JourneysPage() {
         </div>
       </div>
 
-      <div className="space-y-4">
+      <div data-guide="journeys-list" className="space-y-4">
         {loading ? (
           <div className="flex items-center justify-center py-12">
             <Loader2 className="w-8 h-8 animate-spin text-atn-primary" />

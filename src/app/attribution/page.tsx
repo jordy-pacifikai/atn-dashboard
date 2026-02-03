@@ -267,7 +267,7 @@ export default function AttributionPage() {
         </button>
       </div>
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div data-guide="attribution-stats" className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="card">
           <p className="text-sm text-slate-500">Canaux trackés</p>
           <p className="text-2xl font-bold">{data.length}</p>
@@ -287,7 +287,7 @@ export default function AttributionPage() {
       </div>
 
       {/* Sélection du modèle */}
-      <div className="card">
+      <div data-guide="attribution-models" className="card">
         <h2 className="font-semibold mb-4 flex items-center gap-2">
           <Filter className="w-5 h-5" />
           Modèle d'attribution

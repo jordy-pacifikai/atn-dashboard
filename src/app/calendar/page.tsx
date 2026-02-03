@@ -1147,7 +1147,7 @@ export default function CalendarPage() {
       </div>
 
       {/* Calendar grid */}
-      <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+      <div data-guide="calendar-grid" className="bg-white rounded-xl border border-slate-200 overflow-hidden">
         {/* Header */}
         <div className="grid grid-cols-7 bg-slate-50 border-b border-slate-200">
           {['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'].map(day => (
@@ -1210,7 +1210,7 @@ export default function CalendarPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div data-guide="calendar-stats" className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="card">
           <p className="text-sm text-slate-500">Newsletters ce mois</p>
           <p className="text-2xl font-bold text-pink-600">

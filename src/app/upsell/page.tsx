@@ -288,7 +288,7 @@ export default function UpsellPage() {
         </button>
       </div>
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div data-guide="upsell-stats" className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="card">
           <p className="text-sm text-slate-500">Offres envoyées</p>
           <p className="text-2xl font-bold">{totalOffers}</p>
@@ -307,7 +307,7 @@ export default function UpsellPage() {
         </div>
       </div>
 
-      <div className="flex gap-2">
+      <div data-guide="upsell-filters" className="flex gap-2">
         <button
           className={`px-4 py-2 rounded-lg text-sm ${!filterStatus ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'}`}
           onClick={() => setFilterStatus(null)}
@@ -325,7 +325,7 @@ export default function UpsellPage() {
         ))}
       </div>
 
-      <div className="space-y-4">
+      <div data-guide="upsell-list" className="space-y-4">
         {loading ? (
           <div className="flex items-center justify-center py-12">
             <Loader2 className="w-8 h-8 animate-spin text-atn-primary" />

@@ -251,7 +251,7 @@ export default function PricingMonitorPage() {
         </button>
       </div>
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div data-guide="pricing-stats" className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="card">
           <p className="text-sm text-slate-500">Routes surveillées</p>
           <p className="text-2xl font-bold">{stats.routesMonitored}</p>
@@ -274,7 +274,7 @@ export default function PricingMonitorPage() {
 
       {/* Alertes */}
       {stats.alerts > 0 && (
-        <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg">
+        <div data-guide="pricing-alerts" className="p-4 bg-amber-50 border border-amber-200 rounded-lg">
           <div className="flex items-center gap-2 mb-2">
             <AlertTriangle className="w-5 h-5 text-amber-600" />
             <span className="font-medium text-amber-800">Alertes tarifaires</span>
@@ -287,7 +287,7 @@ export default function PricingMonitorPage() {
       )}
 
       {/* Routes */}
-      <div className="grid grid-cols-2 gap-6">
+      <div data-guide="pricing-routes" className="grid grid-cols-2 gap-6">
         {demoRoutes.map(route => (
           <RouteCard key={route.id} route={route} />
         ))}

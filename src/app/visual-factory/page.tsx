@@ -203,7 +203,7 @@ export default function VisualFactoryPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div data-guide="visual-stats" className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="card">
           <p className="text-sm text-slate-500">Total générés</p>
           <p className="text-2xl font-bold">{stats.total}</p>
@@ -223,7 +223,7 @@ export default function VisualFactoryPage() {
       </div>
 
       {/* Générateur */}
-      <div className="card">
+      <div data-guide="visual-generator" className="card">
         <h2 className="font-semibold mb-4 flex items-center gap-2">
           <Wand2 className="w-5 h-5 text-fuchsia-500" />
           Nouveau visuel

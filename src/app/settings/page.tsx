@@ -48,7 +48,7 @@ export default function SettingsPage() {
       </div>
 
       {/* Smart Content Generation */}
-      <div className="card bg-gradient-to-r from-atn-primary/5 to-atn-secondary/5 border-atn-secondary/20">
+      <div data-guide="settings-content-gen" className="card bg-gradient-to-r from-atn-primary/5 to-atn-secondary/5 border-atn-secondary/20">
         <h2 className="font-semibold flex items-center gap-2 mb-4">
           <Sparkles className="w-5 h-5 text-atn-secondary" />
           Génération Intelligente de Contenu
@@ -193,7 +193,7 @@ export default function SettingsPage() {
       </div>
 
       {/* API Keys */}
-      <div className="card">
+      <div data-guide="settings-api-keys" className="card">
         <h2 className="font-semibold flex items-center gap-2 mb-4">
           <Key className="w-5 h-5 text-slate-400" />
           Clés API
@@ -227,7 +227,7 @@ export default function SettingsPage() {
       </div>
 
       {/* n8n Configuration */}
-      <div className="card">
+      <div data-guide="settings-webhooks" className="card">
         <h2 className="font-semibold flex items-center gap-2 mb-4">
           <Database className="w-5 h-5 text-slate-400" />
           n8n Webhooks
@@ -262,7 +262,7 @@ export default function SettingsPage() {
       </div>
 
       {/* Notifications */}
-      <div className="card">
+      <div data-guide="settings-notifications" className="card">
         <h2 className="font-semibold flex items-center gap-2 mb-4">
           <Bell className="w-5 h-5 text-slate-400" />
           Notifications

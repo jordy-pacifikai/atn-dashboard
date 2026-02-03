@@ -159,7 +159,7 @@ export default function StaffAssistantPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div data-guide="staff-stats" className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="card">
           <p className="text-sm text-slate-500">Questions traitées</p>
           <p className="text-2xl font-bold">{stats.total}</p>
@@ -179,7 +179,7 @@ export default function StaffAssistantPage() {
       </div>
 
       {/* Nouvelle question */}
-      <div className="card bg-gradient-to-r from-cyan-50 to-blue-50">
+      <div data-guide="staff-question" className="card bg-gradient-to-r from-cyan-50 to-blue-50">
         <h2 className="font-semibold mb-4 flex items-center gap-2">
           <MessageSquare className="w-5 h-5 text-cyan-600" />
           Poser une question à TALIA
@@ -211,7 +211,7 @@ export default function StaffAssistantPage() {
       </div>
 
       {/* Filtres */}
-      <div className="flex items-center justify-between">
+      <div data-guide="staff-filters" className="flex items-center justify-between">
         <div className="flex gap-2">
           {categories.map(cat => (
             <button
@@ -246,7 +246,7 @@ export default function StaffAssistantPage() {
       </div>
 
       {/* Base de connaissances */}
-      <div className="card">
+      <div data-guide="staff-knowledge" className="card">
         <h2 className="font-semibold mb-4 flex items-center gap-2">
           <Book className="w-5 h-5" />
           Base de connaissances

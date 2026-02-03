@@ -325,7 +325,7 @@ export default function LeadScoringPage() {
         </button>
       </div>
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div data-guide="leadscoring-stats" className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="card">
           <p className="text-sm text-slate-500">Total leads</p>
           <p className="text-2xl font-bold">{stats.total}</p>
@@ -345,7 +345,7 @@ export default function LeadScoringPage() {
       </div>
 
       {/* Scoring rules */}
-      <div className="card bg-gradient-to-r from-amber-50 to-orange-50">
+      <div data-guide="leadscoring-rules" className="card bg-gradient-to-r from-amber-50 to-orange-50">
         <h2 className="font-semibold mb-4 flex items-center gap-2">
           <Star className="w-5 h-5 text-amber-500" />
           Règles de scoring
@@ -368,7 +368,7 @@ export default function LeadScoringPage() {
       </div>
 
       {/* Filtres */}
-      <div className="flex gap-2">
+      <div data-guide="leadscoring-filters" className="flex gap-2">
         {(['all', 'A', 'B', 'C', 'D'] as const).map(grade => (
           <button
             key={grade}
@@ -384,7 +384,7 @@ export default function LeadScoringPage() {
       </div>
 
       {/* Liste des leads */}
-      <div className="space-y-4">
+      <div data-guide="leadscoring-list" className="space-y-4">
         {loading ? (
           <div className="flex items-center justify-center py-12">
             <Loader2 className="w-8 h-8 animate-spin text-atn-primary" />

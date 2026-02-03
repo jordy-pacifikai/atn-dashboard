@@ -334,7 +334,7 @@ export default function PreferencesPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div data-guide="preferences-stats" className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="card">
           <p className="text-sm text-slate-500">Total clients</p>
           <p className="text-2xl font-bold">{stats.total}</p>
@@ -354,7 +354,7 @@ export default function PreferencesPage() {
       </div>
 
       {/* RGPD Info */}
-      <div className="p-4 bg-lime-50 border border-lime-200 rounded-lg">
+      <div data-guide="preferences-rgpd" className="p-4 bg-lime-50 border border-lime-200 rounded-lg">
         <div className="flex items-center gap-2 mb-2">
           <Shield className="w-5 h-5 text-lime-600" />
           <span className="font-medium text-lime-800">Conformité RGPD</span>
@@ -378,7 +378,7 @@ export default function PreferencesPage() {
       </div>
 
       {/* Liste des clients */}
-      <div className="space-y-4">
+      <div data-guide="preferences-list" className="space-y-4">
         {loading ? (
           <div className="flex items-center justify-center py-12">
             <Loader2 className="w-8 h-8 animate-spin text-atn-primary" />
