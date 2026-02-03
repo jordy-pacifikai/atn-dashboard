@@ -1,8 +1,9 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import { MessageCircle, X, Send, Sparkles, Loader2, Calendar, Mail, FileText, BarChart3, Settings, Minimize2 } from 'lucide-react'
+import { MessageCircle, X, Send, Sparkles, Loader2, Calendar, Mail, FileText, BarChart3, Settings, Minimize2, Compass } from 'lucide-react'
 import { sendAssistantMessage, generateReport } from '@/lib/api'
+import SidebarGuide from './SidebarGuide'
 
 // Set to true to use real n8n webhooks, false for demo mode
 const USE_REAL_API = true
@@ -151,6 +152,7 @@ function getResponse(message: string): { content: string; actions?: Message['act
 export default function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false)
   const [isMinimized, setIsMinimized] = useState(false)
+  const [showSidebarGuide, setShowSidebarGuide] = useState(false)
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
@@ -228,15 +230,37 @@ export default function ChatWidget() {
 
   if (!isOpen) {
     return (
-      <button
-        onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 w-14 h-14 bg-atn-secondary text-white rounded-full shadow-lg hover:bg-atn-secondary/90 transition-all hover:scale-105 flex items-center justify-center z-50"
-      >
-        <MessageCircle className="w-6 h-6" />
-        <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-[10px] flex items-center justify-center">
-          1
-        </span>
-      </button>
+      <>
+        {/* Sidebar Guide Modal */}
+        <SidebarGuide
+          isOpen={showSidebarGuide}
+          onClose={() => setShowSidebarGuide(false)}
+          autoPlay={false}
+        />
+
+        {/* Floating buttons container */}
+        <div className="fixed bottom-6 right-6 flex flex-col gap-3 z-50">
+          {/* Guide Sidebar button - above */}
+          <button
+            onClick={() => setShowSidebarGuide(true)}
+            className="w-14 h-14 bg-violet-600 text-white rounded-full shadow-lg hover:bg-violet-700 transition-all hover:scale-105 flex items-center justify-center"
+            title="Guide Sidebar"
+          >
+            <Compass className="w-6 h-6" />
+          </button>
+
+          {/* Assistant button - below */}
+          <button
+            onClick={() => setIsOpen(true)}
+            className="w-14 h-14 bg-atn-secondary text-white rounded-full shadow-lg hover:bg-atn-secondary/90 transition-all hover:scale-105 flex items-center justify-center relative"
+          >
+            <MessageCircle className="w-6 h-6" />
+            <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-[10px] flex items-center justify-center">
+              1
+            </span>
+          </button>
+        </div>
+      </>
     )
   }
 
