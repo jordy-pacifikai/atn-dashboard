@@ -765,17 +765,14 @@ export default function SidebarGuide({ isOpen, onClose, autoPlay = false }: Side
       })
 
       // Tooltip position (to the right of the element)
-      const tooltipWidth = 420
+      const tooltipWidth = 400
       const viewportHeight = window.innerHeight
+      const maxTooltipHeight = Math.min(viewportHeight - 80, 600) // Max 600px or viewport - 80px
 
-      let tooltipTop = rect.top
       let tooltipLeft = rect.right + 24
 
-      // If tooltip goes off bottom, position it higher
-      const tooltipHeight = 500
-      if (tooltipTop + tooltipHeight > viewportHeight - 20) {
-        tooltipTop = Math.max(20, viewportHeight - tooltipHeight - 20)
-      }
+      // Center tooltip vertically around the highlighted element, but keep within bounds
+      const tooltipTop = Math.max(40, Math.min(rect.top + rect.height / 2 - maxTooltipHeight / 2, viewportHeight - maxTooltipHeight - 40))
 
       setTooltipPosition({ top: tooltipTop, left: tooltipLeft })
     }, 300)
@@ -889,12 +886,12 @@ export default function SidebarGuide({ isOpen, onClose, autoPlay = false }: Side
       {/* Tooltip */}
       <div
         ref={tooltipRef}
-        className="absolute bg-white rounded-2xl shadow-2xl overflow-hidden transition-all duration-500"
+        className="absolute bg-white rounded-2xl shadow-2xl overflow-hidden transition-all duration-500 flex flex-col"
         style={{
           top: tooltipPosition.top,
           left: tooltipPosition.left,
-          width: 420,
-          maxHeight: 'calc(100vh - 40px)',
+          width: 400,
+          maxHeight: 'min(600px, calc(100vh - 80px))',
         }}
       >
         {/* Progress bar */}
@@ -906,10 +903,10 @@ export default function SidebarGuide({ isOpen, onClose, autoPlay = false }: Side
         </div>
 
         {/* Header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white flex-shrink-0">
           <div>
-            <p className="text-xs text-sky-600 uppercase tracking-wider font-semibold">{step.category}</p>
-            <h3 className="font-bold text-xl text-slate-900">{step.name}</h3>
+            <p className="text-[10px] text-sky-600 uppercase tracking-wider font-semibold">{step.category}</p>
+            <h3 className="font-bold text-lg text-slate-900">{step.name}</h3>
           </div>
           <div className="flex items-center gap-1">
             <button
@@ -932,23 +929,23 @@ export default function SidebarGuide({ isOpen, onClose, autoPlay = false }: Side
           </div>
         </div>
 
-        {/* Content */}
-        <div className="p-5 space-y-5 max-h-[calc(100vh-200px)] overflow-y-auto">
+        {/* Content - scrollable area */}
+        <div className="p-4 space-y-4 flex-1 overflow-y-auto">
           {/* Purpose */}
-          <p className="text-sm text-slate-700 leading-relaxed">{step.purpose}</p>
+          <p className="text-xs text-slate-700 leading-relaxed">{step.purpose}</p>
 
           {/* ROI Highlight */}
-          <div className="p-4 bg-gradient-to-br from-emerald-50 to-green-50 rounded-xl border border-emerald-200">
-            <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-xl bg-emerald-500 flex items-center justify-center flex-shrink-0">
-                <DollarSign className="w-6 h-6 text-white" />
+          <div className="p-3 bg-gradient-to-br from-emerald-50 to-green-50 rounded-xl border border-emerald-200">
+            <div className="flex items-start gap-3">
+              <div className="w-10 h-10 rounded-lg bg-emerald-500 flex items-center justify-center flex-shrink-0">
+                <DollarSign className="w-5 h-5 text-white" />
               </div>
-              <div className="flex-1">
-                <p className="font-bold text-lg text-emerald-800">{step.roiMetrics.value}</p>
-                <p className="text-sm text-emerald-700 mt-1">{step.roiMetrics.description}</p>
+              <div className="flex-1 min-w-0">
+                <p className="font-bold text-sm text-emerald-800">{step.roiMetrics.value}</p>
+                <p className="text-xs text-emerald-700 mt-0.5">{step.roiMetrics.description}</p>
                 {step.roiMetrics.calculation && (
-                  <div className="flex items-center gap-2 mt-2 text-xs text-emerald-600 bg-emerald-100/50 px-3 py-1.5 rounded-lg">
-                    <Lightbulb className="w-3.5 h-3.5" />
+                  <div className="flex items-center gap-1.5 mt-1.5 text-[10px] text-emerald-600 bg-emerald-100/50 px-2 py-1 rounded">
+                    <Lightbulb className="w-3 h-3 flex-shrink-0" />
                     <span><strong>Calcul :</strong> {step.roiMetrics.calculation}</span>
                   </div>
                 )}
@@ -958,18 +955,18 @@ export default function SidebarGuide({ isOpen, onClose, autoPlay = false }: Side
 
           {/* Interpretation */}
           <div>
-            <p className="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2">
-              <Lightbulb className="w-4 h-4 text-amber-500" />
+            <p className="text-xs font-bold text-slate-800 mb-2 flex items-center gap-1.5">
+              <Lightbulb className="w-3.5 h-3.5 text-amber-500" />
               Comment interpréter les données
             </p>
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               {step.interpretation.map((item, index) => (
-                <div key={index} className="flex items-start gap-3 p-3 bg-slate-50 rounded-lg">
-                  <div className="w-5 h-5 rounded-full bg-sky-100 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <span className="text-xs font-bold text-sky-600">{index + 1}</span>
+                <div key={index} className="flex items-start gap-2 p-2 bg-slate-50 rounded-lg">
+                  <div className="w-4 h-4 rounded-full bg-sky-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <span className="text-[10px] font-bold text-sky-600">{index + 1}</span>
                   </div>
                   <p
-                    className="text-sm text-slate-700 flex-1"
+                    className="text-xs text-slate-700 flex-1"
                     dangerouslySetInnerHTML={{
                       __html: item.replace(/\*\*(.*?)\*\*/g, '<strong class="text-slate-900">$1</strong>')
                     }}
@@ -980,17 +977,17 @@ export default function SidebarGuide({ isOpen, onClose, autoPlay = false }: Side
           </div>
 
           {/* Features & Use Cases */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-2">
             {/* Key Features */}
-            <div className="p-3 bg-blue-50 rounded-xl border border-blue-100">
-              <h4 className="font-semibold text-blue-800 mb-2 flex items-center gap-1.5 text-sm">
-                <CheckCircle className="w-4 h-4" />
+            <div className="p-2 bg-blue-50 rounded-lg border border-blue-100">
+              <h4 className="font-semibold text-blue-800 mb-1.5 flex items-center gap-1 text-xs">
+                <CheckCircle className="w-3 h-3" />
                 Fonctionnalités
               </h4>
-              <ul className="space-y-1.5">
+              <ul className="space-y-1">
                 {step.keyFeatures.map((feature, index) => (
-                  <li key={index} className="flex items-start gap-2 text-xs text-blue-700">
-                    <ArrowRight className="w-3 h-3 text-blue-400 flex-shrink-0 mt-0.5" />
+                  <li key={index} className="flex items-start gap-1.5 text-[10px] text-blue-700">
+                    <ArrowRight className="w-2.5 h-2.5 text-blue-400 flex-shrink-0 mt-0.5" />
                     {feature}
                   </li>
                 ))}
@@ -998,15 +995,15 @@ export default function SidebarGuide({ isOpen, onClose, autoPlay = false }: Side
             </div>
 
             {/* Use Cases */}
-            <div className="p-3 bg-purple-50 rounded-xl border border-purple-100">
-              <h4 className="font-semibold text-purple-800 mb-2 flex items-center gap-1.5 text-sm">
-                <Target className="w-4 h-4" />
+            <div className="p-2 bg-purple-50 rounded-lg border border-purple-100">
+              <h4 className="font-semibold text-purple-800 mb-1.5 flex items-center gap-1 text-xs">
+                <Target className="w-3 h-3" />
                 Cas d'usage
               </h4>
-              <ul className="space-y-1.5">
+              <ul className="space-y-1">
                 {step.useCases.map((useCase, index) => (
-                  <li key={index} className="flex items-start gap-2 text-xs text-purple-700">
-                    <ArrowRight className="w-3 h-3 text-purple-400 flex-shrink-0 mt-0.5" />
+                  <li key={index} className="flex items-start gap-1.5 text-[10px] text-purple-700">
+                    <ArrowRight className="w-2.5 h-2.5 text-purple-400 flex-shrink-0 mt-0.5" />
                     {useCase}
                   </li>
                 ))}
@@ -1015,28 +1012,28 @@ export default function SidebarGuide({ isOpen, onClose, autoPlay = false }: Side
           </div>
 
           {/* Technical info */}
-          <div className="flex flex-wrap gap-2">
-            <div className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 rounded-lg text-xs">
-              <Database className="w-3.5 h-3.5 text-slate-500" />
+          <div className="flex flex-wrap gap-1.5">
+            <div className="flex items-center gap-1 px-2 py-1 bg-slate-100 rounded text-[10px]">
+              <Database className="w-3 h-3 text-slate-500" />
               <span className="text-slate-600">{step.dataSource}</span>
             </div>
-            <div className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 rounded-lg text-xs">
-              <Clock className="w-3.5 h-3.5 text-slate-500" />
+            <div className="flex items-center gap-1 px-2 py-1 bg-slate-100 rounded text-[10px]">
+              <Clock className="w-3 h-3 text-slate-500" />
               <span className="text-slate-600">{step.updateFrequency}</span>
             </div>
           </div>
 
           {/* Dependencies */}
           {step.dependencies && step.dependencies.length > 0 && (
-            <div className="p-3 bg-amber-50 rounded-xl border border-amber-200">
-              <h4 className="font-semibold text-amber-800 mb-2 flex items-center gap-1.5 text-sm">
-                <AlertTriangle className="w-4 h-4" />
-                Prérequis à fournir par ATN
+            <div className="p-2 bg-amber-50 rounded-lg border border-amber-200">
+              <h4 className="font-semibold text-amber-800 mb-1.5 flex items-center gap-1 text-xs">
+                <AlertTriangle className="w-3 h-3" />
+                Prérequis ATN
               </h4>
-              <ul className="space-y-1">
+              <ul className="space-y-0.5">
                 {step.dependencies.map((dep, index) => (
-                  <li key={index} className="text-xs text-amber-700 flex items-center gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+                  <li key={index} className="text-[10px] text-amber-700 flex items-center gap-1.5">
+                    <span className="w-1 h-1 rounded-full bg-amber-500" />
                     {dep}
                   </li>
                 ))}
@@ -1046,35 +1043,35 @@ export default function SidebarGuide({ isOpen, onClose, autoPlay = false }: Side
         </div>
 
         {/* Navigation */}
-        <div className="px-5 py-4 border-t border-slate-100 bg-slate-50">
+        <div className="px-4 py-3 border-t border-slate-100 bg-slate-50 flex-shrink-0">
           <div className="flex items-center justify-between">
             <button
               onClick={() => setCurrentStep(prev => prev - 1)}
               disabled={currentStep === 0}
-              className="flex items-center gap-1.5 px-4 py-2 text-sm text-slate-600 hover:bg-white rounded-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              className="flex items-center gap-1 px-3 py-1.5 text-xs text-slate-600 hover:bg-white rounded-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
             >
-              <ChevronLeft className="w-4 h-4" />
+              <ChevronLeft className="w-3.5 h-3.5" />
               Précédent
             </button>
 
-            <span className="text-sm text-slate-500 font-medium">
+            <span className="text-xs text-slate-500 font-medium">
               {currentStep + 1} / {guideSteps.length}
             </span>
 
             {currentStep < guideSteps.length - 1 ? (
               <button
                 onClick={() => setCurrentStep(prev => prev + 1)}
-                className="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-sky-500 to-blue-600 rounded-lg hover:opacity-90 transition-colors shadow-md"
+                className="flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-white bg-gradient-to-r from-sky-500 to-blue-600 rounded-lg hover:opacity-90 transition-colors shadow-md"
               >
                 Suivant
-                <ChevronRight className="w-4 h-4" />
+                <ChevronRight className="w-3.5 h-3.5" />
               </button>
             ) : (
               <button
                 onClick={onClose}
-                className="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white bg-emerald-500 rounded-lg hover:bg-emerald-600 transition-colors shadow-md"
+                className="flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-white bg-emerald-500 rounded-lg hover:bg-emerald-600 transition-colors shadow-md"
               >
-                <CheckCircle className="w-4 h-4" />
+                <CheckCircle className="w-3.5 h-3.5" />
                 Terminer
               </button>
             )}
