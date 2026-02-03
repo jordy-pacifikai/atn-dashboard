@@ -159,20 +159,20 @@ export default function StaffAssistantPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div data-guide="staff-kpi-questions" className="card">
+      <div data-guide="staff-kpis" className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="card">
           <p className="text-sm text-slate-500">Questions traitées</p>
           <p className="text-2xl font-bold">{stats.total}</p>
         </div>
-        <div data-guide="staff-kpi-helpful" className="card">
+        <div className="card">
           <p className="text-sm text-slate-500">Réponses utiles</p>
           <p className="text-2xl font-bold text-emerald-600">{stats.helpful}</p>
         </div>
-        <div data-guide="staff-kpi-procedures" className="card">
+        <div className="card">
           <p className="text-sm text-slate-500">Procédures consultées</p>
           <p className="text-2xl font-bold text-blue-600">{stats.procedures}</p>
         </div>
-        <div data-guide="staff-kpi-responsetime" className="card">
+        <div className="card">
           <p className="text-sm text-slate-500">Temps de réponse</p>
           <p className="text-2xl font-bold">{stats.avgResponseTime}</p>
         </div>
@@ -186,36 +186,34 @@ export default function StaffAssistantPage() {
         </h2>
         <div className="flex gap-3">
           <input
-            data-guide="staff-question-input"
             type="text"
             placeholder="Exemple: Quelle est la procédure pour..."
             className="flex-1 px-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:border-cyan-500 bg-white"
             value={newQuestion}
             onChange={(e) => setNewQuestion(e.target.value)}
           />
-          <button data-guide="staff-btn-ask" className="px-6 py-3 bg-cyan-500 text-white rounded-lg font-medium flex items-center gap-2 hover:bg-cyan-600">
+          <button className="px-6 py-3 bg-cyan-500 text-white rounded-lg font-medium flex items-center gap-2 hover:bg-cyan-600">
             <Send className="w-5 h-5" />
             Demander
           </button>
         </div>
         <div className="flex gap-2 mt-3">
-          <button data-guide="staff-quicklink-procedures" className="px-3 py-1.5 bg-white rounded-full text-xs text-slate-600 hover:bg-slate-50">
+          <button className="px-3 py-1.5 bg-white rounded-full text-xs text-slate-600 hover:bg-slate-50">
             Procédures embarquement
           </button>
-          <button data-guide="staff-quicklink-operations" className="px-3 py-1.5 bg-white rounded-full text-xs text-slate-600 hover:bg-slate-50">
+          <button className="px-3 py-1.5 bg-white rounded-full text-xs text-slate-600 hover:bg-slate-50">
             Opérations vol
           </button>
-          <button data-guide="staff-quicklink-hr" className="px-3 py-1.5 bg-white rounded-full text-xs text-slate-600 hover:bg-slate-50">
+          <button className="px-3 py-1.5 bg-white rounded-full text-xs text-slate-600 hover:bg-slate-50">
             Questions RH
           </button>
         </div>
       </div>
 
-      {/* Filtres */}
-      <div className="flex items-center justify-between">
+      {/* Filtres et recherche */}
+      <div data-guide="staff-filters" className="flex items-center justify-between">
         <div className="flex gap-2">
           <button
-            data-guide="staff-filter-all"
             className={`px-4 py-2 rounded-lg text-sm flex items-center gap-2 ${
               selectedCategory === 'all' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
             }`}
@@ -225,7 +223,6 @@ export default function StaffAssistantPage() {
             Toutes
           </button>
           <button
-            data-guide="staff-filter-procedures"
             className={`px-4 py-2 rounded-lg text-sm flex items-center gap-2 ${
               selectedCategory === 'procedures' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
             }`}
@@ -235,7 +232,6 @@ export default function StaffAssistantPage() {
             Procédures
           </button>
           <button
-            data-guide="staff-filter-hr"
             className={`px-4 py-2 rounded-lg text-sm flex items-center gap-2 ${
               selectedCategory === 'hr' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
             }`}
@@ -245,7 +241,6 @@ export default function StaffAssistantPage() {
             RH
           </button>
           <button
-            data-guide="staff-filter-technical"
             className={`px-4 py-2 rounded-lg text-sm flex items-center gap-2 ${
               selectedCategory === 'technical' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
             }`}
@@ -255,7 +250,6 @@ export default function StaffAssistantPage() {
             Technique
           </button>
           <button
-            data-guide="staff-filter-operations"
             className={`px-4 py-2 rounded-lg text-sm flex items-center gap-2 ${
               selectedCategory === 'operations' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
             }`}
@@ -265,7 +259,7 @@ export default function StaffAssistantPage() {
             Opérations
           </button>
         </div>
-        <div data-guide="staff-search" className="relative">
+        <div className="relative">
           <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
           <input
             type="text"
@@ -291,19 +285,19 @@ export default function StaffAssistantPage() {
           Base de connaissances
         </h2>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <button data-guide="staff-kb-manual" className="p-4 bg-slate-50 rounded-lg hover:bg-slate-100 text-left">
+          <button className="p-4 bg-slate-50 rounded-lg hover:bg-slate-100 text-left">
             <p className="font-medium text-sm">Manuel des procédures</p>
             <p className="text-xs text-slate-500">156 documents</p>
           </button>
-          <button data-guide="staff-kb-faq" className="p-4 bg-slate-50 rounded-lg hover:bg-slate-100 text-left">
+          <button className="p-4 bg-slate-50 rounded-lg hover:bg-slate-100 text-left">
             <p className="font-medium text-sm">FAQ RH</p>
             <p className="text-xs text-slate-500">89 documents</p>
           </button>
-          <button data-guide="staff-kb-tech" className="p-4 bg-slate-50 rounded-lg hover:bg-slate-100 text-left">
+          <button className="p-4 bg-slate-50 rounded-lg hover:bg-slate-100 text-left">
             <p className="font-medium text-sm">Documentation technique</p>
             <p className="text-xs text-slate-500">234 documents</p>
           </button>
-          <button data-guide="staff-kb-regulations" className="p-4 bg-slate-50 rounded-lg hover:bg-slate-100 text-left">
+          <button className="p-4 bg-slate-50 rounded-lg hover:bg-slate-100 text-left">
             <p className="font-medium text-sm">Réglementations</p>
             <p className="text-xs text-slate-500">67 documents</p>
           </button>
