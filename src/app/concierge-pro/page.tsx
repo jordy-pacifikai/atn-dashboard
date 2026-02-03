@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Headphones, User, Plane, Calendar, MessageSquare, Send, Clock, CheckCircle, AlertCircle } from 'lucide-react'
+import { Headphones, User, Plane, Calendar, MessageSquare, Send, Clock, CheckCircle, AlertCircle, Bot, UserCircle, Sparkles, Loader2 } from 'lucide-react'
 
 interface Conversation {
   id: string
@@ -160,13 +160,105 @@ function ConversationCard({ conversation, selected, onClick }: { conversation: C
 export default function ConciergeProPage() {
   const [selectedId, setSelectedId] = useState(demoConversations[0].id)
   const [newMessage, setNewMessage] = useState('')
+  const [aiEnabled, setAiEnabled] = useState(true)
+  const [conversations, setConversations] = useState(demoConversations)
+  const [isSending, setIsSending] = useState(false)
 
-  const selectedConversation = demoConversations.find(c => c.id === selectedId)!
+  const selectedConversation = conversations.find(c => c.id === selectedId)!
+
+  // Simuler envoi de message
+  const handleSendMessage = async () => {
+    if (!newMessage.trim()) return
+
+    setIsSending(true)
+
+    // Ajouter le message de l'assistant/humain
+    const updatedConversations = conversations.map(conv => {
+      if (conv.id === selectedId) {
+        return {
+          ...conv,
+          messages: [
+            ...conv.messages,
+            {
+              role: 'assistant' as const,
+              content: newMessage,
+              timestamp: new Date().toISOString(),
+            }
+          ]
+        }
+      }
+      return conv
+    })
+
+    setConversations(updatedConversations)
+    setNewMessage('')
+
+    // Simuler réponse du client après 2 secondes
+    await new Promise(r => setTimeout(r, 2000))
+
+    const customerResponses = [
+      'Merci beaucoup pour votre aide !',
+      'Parfait, c\'est exactement ce dont j\'avais besoin.',
+      'D\'accord, je comprends. Merci !',
+      'Excellent service, merci !',
+    ]
+
+    const randomResponse = customerResponses[Math.floor(Math.random() * customerResponses.length)]
+
+    setConversations(prev => prev.map(conv => {
+      if (conv.id === selectedId) {
+        return {
+          ...conv,
+          messages: [
+            ...conv.messages,
+            {
+              role: 'customer' as const,
+              content: randomResponse,
+              timestamp: new Date().toISOString(),
+            }
+          ]
+        }
+      }
+      return conv
+    }))
+
+    // Si l'IA est activée, générer une réponse automatique
+    if (aiEnabled) {
+      await new Promise(r => setTimeout(r, 1500))
+
+      const aiResponses = [
+        'Je suis ravi d\'avoir pu vous aider ! N\'hésitez pas si vous avez d\'autres questions. Bon voyage avec Air Tahiti Nui ! 🌺',
+        'Avec plaisir ! Y a-t-il autre chose que je puisse faire pour vous avant votre vol ?',
+        'C\'est un plaisir de vous assister. Je reste à votre disposition pour toute autre demande.',
+      ]
+
+      const randomAiResponse = aiResponses[Math.floor(Math.random() * aiResponses.length)]
+
+      setConversations(prev => prev.map(conv => {
+        if (conv.id === selectedId) {
+          return {
+            ...conv,
+            messages: [
+              ...conv.messages,
+              {
+                role: 'assistant' as const,
+                content: randomAiResponse,
+                timestamp: new Date().toISOString(),
+              }
+            ]
+          }
+        }
+        return conv
+      }))
+    }
+
+    setIsSending(false)
+  }
 
   const stats = {
-    active: demoConversations.filter(c => c.status === 'active').length,
-    resolved: demoConversations.filter(c => c.status === 'resolved').length,
-    withBooking: demoConversations.filter(c => c.customer.pnr).length,
+    active: conversations.filter(c => c.status === 'active').length,
+    resolved: conversations.filter(c => c.status === 'resolved').length,
+    withBooking: conversations.filter(c => c.customer.pnr).length,
   }
 
   return (
@@ -179,7 +271,57 @@ export default function ConciergeProPage() {
           </h1>
           <p className="text-slate-500">Build 18: Concierge avec contexte réservation</p>
         </div>
+
+        {/* Toggle IA */}
+        <div className="flex items-center gap-3">
+          <div className={`flex items-center gap-2 px-4 py-2 rounded-xl border transition-all ${
+            aiEnabled
+              ? 'bg-gradient-to-r from-sky-50 to-cyan-50 border-sky-200'
+              : 'bg-slate-50 border-slate-200'
+          }`}>
+            {aiEnabled ? (
+              <Bot className="w-5 h-5 text-sky-600" />
+            ) : (
+              <UserCircle className="w-5 h-5 text-slate-500" />
+            )}
+            <span className={`text-sm font-medium ${aiEnabled ? 'text-sky-700' : 'text-slate-600'}`}>
+              {aiEnabled ? 'Mode IA' : 'Mode Manuel'}
+            </span>
+          </div>
+
+          <button
+            onClick={() => setAiEnabled(!aiEnabled)}
+            className={`relative w-14 h-7 rounded-full transition-all duration-300 ${
+              aiEnabled
+                ? 'bg-gradient-to-r from-sky-500 to-cyan-500 shadow-md'
+                : 'bg-slate-300'
+            }`}
+          >
+            <span
+              className={`absolute top-0.5 left-0.5 w-6 h-6 bg-white rounded-full shadow-sm transition-transform duration-300 flex items-center justify-center ${
+                aiEnabled ? 'translate-x-7' : 'translate-x-0'
+              }`}
+            >
+              {aiEnabled ? (
+                <Sparkles className="w-3.5 h-3.5 text-sky-500" />
+              ) : (
+                <UserCircle className="w-3.5 h-3.5 text-slate-400" />
+              )}
+            </span>
+          </button>
+        </div>
       </div>
+
+      {/* Bannière mode manuel */}
+      {!aiEnabled && (
+        <div className="flex items-center gap-3 p-4 bg-amber-50 border border-amber-200 rounded-xl">
+          <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0" />
+          <div>
+            <p className="text-sm font-medium text-amber-800">Mode manuel activé</p>
+            <p className="text-xs text-amber-600">L'agent IA ne répondra pas automatiquement. Les réponses seront gérées manuellement.</p>
+          </div>
+        </div>
+      )}
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div data-guide="concierge-kpi-active" className="card">
@@ -208,7 +350,7 @@ export default function ConciergeProPage() {
             Conversations
           </h2>
           <div className="space-y-2">
-            {demoConversations.map(conv => (
+            {conversations.map(conv => (
               <ConversationCard
                 key={conv.id}
                 conversation={conv}
@@ -266,15 +408,46 @@ export default function ConciergeProPage() {
             <input
               data-guide="concierge-input"
               type="text"
-              placeholder="Écrire une réponse..."
-              className="flex-1 px-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:border-atn-primary"
+              placeholder={aiEnabled ? "Écrire une réponse (l'IA répondra ensuite automatiquement)..." : "Écrire une réponse manuelle..."}
+              className="flex-1 px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent"
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
+              disabled={isSending}
             />
-            <button data-guide="concierge-btn-send" className="px-6 py-3 bg-gradient-to-r from-atn-primary to-atn-secondary text-white rounded-xl flex items-center gap-2 font-medium shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all duration-200">
-              <Send className="w-5 h-5" />
-              Envoyer
+            <button
+              data-guide="concierge-btn-send"
+              onClick={handleSendMessage}
+              disabled={isSending || !newMessage.trim()}
+              className="px-6 py-3 bg-gradient-to-r from-atn-primary to-atn-secondary text-white rounded-xl flex items-center gap-2 font-medium shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+            >
+              {isSending ? (
+                <>
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                  Envoi...
+                </>
+              ) : (
+                <>
+                  <Send className="w-5 h-5" />
+                  Envoyer
+                </>
+              )}
             </button>
+          </div>
+
+          {/* Indicateur mode IA */}
+          <div className={`mt-3 flex items-center gap-2 text-xs ${aiEnabled ? 'text-sky-600' : 'text-slate-500'}`}>
+            {aiEnabled ? (
+              <>
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>L'IA répondra automatiquement aux messages du client</span>
+              </>
+            ) : (
+              <>
+                <UserCircle className="w-3.5 h-3.5" />
+                <span>Mode manuel - Vous gérez la conversation</span>
+              </>
+            )}
           </div>
         </div>
       </div>
