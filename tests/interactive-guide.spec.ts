@@ -133,6 +133,19 @@ const pagesWithGuides = [
       'content-articles-list',
     ],
   },
+  {
+    path: '/concierge-pro',
+    guides: [
+      'concierge-kpi-active',
+      'concierge-kpi-resolved',
+      'concierge-kpi-withbooking',
+      'concierge-kpi-languages',
+      'concierge-conversations-list',
+      'concierge-chat-panel',
+      'concierge-input',
+      'concierge-btn-send',
+    ],
+  },
 ];
 
 test.describe('Interactive Guide - Data Guide Attributes', () => {
