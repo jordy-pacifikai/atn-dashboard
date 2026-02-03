@@ -83,7 +83,7 @@ const fallbackAssets: VisualAsset[] = [
 const demoImagesByTheme: Record<string, { keywords: string[], images: string[], priority: number }> = {
   // Culture et danse - PRIORITE HAUTE car keywords tres specifiques
   culture: {
-    keywords: ['danse', 'danseur', 'danseuse', 'tradition', 'traditionnel', 'costume', 'fete', 'vahine', 'tiare', 'polynesien', 'ukulele', 'heiva', 'ori', 'tamure'],
+    keywords: ['danse', 'danseur', 'danseuse', 'tradition', 'costume', 'fete', 'vahine', 'tiare', 'polynes', 'ukulele', 'heiva', 'ori tahiti', 'tamure', 'folklore', 'spectacle'],
     images: [
       'https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b', // Danse tahitienne
       'https://images.unsplash.com/photo-1601370690183-1c7796ecec61', // Fleur tiare
