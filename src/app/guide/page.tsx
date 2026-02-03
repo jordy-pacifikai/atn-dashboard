@@ -426,7 +426,7 @@ const pageDocumentation = [
           {
             name: 'Analyse sentiment',
             what: 'Classement automatique positif/neutre/négatif + détection ironie',
-            how: 'L\'IA comprend le contexte: "Le repas était 'formidable'" (ironie détectée)',
+            how: "L'IA comprend le contexte: \"Le repas était 'formidable'\" (ironie détectée)",
             why: 'Ne pas être trompé par des avis sarcastiques',
             source: 'Workflow Build 16 - Review Intelligence',
             status: 'ok',
@@ -728,7 +728,7 @@ export default function GuidePage() {
     return matchesSearch && matchesCategory
   })
 
-  const glossaryCategories = [...new Set(glossary.map(g => g.category))]
+  const glossaryCategories = Array.from(new Set(glossary.map(g => g.category)))
 
   return (
     <div className="space-y-6 max-w-5xl">

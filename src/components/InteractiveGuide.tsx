@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { usePathname } from 'next/navigation'
 import {
   HelpCircle,
@@ -39,6 +39,13 @@ interface PageConfig {
   globalROI?: string
   demoScript?: string
   elements: ElementGuide[]
+}
+
+interface HighlightRect {
+  top: number
+  left: number
+  width: number
+  height: number
 }
 
 // Configuration complète par page
@@ -556,8 +563,10 @@ export default function InteractiveGuide() {
   const [isOpen, setIsOpen] = useState(false)
   const [currentElementIndex, setCurrentElementIndex] = useState(0)
   const [highlightedElement, setHighlightedElement] = useState<HTMLElement | null>(null)
+  const [highlightRect, setHighlightRect] = useState<HighlightRect | null>(null)
   const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0, placement: 'bottom' as 'top' | 'bottom' | 'left' | 'right' })
   const [isAutoPlaying, setIsAutoPlaying] = useState(false)
+  const scrollContainerRef = useRef<HTMLElement | null>(null)
 
   // Trouver la config de la page courante
   const currentPageConfig = pageConfigs.find(p => p.route === pathname) || defaultPageConfig
@@ -577,40 +586,64 @@ export default function InteractiveGuide() {
     }
   }, [])
 
-  // Fonction pour calculer la position du tooltip
+  // Mettre à jour le rect du highlight (position fixed dans le viewport)
+  const updateHighlightRect = useCallback((element: HTMLElement) => {
+    const rect = element.getBoundingClientRect()
+
+    setHighlightRect({
+      top: rect.top - 8,
+      left: rect.left - 8,
+      width: rect.width + 16,
+      height: rect.height + 16,
+    })
+  }, [])
+
+  // Fonction pour calculer la position du tooltip - FIXE dans le viewport, ne chevauche JAMAIS l'encadré
   const calculateTooltipPosition = useCallback((element: HTMLElement) => {
     const rect = element.getBoundingClientRect()
     const tooltipWidth = 400
-    const tooltipHeight = 300
-    const margin = 16
+    const tooltipHeight = 380
+    const margin = 20
+    const highlightPadding = 8
 
-    let placement: 'top' | 'bottom' | 'left' | 'right' = 'bottom'
+    let placement: 'top' | 'bottom' | 'left' | 'right' = 'right'
     let top = 0
     let left = 0
 
-    // Espace disponible
-    const spaceAbove = rect.top
-    const spaceBelow = window.innerHeight - rect.bottom
-    const spaceLeft = rect.left
-    const spaceRight = window.innerWidth - rect.right
+    // Zone de l'élément highlighté (avec padding)
+    const highlightTop = rect.top - highlightPadding
+    const highlightBottom = rect.bottom + highlightPadding
+    const highlightLeft = rect.left - highlightPadding
+    const highlightRight = rect.right + highlightPadding
 
-    // Choisir le meilleur placement
-    if (spaceBelow >= tooltipHeight + margin) {
+    // Espace disponible autour de l'élément
+    const spaceAbove = highlightTop
+    const spaceBelow = window.innerHeight - highlightBottom
+    const spaceLeft = highlightLeft
+    const spaceRight = window.innerWidth - highlightRight
+
+    // Priorité: droite > gauche > bas > haut (pour ne jamais chevaucher)
+    if (spaceRight >= tooltipWidth + margin) {
+      placement = 'right'
+      top = Math.max(margin, Math.min(rect.top, window.innerHeight - tooltipHeight - margin))
+      left = highlightRight + margin
+    } else if (spaceLeft >= tooltipWidth + margin) {
+      placement = 'left'
+      top = Math.max(margin, Math.min(rect.top, window.innerHeight - tooltipHeight - margin))
+      left = highlightLeft - tooltipWidth - margin
+    } else if (spaceBelow >= tooltipHeight + margin) {
       placement = 'bottom'
-      top = rect.bottom + margin
-      left = rect.left + rect.width / 2 - tooltipWidth / 2
+      top = highlightBottom + margin
+      left = Math.max(margin, Math.min(rect.left, window.innerWidth - tooltipWidth - margin))
     } else if (spaceAbove >= tooltipHeight + margin) {
       placement = 'top'
-      top = rect.top - tooltipHeight - margin
-      left = rect.left + rect.width / 2 - tooltipWidth / 2
-    } else if (spaceRight >= tooltipWidth + margin) {
-      placement = 'right'
-      top = rect.top + rect.height / 2 - tooltipHeight / 2
-      left = rect.right + margin
+      top = highlightTop - tooltipHeight - margin
+      left = Math.max(margin, Math.min(rect.left, window.innerWidth - tooltipWidth - margin))
     } else {
-      placement = 'left'
-      top = rect.top + rect.height / 2 - tooltipHeight / 2
-      left = rect.left - tooltipWidth - margin
+      // Fallback: coin inférieur droit
+      placement = 'bottom'
+      top = window.innerHeight - tooltipHeight - margin
+      left = window.innerWidth - tooltipWidth - margin
     }
 
     // Contraindre dans la fenêtre
@@ -620,24 +653,67 @@ export default function InteractiveGuide() {
     return { top, left, placement }
   }, [])
 
+  // Bloquer le scroll quand le guide est ouvert
+  useEffect(() => {
+    if (isOpen) {
+      // Sauvegarder le scroll container
+      scrollContainerRef.current = document.querySelector('main') || document.body
+      document.body.style.overflow = 'hidden'
+      if (scrollContainerRef.current && scrollContainerRef.current !== document.body) {
+        scrollContainerRef.current.style.overflow = 'hidden'
+      }
+    } else {
+      document.body.style.overflow = ''
+      if (scrollContainerRef.current && scrollContainerRef.current !== document.body) {
+        scrollContainerRef.current.style.overflow = ''
+      }
+    }
+
+    return () => {
+      document.body.style.overflow = ''
+      if (scrollContainerRef.current && scrollContainerRef.current !== document.body) {
+        scrollContainerRef.current.style.overflow = ''
+      }
+    }
+  }, [isOpen])
+
   // Mettre à jour le highlight quand l'élément change
   useEffect(() => {
     if (!isOpen || !currentElement) {
       setHighlightedElement(null)
+      setHighlightRect(null)
       return
     }
 
     const el = findElement(currentElement.selector, currentElement.fallbackSelector)
     if (el) {
-      setHighlightedElement(el)
-      setTooltipPosition(calculateTooltipPosition(el))
-
-      // Scroll vers l'élément
+      // Scroll vers l'élément AVANT de calculer les positions
       el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+
+      // Attendre que le scroll soit terminé pour calculer les positions
+      setTimeout(() => {
+        setHighlightedElement(el)
+        updateHighlightRect(el)
+        setTooltipPosition(calculateTooltipPosition(el))
+      }, 400)
     } else {
       setHighlightedElement(null)
+      setHighlightRect(null)
     }
-  }, [isOpen, currentElement, findElement, calculateTooltipPosition])
+  }, [isOpen, currentElement, findElement, calculateTooltipPosition, updateHighlightRect])
+
+  // Mettre à jour les positions lors du resize
+  useEffect(() => {
+    if (!isOpen || !highlightedElement) return
+
+    const handleResize = () => {
+      updateHighlightRect(highlightedElement)
+      setTooltipPosition(calculateTooltipPosition(highlightedElement))
+    }
+
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [isOpen, highlightedElement, updateHighlightRect, calculateTooltipPosition])
 
   // Auto-play
   useEffect(() => {
@@ -748,35 +824,62 @@ export default function InteractiveGuide() {
         </button>
       )}
 
-      {/* Overlay highlight */}
-      {isOpen && highlightedElement && (
+      {/* Overlay highlight avec cutout transparent */}
+      {isOpen && highlightRect && (
         <div className="fixed inset-0 z-[90] pointer-events-none">
-          {/* Overlay sombre */}
-          <div className="absolute inset-0 bg-black/40" />
+          {/* SVG overlay avec cutout */}
+          <svg className="absolute inset-0 w-full h-full">
+            <defs>
+              <mask id="highlight-mask">
+                {/* Fond blanc = visible */}
+                <rect x="0" y="0" width="100%" height="100%" fill="white" />
+                {/* Cutout noir = transparent */}
+                <rect
+                  x={highlightRect.left}
+                  y={highlightRect.top}
+                  width={highlightRect.width}
+                  height={highlightRect.height}
+                  rx="12"
+                  fill="black"
+                />
+              </mask>
+            </defs>
+            {/* Overlay sombre avec le masque */}
+            <rect
+              x="0"
+              y="0"
+              width="100%"
+              height="100%"
+              fill="rgba(0,0,0,0.5)"
+              mask="url(#highlight-mask)"
+            />
+          </svg>
 
-          {/* Trou pour l'élément highlighté */}
+          {/* Bordure autour de l'élément highlighté - opacité 0 à l'intérieur */}
           <div
-            className="absolute bg-transparent"
+            className="absolute pointer-events-none"
             style={{
-              top: highlightedElement.getBoundingClientRect().top - 8,
-              left: highlightedElement.getBoundingClientRect().left - 8,
-              width: highlightedElement.getBoundingClientRect().width + 16,
-              height: highlightedElement.getBoundingClientRect().height + 16,
-              boxShadow: '0 0 0 9999px rgba(0,0,0,0.4)',
+              top: highlightRect.top,
+              left: highlightRect.left,
+              width: highlightRect.width,
+              height: highlightRect.height,
               borderRadius: '12px',
               border: '3px solid #8b5cf6',
+              boxShadow: '0 0 20px rgba(139, 92, 246, 0.4)',
+              background: 'transparent',
             }}
           />
         </div>
       )}
 
-      {/* Tooltip */}
-      {isOpen && currentElement && (
+      {/* Tooltip - FIXE dans le viewport, ne bouge pas avec le scroll */}
+      {isOpen && currentElement && highlightRect && (
         <div
           className="fixed z-[100] w-[400px] bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden"
           style={{
             top: tooltipPosition.top,
             left: tooltipPosition.left,
+            maxHeight: 'calc(100vh - 40px)',
           }}
         >
           {/* Header */}
