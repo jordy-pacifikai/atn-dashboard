@@ -82,7 +82,7 @@ const classColors: Record<string, string> = {
 
 function BookingCard({ booking }: { booking: BookingRequest }) {
   const [expanded, setExpanded] = useState(false)
-  const config = requestTypeConfig[booking.requestType]
+  const config = requestTypeConfig[booking.requestType] || requestTypeConfig.information
   const Icon = config.icon
 
   return (
@@ -100,7 +100,7 @@ function BookingCard({ booking }: { booking: BookingRequest }) {
               <span className="text-sm font-bold">{booking.route}</span>
             </div>
             <div className="flex items-center gap-2 mt-1 text-sm text-slate-500">
-              <span className={`px-2 py-0.5 rounded text-xs ${classColors[booking.class]}`}>
+              <span className={`px-2 py-0.5 rounded text-xs ${classColors[booking.class] || 'bg-slate-100 text-slate-700'}`}>
                 {booking.class}
               </span>
               <span className="flex items-center gap-1">
