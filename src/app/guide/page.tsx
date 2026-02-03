@@ -6,7 +6,7 @@ import { useSearchParams } from 'next/navigation'
 import {
   LayoutDashboard, Mail, FileText, TrendingUp, MessageCircle,
   HelpCircle, Sparkles, Target, Zap, CheckCircle, Clock,
-  ArrowRight, Play, Bot, BarChart3, Shield, Phone, Send,
+  ArrowRight, Play, Bot, BarChart3, Shield,
   AlertTriangle, XCircle, Info, Database, Book, Users,
   Plane, Star, Eye, Calendar, Settings, CreditCard,
   Image as ImageIcon, Globe, Search, ChevronDown, ChevronRight,
@@ -1039,31 +1039,6 @@ export default function GuidePage() {
         </div>
       )}
 
-      {/* CTA Footer */}
-      <div className="bg-gradient-to-r from-violet-50 to-purple-50 border border-violet-200 rounded-xl p-6 text-center">
-        <h2 className="font-semibold text-lg text-[--text-primary] mb-2">Des questions sur une fonctionnalité ?</h2>
-        <p className="text-sm text-[--text-secondary] mb-4">
-          Réservez un appel pour une explication personnalisée
-        </p>
-        <div className="flex justify-center gap-3">
-          <a
-            href="https://cal.com/pacifikai/demo"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-violet-600 text-white rounded-lg font-medium hover:bg-violet-700 transition-colors"
-          >
-            <Phone className="w-4 h-4" />
-            Réserver un appel
-          </a>
-          <a
-            href="mailto:jordy@pacifikai.com"
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-white text-[--text-primary] rounded-lg font-medium hover:bg-[--bg-tertiary] transition-colors border border-[--border-primary]"
-          >
-            <Send className="w-4 h-4" />
-            Envoyer un email
-          </a>
-        </div>
-      </div>
     </div>
   )
 }
