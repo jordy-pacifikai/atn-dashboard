@@ -125,6 +125,9 @@ export default function VisualFactoryPage() {
   const [prompt, setPrompt] = useState('')
   const [loading, setLoading] = useState(true)
   const [generating, setGenerating] = useState(false)
+  const [useBrandColors, setUseBrandColors] = useState(false)
+  const [addTextOverlay, setAddTextOverlay] = useState(false)
+  const [overlayText, setOverlayText] = useState('')
 
   // Fetch assets from Airtable
   const fetchAssets = async () => {
@@ -161,17 +164,29 @@ export default function VisualFactoryPage() {
 
     setGenerating(true)
     try {
+      // Build enhanced prompt with options
+      let enhancedPrompt = prompt
+      if (useBrandColors) {
+        enhancedPrompt += '. Use Air Tahiti Nui brand colors: deep blue (#003366), turquoise (#0099CC), gold accents.'
+      }
+      if (addTextOverlay && overlayText) {
+        enhancedPrompt += `. Add text overlay: "${overlayText}"`
+      }
+
       await fetch('https://n8n.srv1140766.hstgr.cloud/webhook/atn-visual-factory', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           action: 'generate',
           type: selectedType,
-          prompt: prompt,
-          format: assetTypes.find(t => t.id === selectedType)?.format
+          prompt: enhancedPrompt,
+          format: assetTypes.find(t => t.id === selectedType)?.format,
+          useBrandColors,
+          textOverlay: addTextOverlay ? overlayText : null
         })
       })
       setPrompt('')
+      setOverlayText('')
       await fetchAssets()
     } catch (error) {
       console.error('Error generating visual:', error)
@@ -304,15 +319,52 @@ export default function VisualFactoryPage() {
           </button>
         </div>
 
-        <div className="flex gap-4 mt-4 pt-4 border-t border-slate-100">
-          <button data-guide="visual-btn-brandcolors" className="flex items-center gap-2 text-sm text-slate-600 hover:text-slate-800">
-            <Palette className="w-4 h-4" />
-            Brand colors
-          </button>
-          <button data-guide="visual-btn-addtext" className="flex items-center gap-2 text-sm text-slate-600 hover:text-slate-800">
-            <Type className="w-4 h-4" />
-            Ajouter texte
-          </button>
+        <div className="flex flex-col gap-3 mt-4 pt-4 border-t border-slate-100">
+          <div className="flex gap-4">
+            <button
+              data-guide="visual-btn-brandcolors"
+              className={`flex items-center gap-2 text-sm px-3 py-1.5 rounded-lg transition-all ${
+                useBrandColors
+                  ? 'bg-atn-primary text-white'
+                  : 'text-slate-600 hover:text-slate-800 hover:bg-slate-100'
+              }`}
+              onClick={() => setUseBrandColors(!useBrandColors)}
+            >
+              <Palette className="w-4 h-4" />
+              Brand colors {useBrandColors ? '✓' : ''}
+            </button>
+            <button
+              data-guide="visual-btn-addtext"
+              className={`flex items-center gap-2 text-sm px-3 py-1.5 rounded-lg transition-all ${
+                addTextOverlay
+                  ? 'bg-atn-primary text-white'
+                  : 'text-slate-600 hover:text-slate-800 hover:bg-slate-100'
+              }`}
+              onClick={() => setAddTextOverlay(!addTextOverlay)}
+            >
+              <Type className="w-4 h-4" />
+              Ajouter texte {addTextOverlay ? '✓' : ''}
+            </button>
+          </div>
+
+          {addTextOverlay && (
+            <input
+              type="text"
+              placeholder="Texte à afficher sur l'image..."
+              className="px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:border-atn-primary text-sm"
+              value={overlayText}
+              onChange={(e) => setOverlayText(e.target.value)}
+            />
+          )}
+
+          {useBrandColors && (
+            <div className="flex items-center gap-2 text-xs text-slate-500">
+              <span className="w-4 h-4 rounded-full bg-[#003366]" title="Deep Blue"></span>
+              <span className="w-4 h-4 rounded-full bg-[#0099CC]" title="Turquoise"></span>
+              <span className="w-4 h-4 rounded-full bg-[#FFD700]" title="Gold"></span>
+              <span>Palette Air Tahiti Nui activée</span>
+            </div>
+          )}
         </div>
       </div>
 
