@@ -424,44 +424,64 @@ export default function NewslettersPage() {
         </button>
       </div>
 
-      <div data-guide="news-stats" className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="card">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div data-guide="news-kpi-sent" className="card">
           <p className="text-sm text-slate-500">Emails envoyés</p>
           <p className="text-2xl font-bold">{totalSent}</p>
         </div>
-        <div className="card">
+        <div data-guide="news-kpi-perso" className="card">
           <p className="text-sm text-slate-500">Score perso. moyen</p>
           <p className="text-2xl font-bold text-emerald-600">{avgPersonalization}%</p>
         </div>
-        <div className="card">
+        <div data-guide="news-kpi-openrate" className="card">
           <p className="text-sm text-slate-500">Taux d'ouverture</p>
           <p className="text-2xl font-bold text-blue-600">{openRate}%</p>
         </div>
-        <div className="card">
+        <div data-guide="news-kpi-segments" className="card">
           <p className="text-sm text-slate-500">Segments actifs</p>
           <p className="text-2xl font-bold">5</p>
         </div>
       </div>
 
-      <div data-guide="news-filters" className="flex gap-2">
+      <div className="flex gap-2">
         <button
+          data-guide="news-filter-all"
           className={`px-4 py-2 rounded-lg text-sm ${!filterSegment ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'}`}
           onClick={() => setFilterSegment(null)}
         >
           Tous
         </button>
-        {['Lune de miel', 'Famille', 'Plongeurs', 'Business'].map(segment => (
-          <button
-            key={segment}
-            className={`px-4 py-2 rounded-lg text-sm ${filterSegment === segment ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'}`}
-            onClick={() => setFilterSegment(segment)}
-          >
-            {segment}
-          </button>
-        ))}
+        <button
+          data-guide="news-filter-honeymoon"
+          className={`px-4 py-2 rounded-lg text-sm ${filterSegment === 'Lune de miel' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'}`}
+          onClick={() => setFilterSegment('Lune de miel')}
+        >
+          Lune de miel
+        </button>
+        <button
+          data-guide="news-filter-family"
+          className={`px-4 py-2 rounded-lg text-sm ${filterSegment === 'Famille' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'}`}
+          onClick={() => setFilterSegment('Famille')}
+        >
+          Famille
+        </button>
+        <button
+          data-guide="news-filter-divers"
+          className={`px-4 py-2 rounded-lg text-sm ${filterSegment === 'Plongeurs' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'}`}
+          onClick={() => setFilterSegment('Plongeurs')}
+        >
+          Plongeurs
+        </button>
+        <button
+          data-guide="news-filter-business"
+          className={`px-4 py-2 rounded-lg text-sm ${filterSegment === 'Business' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'}`}
+          onClick={() => setFilterSegment('Business')}
+        >
+          Business
+        </button>
       </div>
 
-      <div data-guide="news-list" className="space-y-4">
+      <div data-guide="news-newsletters-list" className="space-y-4">
         {loading ? (
           <div className="flex items-center justify-center py-12">
             <Loader2 className="w-8 h-8 animate-spin text-atn-primary" />

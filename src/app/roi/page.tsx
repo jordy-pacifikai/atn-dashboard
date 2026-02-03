@@ -219,38 +219,64 @@ export default function RoiPage() {
         </button>
       </div>
 
-      <div data-guide="roi-stats" className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="card">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div data-guide="roi-kpi-revenue" className="card">
           <p className="text-sm text-slate-500">Revenu total</p>
           <p className="text-2xl font-bold">{(totalRevenue / 1000000).toFixed(1)}M XPF</p>
         </div>
-        <div className="card">
+        <div data-guide="roi-kpi-bookings" className="card">
           <p className="text-sm text-slate-500">Réservations</p>
           <p className="text-2xl font-bold">{totalBookings.toLocaleString()}</p>
         </div>
-        <div className="card">
+        <div data-guide="roi-kpi-alerts" className="card">
           <p className="text-sm text-slate-500">Alertes actives</p>
           <p className="text-2xl font-bold text-amber-600">{criticalCount}</p>
         </div>
-        <div className="card">
+        <div data-guide="roi-kpi-growth" className="card">
           <p className="text-sm text-slate-500">Routes en croissance</p>
           <p className="text-2xl font-bold text-emerald-600">{growthRoutes}</p>
         </div>
       </div>
 
-      <div data-guide="roi-filters" className="flex gap-2">
-        {[null, 'critical', 'warning', 'growth', 'stable'].map((status) => (
-          <button
-            key={status || 'all'}
-            className={`px-4 py-2 rounded-lg text-sm ${filterStatus === status ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'}`}
-            onClick={() => setFilterStatus(status)}
-          >
-            {status === null ? 'Toutes' : statusConfig[status]?.label || status}
-          </button>
-        ))}
+      <div className="flex gap-2">
+        <button
+          data-guide="roi-filter-all"
+          className={`px-4 py-2 rounded-lg text-sm ${filterStatus === null ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'}`}
+          onClick={() => setFilterStatus(null)}
+        >
+          Toutes
+        </button>
+        <button
+          data-guide="roi-filter-critical"
+          className={`px-4 py-2 rounded-lg text-sm ${filterStatus === 'critical' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'}`}
+          onClick={() => setFilterStatus('critical')}
+        >
+          CRITIQUE
+        </button>
+        <button
+          data-guide="roi-filter-warning"
+          className={`px-4 py-2 rounded-lg text-sm ${filterStatus === 'warning' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'}`}
+          onClick={() => setFilterStatus('warning')}
+        >
+          Attention
+        </button>
+        <button
+          data-guide="roi-filter-growth"
+          className={`px-4 py-2 rounded-lg text-sm ${filterStatus === 'growth' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'}`}
+          onClick={() => setFilterStatus('growth')}
+        >
+          Croissance
+        </button>
+        <button
+          data-guide="roi-filter-stable"
+          className={`px-4 py-2 rounded-lg text-sm ${filterStatus === 'stable' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'}`}
+          onClick={() => setFilterStatus('stable')}
+        >
+          Stable
+        </button>
       </div>
 
-      <div data-guide="roi-list" className="space-y-4">
+      <div data-guide="roi-alerts-list" className="space-y-4">
         {loading ? (
           <div className="flex items-center justify-center py-12">
             <Loader2 className="w-8 h-8 animate-spin text-atn-primary" />

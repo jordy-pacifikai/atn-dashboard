@@ -285,54 +285,80 @@ export default function SocialPage() {
       </div>
 
       {/* Stats */}
-      <div data-guide="social-stats" className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="card">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div data-guide="social-kpi-reach" className="card">
           <p className="text-sm text-slate-500">Portée totale</p>
           <p className="text-2xl font-bold">{totalReach.toLocaleString()}</p>
         </div>
-        <div className="card">
+        <div data-guide="social-kpi-sentiment" className="card">
           <p className="text-sm text-slate-500">Sentiment moyen</p>
           <p className={`text-2xl font-bold ${avgSentiment >= 70 ? 'text-emerald-600' : avgSentiment >= 50 ? 'text-amber-600' : 'text-red-600'}`}>
             {avgSentiment}%
           </p>
         </div>
-        <div className="card">
+        <div data-guide="social-kpi-pending" className="card">
           <p className="text-sm text-slate-500">À traiter</p>
           <p className="text-2xl font-bold text-amber-600">{pendingCount}</p>
         </div>
-        <div className="card">
+        <div data-guide="social-kpi-negative" className="card">
           <p className="text-sm text-slate-500">Alertes négatives</p>
           <p className="text-2xl font-bold text-red-600">{negativeCount}</p>
         </div>
       </div>
 
       {/* Filtres */}
-      <div data-guide="social-filters" className="flex gap-2">
+      <div className="flex gap-2">
         <button
+          data-guide="social-filter-all"
           className={`px-4 py-2 rounded-lg text-sm ${!filterPlatform ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'}`}
           onClick={() => setFilterPlatform(null)}
         >
           Tous
         </button>
-        {['Twitter/X', 'Instagram', 'Facebook', 'LinkedIn'].map((platform) => {
-          const Icon = platformIcons[platform]
-          return (
-            <button
-              key={platform}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm ${
-                filterPlatform === platform ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'
-              }`}
-              onClick={() => setFilterPlatform(platform)}
-            >
-              <Icon className="w-4 h-4" />
-              {platform}
-            </button>
-          )
-        })}
+        <button
+          data-guide="social-filter-twitter"
+          className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm ${
+            filterPlatform === 'Twitter/X' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'
+          }`}
+          onClick={() => setFilterPlatform('Twitter/X')}
+        >
+          <Twitter className="w-4 h-4" />
+          Twitter/X
+        </button>
+        <button
+          data-guide="social-filter-instagram"
+          className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm ${
+            filterPlatform === 'Instagram' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'
+          }`}
+          onClick={() => setFilterPlatform('Instagram')}
+        >
+          <Instagram className="w-4 h-4" />
+          Instagram
+        </button>
+        <button
+          data-guide="social-filter-facebook"
+          className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm ${
+            filterPlatform === 'Facebook' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'
+          }`}
+          onClick={() => setFilterPlatform('Facebook')}
+        >
+          <Facebook className="w-4 h-4" />
+          Facebook
+        </button>
+        <button
+          data-guide="social-filter-linkedin"
+          className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm ${
+            filterPlatform === 'LinkedIn' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'
+          }`}
+          onClick={() => setFilterPlatform('LinkedIn')}
+        >
+          <Linkedin className="w-4 h-4" />
+          LinkedIn
+        </button>
       </div>
 
       {/* Liste des mentions */}
-      <div data-guide="social-list" className="space-y-4">
+      <div data-guide="social-mentions-list" className="space-y-4">
         {loading ? (
           <div className="flex items-center justify-center py-12">
             <Loader2 className="w-8 h-8 animate-spin text-atn-primary" />

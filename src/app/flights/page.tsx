@@ -306,47 +306,67 @@ export default function FlightsPage() {
       </div>
 
       {/* Stats */}
-      <div data-guide="flights-stats" className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="card">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div data-guide="flights-kpi-affected" className="card">
           <p className="text-sm text-slate-500">Passagers impactés</p>
           <p className="text-2xl font-bold">{totalAffected}</p>
         </div>
-        <div className="card">
+        <div data-guide="flights-kpi-notified" className="card">
           <p className="text-sm text-slate-500">Notifiés</p>
           <p className="text-2xl font-bold text-emerald-600">{totalNotified}</p>
         </div>
-        <div className="card">
+        <div data-guide="flights-kpi-delayed" className="card">
           <p className="text-sm text-slate-500">Vols retardés</p>
           <p className="text-2xl font-bold text-amber-600">{delayedFlights}</p>
         </div>
-        <div className="card">
+        <div data-guide="flights-kpi-cancelled" className="card">
           <p className="text-sm text-slate-500">Vols annulés</p>
           <p className="text-2xl font-bold text-red-600">{cancelledFlights}</p>
         </div>
       </div>
 
       {/* Filtres */}
-      <div data-guide="flights-filters" className="flex gap-2">
-        {[
-          { value: null, label: 'Tous' },
-          { value: 'delay', label: 'Retards' },
-          { value: 'cancelled', label: 'Annulations' },
-          { value: 'gate_change', label: 'Changements porte' },
-        ].map(({ value, label }) => (
-          <button
-            key={value || 'all'}
-            className={`px-4 py-2 rounded-lg text-sm ${
-              filterType === value ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'
-            }`}
-            onClick={() => setFilterType(value)}
-          >
-            {label}
-          </button>
-        ))}
+      <div className="flex gap-2">
+        <button
+          data-guide="flights-filter-all"
+          className={`px-4 py-2 rounded-lg text-sm ${
+            filterType === null ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'
+          }`}
+          onClick={() => setFilterType(null)}
+        >
+          Tous
+        </button>
+        <button
+          data-guide="flights-filter-delay"
+          className={`px-4 py-2 rounded-lg text-sm ${
+            filterType === 'delay' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'
+          }`}
+          onClick={() => setFilterType('delay')}
+        >
+          Retards
+        </button>
+        <button
+          data-guide="flights-filter-cancelled"
+          className={`px-4 py-2 rounded-lg text-sm ${
+            filterType === 'cancelled' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'
+          }`}
+          onClick={() => setFilterType('cancelled')}
+        >
+          Annulations
+        </button>
+        <button
+          data-guide="flights-filter-gate"
+          className={`px-4 py-2 rounded-lg text-sm ${
+            filterType === 'gate_change' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'
+          }`}
+          onClick={() => setFilterType('gate_change')}
+        >
+          Changements porte
+        </button>
       </div>
 
       {/* Liste des alertes */}
-      <div data-guide="flights-list" className="space-y-4">
+      <div data-guide="flights-alerts-list" className="space-y-4">
         {loading ? (
           <div className="flex items-center justify-center py-12">
             <Loader2 className="w-8 h-8 animate-spin text-atn-primary" />

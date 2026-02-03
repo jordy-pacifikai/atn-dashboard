@@ -313,48 +313,79 @@ export default function ReviewsPage() {
       </div>
 
       {/* Stats */}
-      <div data-guide="reviews-stats" className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="card">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div data-guide="reviews-kpi-avgrating" className="card">
           <p className="text-sm text-slate-500">Note moyenne</p>
           <div className="flex items-center gap-2 mt-1">
             <p className="text-2xl font-bold">{avgRating}</p>
             <StarRating rating={Math.round(parseFloat(avgRating))} />
           </div>
         </div>
-        <div className="card">
+        <div data-guide="reviews-kpi-pending" className="card">
           <p className="text-sm text-slate-500">À valider</p>
           <p className="text-2xl font-bold text-amber-600">{pendingCount}</p>
         </div>
-        <div className="card">
+        <div data-guide="reviews-kpi-positive" className="card">
           <p className="text-sm text-slate-500">Avis positifs</p>
           <p className="text-2xl font-bold text-emerald-600">{positiveCount}</p>
         </div>
-        <div className="card">
+        <div data-guide="reviews-kpi-total" className="card">
           <p className="text-sm text-slate-500">Total avis</p>
           <p className="text-2xl font-bold">{reviews.length}</p>
         </div>
       </div>
 
       {/* Filtres */}
-      <div data-guide="reviews-filters" className="flex gap-2">
-        {[null, 'pending', 'approved', 'published', 'rejected'].map((status) => (
-          <button
-            key={status || 'all'}
-            className={`px-4 py-2 rounded-lg text-sm ${
-              filterStatus === status ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'
-            }`}
-            onClick={() => setFilterStatus(status)}
-          >
-            {status === null ? 'Tous' :
-             status === 'pending' ? 'À valider' :
-             status === 'approved' ? 'Approuvés' :
-             status === 'published' ? 'Publiés' : 'Rejetés'}
-          </button>
-        ))}
+      <div className="flex gap-2">
+        <button
+          data-guide="reviews-filter-all"
+          className={`px-4 py-2 rounded-lg text-sm ${
+            filterStatus === null ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'
+          }`}
+          onClick={() => setFilterStatus(null)}
+        >
+          Tous
+        </button>
+        <button
+          data-guide="reviews-filter-pending"
+          className={`px-4 py-2 rounded-lg text-sm ${
+            filterStatus === 'pending' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'
+          }`}
+          onClick={() => setFilterStatus('pending')}
+        >
+          À valider
+        </button>
+        <button
+          data-guide="reviews-filter-approved"
+          className={`px-4 py-2 rounded-lg text-sm ${
+            filterStatus === 'approved' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'
+          }`}
+          onClick={() => setFilterStatus('approved')}
+        >
+          Approuvés
+        </button>
+        <button
+          data-guide="reviews-filter-published"
+          className={`px-4 py-2 rounded-lg text-sm ${
+            filterStatus === 'published' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'
+          }`}
+          onClick={() => setFilterStatus('published')}
+        >
+          Publiés
+        </button>
+        <button
+          data-guide="reviews-filter-rejected"
+          className={`px-4 py-2 rounded-lg text-sm ${
+            filterStatus === 'rejected' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'
+          }`}
+          onClick={() => setFilterStatus('rejected')}
+        >
+          Rejetés
+        </button>
       </div>
 
       {/* Liste des avis */}
-      <div data-guide="reviews-list" className="space-y-4">
+      <div data-guide="reviews-reviews-list" className="space-y-4">
         {loading ? (
           <div className="flex items-center justify-center py-12">
             <Loader2 className="w-8 h-8 animate-spin text-atn-primary" />

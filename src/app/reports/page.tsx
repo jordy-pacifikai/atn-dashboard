@@ -250,7 +250,7 @@ export default function ReportsPage() {
       </div>
 
       {/* Custom report request */}
-      <div data-guide="reports-custom" className="card bg-gradient-to-r from-atn-primary/5 to-atn-secondary/5 border-atn-secondary/20">
+      <div data-guide="reports-custom-section" className="card bg-gradient-to-r from-atn-primary/5 to-atn-secondary/5 border-atn-secondary/20">
         <h2 className="font-semibold mb-3 flex items-center gap-2">
           <span className="text-atn-secondary">✨</span>
           Rapport personnalisé avec l'IA
@@ -303,26 +303,46 @@ export default function ReportsPage() {
       </div>
 
       {/* Category filters */}
-      <div data-guide="reports-filters" className="flex gap-2">
+      <div className="flex gap-2">
         <button
+          data-guide="reports-filter-all"
           className={`px-4 py-2 rounded-lg text-sm ${!filterCategory ? 'bg-slate-800 text-white' : 'bg-slate-100'}`}
           onClick={() => setFilterCategory(null)}
         >
           Tous
         </button>
-        {Object.entries(categoryConfig).map(([key, config]) => (
-          <button
-            key={key}
-            className={`px-4 py-2 rounded-lg text-sm ${filterCategory === key ? 'bg-slate-800 text-white' : 'bg-slate-100'}`}
-            onClick={() => setFilterCategory(filterCategory === key ? null : key)}
-          >
-            {config.label}
-          </button>
-        ))}
+        <button
+          data-guide="reports-filter-performance"
+          className={`px-4 py-2 rounded-lg text-sm ${filterCategory === 'performance' ? 'bg-slate-800 text-white' : 'bg-slate-100'}`}
+          onClick={() => setFilterCategory(filterCategory === 'performance' ? null : 'performance')}
+        >
+          Performance
+        </button>
+        <button
+          data-guide="reports-filter-content"
+          className={`px-4 py-2 rounded-lg text-sm ${filterCategory === 'content' ? 'bg-slate-800 text-white' : 'bg-slate-100'}`}
+          onClick={() => setFilterCategory(filterCategory === 'content' ? null : 'content')}
+        >
+          Contenu
+        </button>
+        <button
+          data-guide="reports-filter-revenue"
+          className={`px-4 py-2 rounded-lg text-sm ${filterCategory === 'revenue' ? 'bg-slate-800 text-white' : 'bg-slate-100'}`}
+          onClick={() => setFilterCategory(filterCategory === 'revenue' ? null : 'revenue')}
+        >
+          Revenue
+        </button>
+        <button
+          data-guide="reports-filter-operations"
+          className={`px-4 py-2 rounded-lg text-sm ${filterCategory === 'operations' ? 'bg-slate-800 text-white' : 'bg-slate-100'}`}
+          onClick={() => setFilterCategory(filterCategory === 'operations' ? null : 'operations')}
+        >
+          Opérations
+        </button>
       </div>
 
       {/* Report templates */}
-      <div data-guide="reports-templates" className="space-y-4">
+      <div data-guide="reports-templates-list" className="space-y-4">
         {filteredReports.map(report => (
           <ReportCard
             key={report.id}

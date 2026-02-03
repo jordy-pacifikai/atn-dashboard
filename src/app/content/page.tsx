@@ -585,38 +585,57 @@ export default function ContentPage() {
         </button>
       </div>
 
-      <div data-guide="content-stats" className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="card">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div data-guide="content-kpi-published" className="card">
           <p className="text-sm text-slate-500">Articles publiés</p>
           <p className="text-2xl font-bold">{publishedCount}</p>
         </div>
-        <div className="card">
+        <div data-guide="content-kpi-seo" className="card">
           <p className="text-sm text-slate-500">Score SEO moyen</p>
           <p className="text-2xl font-bold text-emerald-600">{avgSeoScore}%</p>
         </div>
-        <div className="card">
+        <div data-guide="content-kpi-words" className="card">
           <p className="text-sm text-slate-500">Mots générés</p>
           <p className="text-2xl font-bold">{totalWords.toLocaleString()}</p>
         </div>
-        <div className="card">
+        <div data-guide="content-kpi-images" className="card">
           <p className="text-sm text-slate-500">Images IA</p>
           <p className="text-2xl font-bold">{articles.filter(a => a.imageUrl).length}</p>
         </div>
       </div>
 
-      <div data-guide="content-filters" className="flex gap-2">
-        {[null, 'published', 'draft', 'scheduled'].map((status) => (
-          <button
-            key={status || 'all'}
-            className={`px-4 py-2 rounded-lg text-sm ${filterStatus === status ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'}`}
-            onClick={() => setFilterStatus(status)}
-          >
-            {status === null ? 'Tous' : statusConfig[status].label}
-          </button>
-        ))}
+      <div className="flex gap-2">
+        <button
+          data-guide="content-filter-all"
+          className={`px-4 py-2 rounded-lg text-sm ${filterStatus === null ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'}`}
+          onClick={() => setFilterStatus(null)}
+        >
+          Tous
+        </button>
+        <button
+          data-guide="content-filter-published"
+          className={`px-4 py-2 rounded-lg text-sm ${filterStatus === 'published' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'}`}
+          onClick={() => setFilterStatus('published')}
+        >
+          {statusConfig.published.label}
+        </button>
+        <button
+          data-guide="content-filter-draft"
+          className={`px-4 py-2 rounded-lg text-sm ${filterStatus === 'draft' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'}`}
+          onClick={() => setFilterStatus('draft')}
+        >
+          {statusConfig.draft.label}
+        </button>
+        <button
+          data-guide="content-filter-scheduled"
+          className={`px-4 py-2 rounded-lg text-sm ${filterStatus === 'scheduled' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'}`}
+          onClick={() => setFilterStatus('scheduled')}
+        >
+          {statusConfig.scheduled.label}
+        </button>
       </div>
 
-      <div data-guide="content-list" className="space-y-4">
+      <div data-guide="content-articles-list" className="space-y-4">
         {loading ? (
           <div className="flex items-center justify-center py-12">
             <Loader2 className="w-8 h-8 animate-spin text-atn-primary" />

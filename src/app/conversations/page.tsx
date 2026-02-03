@@ -161,20 +161,20 @@ export default function ConversationsPage() {
       </div>
 
       {/* Stats */}
-      <div data-guide="conv-stats" className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="card">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div data-guide="conv-kpi-total" className="card">
           <p className="text-sm text-slate-500">Total conversations</p>
           <p className="text-2xl font-bold">{totalConversations}</p>
         </div>
-        <div className="card">
+        <div data-guide="conv-kpi-avgtime" className="card">
           <p className="text-sm text-slate-500">Temps moyen</p>
           <p className="text-2xl font-bold">{avgResponseTime}s</p>
         </div>
-        <div className="card">
+        <div data-guide="conv-kpi-tokens" className="card">
           <p className="text-sm text-slate-500">Tokens utilisés</p>
           <p className="text-2xl font-bold">{totalTokens}</p>
         </div>
-        <div className="card">
+        <div data-guide="conv-kpi-languages" className="card">
           <p className="text-sm text-slate-500">Langues détectées</p>
           <div className="flex gap-1 mt-2">
             {uniqueLangs.length > 0 ? uniqueLangs.map(lang => (
@@ -189,8 +189,8 @@ export default function ConversationsPage() {
       </div>
 
       {/* Filtres */}
-      <div data-guide="conv-filters" className="flex gap-4">
-        <div className="relative flex-1">
+      <div className="flex gap-4">
+        <div data-guide="conv-search" className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
           <input
             type="text"
@@ -202,25 +202,45 @@ export default function ConversationsPage() {
         </div>
         <div className="flex gap-2">
           <button
+            data-guide="conv-filter-all"
             className={`px-3 py-2 rounded-lg text-sm ${!filterLang ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'}`}
             onClick={() => setFilterLang(null)}
           >
             Tous
           </button>
-          {['FR', 'EN', 'ES', 'JP'].map(lang => (
-            <button
-              key={lang}
-              className={`px-3 py-2 rounded-lg text-sm ${filterLang === lang ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'}`}
-              onClick={() => setFilterLang(lang)}
-            >
-              {lang}
-            </button>
-          ))}
+          <button
+            data-guide="conv-filter-fr"
+            className={`px-3 py-2 rounded-lg text-sm ${filterLang === 'FR' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'}`}
+            onClick={() => setFilterLang('FR')}
+          >
+            FR
+          </button>
+          <button
+            data-guide="conv-filter-en"
+            className={`px-3 py-2 rounded-lg text-sm ${filterLang === 'EN' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'}`}
+            onClick={() => setFilterLang('EN')}
+          >
+            EN
+          </button>
+          <button
+            data-guide="conv-filter-es"
+            className={`px-3 py-2 rounded-lg text-sm ${filterLang === 'ES' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'}`}
+            onClick={() => setFilterLang('ES')}
+          >
+            ES
+          </button>
+          <button
+            data-guide="conv-filter-jp"
+            className={`px-3 py-2 rounded-lg text-sm ${filterLang === 'JP' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'}`}
+            onClick={() => setFilterLang('JP')}
+          >
+            JP
+          </button>
         </div>
       </div>
 
       {/* Liste des conversations */}
-      <div data-guide="conv-list" className="card">
+      <div data-guide="conv-conversations-list" className="card">
         {loading ? (
           <div className="flex items-center justify-center py-12">
             <Loader2 className="w-8 h-8 animate-spin text-atn-secondary" />
