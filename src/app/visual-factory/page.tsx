@@ -347,12 +347,42 @@ export default function VisualFactoryPage() {
         const pool = demoImagePool[selectedType as keyof typeof demoImagePool] || demoImagePool.banner
         const randomImage = pool[Math.floor(Math.random() * pool.length)]
 
-        // Mettre à jour l'asset avec l'image générée
-        setAssets(prev => prev.map(a =>
-          a.id === tempId
-            ? { ...a, status: 'ready' as const, imageUrl: randomImage }
-            : a
-        ))
+        // Sauvegarder dans Airtable
+        try {
+          const saveResponse = await fetch('/api/airtable?table=Visual_Assets', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              Type: selectedType,
+              Prompt: prompt,
+              Image_URL: randomImage,
+              Status: 'ready',
+              Campaign: 'Visual Factory',
+              Format: assetFormat,
+              Created_At: new Date().toISOString()
+            })
+          })
+
+          const savedRecord = await saveResponse.json()
+
+          // Mettre à jour avec le vrai ID Airtable
+          setAssets(prev => prev.map(a =>
+            a.id === tempId
+              ? { ...a, id: savedRecord.id, status: 'ready' as const, imageUrl: randomImage }
+              : a
+          ))
+
+          // Rafraîchir la liste depuis Airtable pour voir la nouvelle image en premier
+          await fetchAssets()
+        } catch (saveError) {
+          console.error('Error saving to Airtable:', saveError)
+          // Fallback: juste mettre à jour localement
+          setAssets(prev => prev.map(a =>
+            a.id === tempId
+              ? { ...a, status: 'ready' as const, imageUrl: randomImage }
+              : a
+          ))
+        }
       } else {
         // Mode production: appeler le workflow n8n
         const response = await fetch('https://n8n.srv1140766.hstgr.cloud/webhook/atn-visual-factory', {
