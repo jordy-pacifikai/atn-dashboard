@@ -33,7 +33,7 @@ export default function DemoSitePage() {
   const [viewport, setViewport] = useState<ViewportSize>('desktop')
   const [key, setKey] = useState(0)
 
-  const demoUrl = '/demo-site-content/index.html'
+  const demoUrl = 'https://atn-demo-pacifikai.vercel.app/index.html'
 
   return (
     <div className="max-w-6xl mx-auto space-y-6 animate-fadeIn">
