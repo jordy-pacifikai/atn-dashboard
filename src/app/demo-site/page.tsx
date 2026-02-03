@@ -9,8 +9,6 @@ import {
   Tablet,
   RefreshCw,
   MessageCircle,
-  CheckCircle,
-  ArrowRight,
   Lightbulb,
   ChevronRight,
 } from 'lucide-react'
@@ -171,20 +169,6 @@ export default function DemoSitePage() {
       <div className="flex items-center justify-center gap-2 text-sm text-[--text-tertiary]">
         <MessageCircle className="w-4 h-4 text-[--atn-primary]" />
         <span>Le chatbot est la bulle bleue en bas à droite du site ↗</span>
-      </div>
-
-      {/* Navigation vers étape suivante */}
-      <div className="card p-6 text-center">
-        <p className="text-[--text-secondary] mb-4">
-          Vous avez testé le chatbot ? Passez à l'étape suivante.
-        </p>
-        <Link
-          href="/guide"
-          className="inline-flex items-center gap-2 px-6 py-3 bg-[--atn-primary] text-white font-semibold rounded-xl hover:bg-[--atn-primary]/90 transition-all shadow-lg shadow-[--atn-primary]/20"
-        >
-          Voir les tarifs & ROI
-          <ArrowRight className="w-5 h-5" />
-        </Link>
       </div>
     </div>
   )
