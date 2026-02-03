@@ -219,6 +219,7 @@ export default function DashboardPage() {
             {currentTime?.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' }) || ''}
           </span>
           <button
+            data-guide="dashboard-btn-refresh"
             onClick={handleRefresh}
             className={`p-2 rounded-lg bg-[--bg-secondary] hover:bg-[--bg-tertiary] transition-colors ${isRefreshing ? 'animate-spin' : ''}`}
           >
