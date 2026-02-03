@@ -95,7 +95,7 @@ function BookingContext({ customer }: { customer: Conversation['customer'] }) {
         <Plane className="w-4 h-4 text-atn-primary" />
         Contexte réservation
       </h3>
-      <div className="grid grid-cols-4 gap-4 text-sm">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
         <div>
           <p className="text-slate-500 text-xs">PNR</p>
           <p className="font-medium">{customer.pnr}</p>
@@ -181,7 +181,7 @@ export default function ConciergeProPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="card">
           <p className="text-sm text-slate-500">Conversations actives</p>
           <p className="text-2xl font-bold text-blue-600">{stats.active}</p>

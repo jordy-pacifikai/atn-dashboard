@@ -273,19 +273,19 @@ export default function SocialPage() {
         <button
           onClick={syncMentions}
           disabled={syncing}
-          className="flex items-center gap-2 px-4 py-2 bg-atn-primary text-white rounded-lg hover:bg-opacity-90 disabled:opacity-50"
+          className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-atn-primary to-atn-secondary text-white rounded-xl font-medium text-sm shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
         >
           {syncing ? (
             <Loader2 className="w-4 h-4 animate-spin" />
           ) : (
             <RefreshCw className="w-4 h-4" />
           )}
-          {syncing ? 'Scan en cours...' : 'Scanner les réseaux'}
+          <span className="hidden sm:inline">{syncing ? 'Scan en cours...' : 'Scanner'}</span>
         </button>
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="card">
           <p className="text-sm text-slate-500">Portée totale</p>
           <p className="text-2xl font-bold">{totalReach.toLocaleString()}</p>

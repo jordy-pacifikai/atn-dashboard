@@ -161,7 +161,7 @@ export default function ConversationsPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="card">
           <p className="text-sm text-slate-500">Total conversations</p>
           <p className="text-2xl font-bold">{totalConversations}</p>

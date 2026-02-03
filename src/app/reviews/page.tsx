@@ -301,19 +301,19 @@ export default function ReviewsPage() {
         <button
           onClick={syncReviews}
           disabled={syncing}
-          className="flex items-center gap-2 px-4 py-2 bg-atn-primary text-white rounded-lg hover:bg-opacity-90 disabled:opacity-50"
+          className="flex items-center gap-2 px-4 py-2 bg-atn-primary text-white rounded-lg text-sm font-medium hover:bg-opacity-90 disabled:opacity-50 transition-all"
         >
           {syncing ? (
             <Loader2 className="w-4 h-4 animate-spin" />
           ) : (
             <RefreshCw className="w-4 h-4" />
           )}
-          {syncing ? 'Synchronisation...' : 'Synchroniser'}
+          {syncing ? 'Sync...' : 'Synchroniser'}
         </button>
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="card">
           <p className="text-sm text-slate-500">Note moyenne</p>
           <div className="flex items-center gap-2 mt-1">

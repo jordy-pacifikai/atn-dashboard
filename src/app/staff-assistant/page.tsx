@@ -159,7 +159,7 @@ export default function StaffAssistantPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="card">
           <p className="text-sm text-slate-500">Questions traitées</p>
           <p className="text-2xl font-bold">{stats.total}</p>
@@ -251,7 +251,7 @@ export default function StaffAssistantPage() {
           <Book className="w-5 h-5" />
           Base de connaissances
         </h2>
-        <div className="grid grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {[
             { label: 'Manuel des procédures', count: 156 },
             { label: 'FAQ RH', count: 89 },

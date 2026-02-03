@@ -253,7 +253,7 @@ export default function GuidePage() {
           <div className="bg-white rounded-xl border border-[--border-primary] p-6">
             <h2 className="font-semibold text-lg text-[--text-primary] mb-6">Comment ça fonctionne</h2>
 
-            <div className="grid md:grid-cols-4 gap-4">
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
               {[
                 { step: '1', title: 'On se connecte', desc: 'Accès à vos systèmes existants (CRM, email, etc.)', icon: Shield },
                 { step: '2', title: 'L\'IA apprend', desc: 'Analyse de vos données et personnalisation', icon: Bot },

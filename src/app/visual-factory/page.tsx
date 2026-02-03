@@ -203,7 +203,7 @@ export default function VisualFactoryPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="card">
           <p className="text-sm text-slate-500">Total générés</p>
           <p className="text-2xl font-bold">{stats.total}</p>
@@ -229,7 +229,7 @@ export default function VisualFactoryPage() {
           Nouveau visuel
         </h2>
 
-        <div className="grid grid-cols-4 gap-3 mb-4">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
           {assetTypes.map(type => (
             <button
               key={type.id}

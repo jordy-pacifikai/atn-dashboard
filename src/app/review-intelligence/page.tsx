@@ -333,7 +333,7 @@ export default function ReviewIntelligencePage() {
         </button>
       </div>
 
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="card">
           <div className="flex items-center gap-2 mb-1">
             <ThumbsUp className="w-4 h-4 text-emerald-600" />

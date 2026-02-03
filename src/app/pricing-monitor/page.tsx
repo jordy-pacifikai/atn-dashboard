@@ -251,7 +251,7 @@ export default function PricingMonitorPage() {
         </button>
       </div>
 
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="card">
           <p className="text-sm text-slate-500">Routes surveillées</p>
           <p className="text-2xl font-bold">{stats.routesMonitored}</p>

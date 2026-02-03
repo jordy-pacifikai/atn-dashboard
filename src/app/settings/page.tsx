@@ -319,7 +319,7 @@ export default function SettingsPage() {
       {/* Save button */}
       <div className="flex justify-end">
         <button
-          className="btn-primary flex items-center gap-2"
+          className="flex items-center gap-2 px-4 py-2 bg-atn-primary text-white rounded-lg text-sm font-medium hover:bg-opacity-90 disabled:opacity-50 transition-all flex items-center gap-2"
           onClick={handleSave}
         >
           <Save className="w-4 h-4" />

@@ -185,18 +185,46 @@ export default function FlightsPage() {
       const data = await response.json()
 
       if (data.records && data.records.length > 0) {
-        const mapped: FlightAlert[] = data.records.map((record: { id: string; fields: Record<string, unknown> }) => ({
-          id: record.id,
-          flightNumber: (record.fields.Flight_Number as string) || 'TN1',
-          route: (record.fields.Route as string) || 'PPT-LAX',
-          alertType: ((record.fields.Alert_Type as string)?.toLowerCase() || 'delay') as FlightAlert['alertType'],
-          delayMinutes: (record.fields.Delay_Minutes as number) || 0,
-          passengersAffected: (record.fields.Passengers_Affected as number) || 0,
-          notificationsSent: (record.fields.Notifications_Sent as number) || 0,
-          channels: (record.fields.Channels as string[]) || ['Email'],
-          status: ((record.fields.Status as string)?.toLowerCase() || 'pending') as 'sent' | 'pending' | 'failed',
-          date: (record.fields.Date as string) || new Date().toISOString(),
-        }))
+        // Map French values to English
+        const alertTypeMap: Record<string, FlightAlert['alertType']> = {
+          'retard': 'delay',
+          'delay': 'delay',
+          'annulé': 'cancelled',
+          'annule': 'cancelled',
+          'cancelled': 'cancelled',
+          'changement porte': 'gate_change',
+          'gate_change': 'gate_change',
+          'horaire modifié': 'schedule_change',
+          'horaire modifie': 'schedule_change',
+          'schedule_change': 'schedule_change',
+        }
+        const statusMap: Record<string, 'sent' | 'pending' | 'failed'> = {
+          'envoyé': 'sent',
+          'envoye': 'sent',
+          'sent': 'sent',
+          'en attente': 'pending',
+          'pending': 'pending',
+          'échec': 'failed',
+          'echec': 'failed',
+          'failed': 'failed',
+        }
+
+        const mapped: FlightAlert[] = data.records.map((record: { id: string; fields: Record<string, unknown> }) => {
+          const rawAlertType = ((record.fields.Alert_Type as string) || 'delay').toLowerCase()
+          const rawStatus = ((record.fields.Status as string) || 'pending').toLowerCase()
+          return {
+            id: record.id,
+            flightNumber: (record.fields.Flight_Number as string) || 'TN1',
+            route: (record.fields.Route as string) || 'PPT-LAX',
+            alertType: alertTypeMap[rawAlertType] || 'delay',
+            delayMinutes: (record.fields.Delay_Minutes as number) || 0,
+            passengersAffected: (record.fields.Passengers_Affected as number) || 0,
+            notificationsSent: (record.fields.Notifications_Sent as number) || 0,
+            channels: (record.fields.Channels as string[]) || ['Email'],
+            status: statusMap[rawStatus] || 'pending',
+            date: (record.fields.Date as string) || new Date().toISOString(),
+          }
+        })
         setAlerts(mapped)
       } else {
         setAlerts(fallbackAlerts)
@@ -278,7 +306,7 @@ export default function FlightsPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="card">
           <p className="text-sm text-slate-500">Passagers impactés</p>
           <p className="text-2xl font-bold">{totalAffected}</p>

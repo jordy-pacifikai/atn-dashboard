@@ -156,7 +156,7 @@ function VariantCard({ variant, isWinner, testStatus }: { variant: Variant; isWi
 
       <p className="text-sm text-slate-600 mb-4 p-2 bg-white rounded">{variant.description}</p>
 
-      <div className="grid grid-cols-4 gap-2 text-center">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 text-center">
         <div>
           <p className="text-lg font-bold">{variant.metrics.impressions.toLocaleString()}</p>
           <p className="text-xs text-slate-500">Impressions</p>
@@ -351,7 +351,7 @@ export default function ABTestsPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="card">
           <p className="text-sm text-slate-500">Tests en cours</p>
           <p className="text-2xl font-bold text-blue-600">{stats.running}</p>
