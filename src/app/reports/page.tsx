@@ -1,8 +1,9 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { FileBarChart, Download, Calendar, Clock, Loader2, CheckCircle, Mail, FileText, TrendingUp, Users, Plane, Star, ShoppingCart, Eye } from 'lucide-react'
+import { FileBarChart, Download, Calendar, Clock, Loader2, CheckCircle, Mail, FileText, TrendingUp, Users, Plane, Star, ShoppingCart, Eye, Sparkles } from 'lucide-react'
 import Modal from '@/components/Modal'
+import ReportModal from '@/components/ReportModal'
 
 interface AIReport {
   id: string
@@ -183,6 +184,7 @@ export default function ReportsPage() {
   const [aiReports, setAIReports] = useState<AIReport[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedReport, setSelectedReport] = useState<AIReport | null>(null)
+  const [showReportModal, setShowReportModal] = useState<string | null>(null)
 
   useEffect(() => {
     async function fetchAIReports() {
@@ -221,19 +223,19 @@ export default function ReportsPage() {
 
   const handleGenerate = async (reportId: string) => {
     setGeneratingId(reportId)
-    // Simulate generation
-    await new Promise(r => setTimeout(r, 3000))
+    // Simulate brief loading then show modal
+    await new Promise(r => setTimeout(r, 500))
     setGeneratingId(null)
-    // In real implementation, this would trigger a workflow and download the result
-    alert('Rapport généré ! (En production: téléchargement automatique)')
+    setShowReportModal(reportId)
   }
 
   const handleCustomReport = async () => {
     if (!customPrompt.trim()) return
     setIsCustomGenerating(true)
-    await new Promise(r => setTimeout(r, 3000))
+    await new Promise(r => setTimeout(r, 500))
     setIsCustomGenerating(false)
-    alert('Rapport personnalisé généré !')
+    // Show daily summary as default for custom reports
+    setShowReportModal('daily-summary')
     setCustomPrompt('')
   }
 
@@ -454,18 +456,27 @@ export default function ReportsPage() {
         </h2>
         <div className="space-y-3">
           {[
-            { name: 'Résumé quotidien', schedule: 'Tous les jours à 08:00', nextRun: 'Demain 08:00' },
-            { name: 'Performance Marketing', schedule: 'Lundi à 09:00', nextRun: 'Lun 3 Fév' },
-            { name: 'Analyse ROI', schedule: 'Vendredi à 17:00', nextRun: 'Ven 31 Jan' },
+            { name: 'Résumé quotidien', schedule: 'Tous les jours à 08:00', nextRun: 'Demain 08:00', reportId: 'daily-summary' },
+            { name: 'Performance Marketing', schedule: 'Lundi à 09:00', nextRun: 'Lun 3 Fév', reportId: 'weekly-marketing' },
+            { name: 'Analyse ROI', schedule: 'Vendredi à 17:00', nextRun: 'Ven 7 Fév', reportId: 'roi-analysis' },
           ].map((report, i) => (
-            <div key={i} className="flex items-center justify-between p-3 border border-slate-200 rounded-lg">
+            <div key={i} className="flex items-center justify-between p-3 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors">
               <div>
                 <p className="text-sm font-medium">{report.name}</p>
                 <p className="text-xs text-slate-500">{report.schedule}</p>
               </div>
-              <div className="text-right">
-                <p className="text-xs text-slate-500">Prochain envoi</p>
-                <p className="text-sm font-medium text-atn-secondary">{report.nextRun}</p>
+              <div className="flex items-center gap-4">
+                <div className="text-right">
+                  <p className="text-xs text-slate-500">Prochain envoi</p>
+                  <p className="text-sm font-medium text-atn-secondary">{report.nextRun}</p>
+                </div>
+                <button
+                  onClick={() => setShowReportModal(report.reportId)}
+                  className="p-2 hover:bg-white rounded-lg border border-slate-200"
+                  title="Voir le dernier rapport"
+                >
+                  <Eye className="w-4 h-4 text-slate-500" />
+                </button>
               </div>
             </div>
           ))}
@@ -474,6 +485,14 @@ export default function ReportsPage() {
           + Programmer un nouveau rapport
         </button>
       </div>
+
+      {/* Report Generation Modal */}
+      {showReportModal && (
+        <ReportModal
+          reportId={showReportModal}
+          onClose={() => setShowReportModal(null)}
+        />
+      )}
     </div>
   )
 }
