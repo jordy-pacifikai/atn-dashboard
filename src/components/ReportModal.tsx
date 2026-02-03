@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { X, Download, Printer, TrendingUp, TrendingDown, Minus, Plane, Star, Users, Mail, FileText, ShoppingCart, BarChart3, Globe } from 'lucide-react'
 
 // =====================================================
@@ -361,11 +362,11 @@ const MetricCard = ({ metric }: { metric: ReportMetric }) => {
   }
 
   return (
-    <div className="bg-gradient-to-br from-white to-slate-50 rounded-xl p-5 border border-slate-200/60 shadow-sm">
-      <p className="text-sm font-medium text-slate-500 mb-1">{metric.label}</p>
-      <p className="text-3xl font-bold text-slate-900 tracking-tight">{metric.value}</p>
+    <div className="bg-gradient-to-br from-white to-slate-50 rounded-xl p-3 sm:p-5 border border-slate-200/60 shadow-sm">
+      <p className="text-xs sm:text-sm font-medium text-slate-500 mb-1">{metric.label}</p>
+      <p className="text-xl sm:text-2xl md:text-3xl font-bold text-slate-900 tracking-tight">{metric.value}</p>
       {metric.change !== undefined && (
-        <div className={`flex items-center gap-1 mt-2 text-sm font-medium ${getTrendColor()}`}>
+        <div className={`flex items-center gap-1 mt-1 sm:mt-2 text-xs sm:text-sm font-medium ${getTrendColor()}`}>
           {getTrendIcon()}
           <span>{metric.change > 0 ? '+' : ''}{metric.change}%</span>
           <span className="text-slate-400 font-normal">vs période préc.</span>
@@ -409,7 +410,18 @@ const CategoryIcon = ({ category }: { category: string }) => {
 export default function ReportModal({ reportId, onClose }: ReportModalProps) {
   const [reportData, setReportData] = useState<ReportData | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [mounted, setMounted] = useState(false)
   const reportRef = useRef<HTMLDivElement>(null)
+
+  // Mount portal
+  useEffect(() => {
+    setMounted(true)
+    // Prevent body scroll when modal is open
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [])
 
   useEffect(() => {
     // Simulate loading
@@ -479,10 +491,22 @@ export default function ReportModal({ reportId, onClose }: ReportModalProps) {
     4: 'bg-amber-500',
   }
 
-  if (isLoading) {
-    return (
-      <div className="modal-overlay" onClick={onClose}>
-        <div className="bg-white rounded-2xl w-full max-w-5xl p-12 flex flex-col items-center justify-center" onClick={e => e.stopPropagation()}>
+  // Don't render until mounted (for portal)
+  if (!mounted) return null
+
+  const colors = reportData ? categoryColors[reportData.category] : categoryColors.performance
+
+  const modalContent = (
+    <div
+      className="fixed inset-0 z-[99999] flex items-center justify-center p-4 sm:p-6 md:p-8"
+      style={{ backgroundColor: 'rgba(0, 0, 0, 0.6)' }}
+      onClick={onClose}
+    >
+      {isLoading ? (
+        <div
+          className="bg-white rounded-2xl w-full max-w-md mx-auto p-8 sm:p-12 flex flex-col items-center justify-center"
+          onClick={e => e.stopPropagation()}
+        >
           <div className="relative">
             <div className="w-16 h-16 border-4 border-slate-200 border-t-atn-primary rounded-full animate-spin" />
             <Plane className="absolute inset-0 m-auto w-6 h-6 text-atn-primary" />
@@ -490,81 +514,73 @@ export default function ReportModal({ reportId, onClose }: ReportModalProps) {
           <p className="mt-6 text-lg font-medium text-slate-700">Génération du rapport...</p>
           <p className="text-sm text-slate-500 mt-1">Analyse des données en cours</p>
         </div>
-      </div>
-    )
-  }
+      ) : !reportData ? null : (
+        <div
+          className="bg-white rounded-2xl w-full max-w-5xl mx-auto overflow-hidden shadow-2xl flex flex-col"
+          style={{ maxHeight: 'calc(100vh - 4rem)' }}
+          onClick={e => e.stopPropagation()}
+        >
+          {/* Header with ATN Branding */}
+          <div className="relative overflow-hidden bg-gradient-to-r from-[#0F4C81] via-[#0D5C8C] to-[#00A5B5] text-white shrink-0">
+            <WavePattern />
+            <TiareFlower className="absolute -right-8 -top-8 w-40 h-40 text-white/10 rotate-12 hidden sm:block" />
+            <TiareFlower className="absolute right-24 bottom-0 w-24 h-24 text-white/5 -rotate-12 hidden sm:block" />
 
-  if (!reportData) return null
-
-  const colors = categoryColors[reportData.category]
-
-  return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div
-        className="bg-white rounded-2xl w-full max-w-5xl max-h-[90vh] overflow-hidden shadow-2xl flex flex-col"
-        onClick={e => e.stopPropagation()}
-      >
-        {/* Header with ATN Branding */}
-        <div className="relative overflow-hidden bg-gradient-to-r from-[#0F4C81] via-[#0D5C8C] to-[#00A5B5] text-white">
-          <WavePattern />
-          <TiareFlower className="absolute -right-8 -top-8 w-40 h-40 text-white/10 rotate-12" />
-          <TiareFlower className="absolute right-24 bottom-0 w-24 h-24 text-white/5 -rotate-12" />
-
-          <div className="relative z-10 p-8">
-            <div className="flex items-start justify-between">
-              <div>
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="flex items-center gap-2 px-3 py-1.5 bg-white/15 backdrop-blur-sm rounded-full">
-                    <Plane className="w-4 h-4" />
-                    <span className="text-sm font-semibold tracking-wide">AIR TAHITI NUI</span>
+            <div className="relative z-10 p-4 sm:p-6 md:p-8">
+              <div className="flex items-start justify-between gap-4">
+                <div className="min-w-0 flex-1">
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+                    <div className="flex items-center gap-2 px-2 sm:px-3 py-1 sm:py-1.5 bg-white/15 backdrop-blur-sm rounded-full">
+                      <Plane className="w-3 h-3 sm:w-4 sm:h-4" />
+                      <span className="text-xs sm:text-sm font-semibold tracking-wide">AIR TAHITI NUI</span>
+                    </div>
+                    <div className={`px-2 sm:px-3 py-1 sm:py-1.5 rounded-full text-xs font-medium ${colors.light} ${colors.text}`}>
+                      <CategoryIcon category={reportData.category} />
+                    </div>
                   </div>
-                  <div className={`px-3 py-1.5 rounded-full text-xs font-medium ${colors.light} ${colors.text}`}>
-                    <CategoryIcon category={reportData.category} />
-                  </div>
+                  <h1 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight mb-1 sm:mb-2">{reportData.title}</h1>
+                  <p className="text-white/80 text-sm sm:text-base md:text-lg">{reportData.subtitle}</p>
                 </div>
-                <h1 className="text-3xl font-bold tracking-tight mb-2">{reportData.title}</h1>
-                <p className="text-white/80 text-lg">{reportData.subtitle}</p>
+
+                <button
+                  onClick={onClose}
+                  className="p-2 hover:bg-white/20 rounded-full transition-colors shrink-0"
+                >
+                  <X className="w-5 h-5 sm:w-6 sm:h-6" />
+                </button>
               </div>
 
-              <button
-                onClick={onClose}
-                className="p-2 hover:bg-white/20 rounded-full transition-colors"
-              >
-                <X className="w-6 h-6" />
-              </button>
-            </div>
-
-            <div className="flex items-center gap-6 mt-6 text-sm text-white/70">
-              <div className="flex items-center gap-2">
-                <Globe className="w-4 h-4" />
-                <span>{reportData.period}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <FileText className="w-4 h-4" />
-                <span>Généré le {new Date(reportData.generatedAt).toLocaleDateString('fr-FR', {
-                  day: 'numeric',
-                  month: 'long',
-                  year: 'numeric',
-                  hour: '2-digit',
-                  minute: '2-digit'
-                })}</span>
+              <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 mt-4 sm:mt-6 text-xs sm:text-sm text-white/70">
+                <div className="flex items-center gap-2">
+                  <Globe className="w-3 h-3 sm:w-4 sm:h-4 shrink-0" />
+                  <span className="truncate">{reportData.period}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <FileText className="w-3 h-3 sm:w-4 sm:h-4 shrink-0" />
+                  <span className="truncate">Généré le {new Date(reportData.generatedAt).toLocaleDateString('fr-FR', {
+                    day: 'numeric',
+                    month: 'short',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                  })}</span>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Content */}
-        <div ref={reportRef} className="flex-1 overflow-y-auto p-8 space-y-8">
+          {/* Content */}
+          <div ref={reportRef} className="flex-1 overflow-y-auto p-4 sm:p-6 md:p-8 space-y-6 sm:space-y-8">
           {/* Highlights Banner */}
           {reportData.highlights && (
-            <div className="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200/50 rounded-xl p-5">
-              <h3 className="text-sm font-semibold text-amber-800 mb-3 flex items-center gap-2">
-                <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
+            <div className="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200/50 rounded-xl p-3 sm:p-5">
+              <h3 className="text-xs sm:text-sm font-semibold text-amber-800 mb-2 sm:mb-3 flex items-center gap-2">
+                <Star className="w-3 h-3 sm:w-4 sm:h-4 fill-amber-400 text-amber-400" />
                 Points clés
               </h3>
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-wrap gap-2 sm:gap-3">
                 {reportData.highlights.map((highlight, i) => (
-                  <span key={i} className="px-3 py-1.5 bg-white rounded-lg text-sm text-amber-900 shadow-sm">
+                  <span key={i} className="px-2 sm:px-3 py-1 sm:py-1.5 bg-white rounded-lg text-xs sm:text-sm text-amber-900 shadow-sm">
                     {highlight}
                   </span>
                 ))}
@@ -573,21 +589,21 @@ export default function ReportModal({ reportId, onClose }: ReportModalProps) {
           )}
 
           {/* Executive Summary */}
-          <div className="bg-slate-50 rounded-xl p-6 border border-slate-100">
-            <h2 className="text-lg font-semibold text-slate-800 mb-3 flex items-center gap-2">
-              <div className={`w-1.5 h-6 rounded-full ${colors.bg}`} />
+          <div className="bg-slate-50 rounded-xl p-4 sm:p-6 border border-slate-100">
+            <h2 className="text-base sm:text-lg font-semibold text-slate-800 mb-2 sm:mb-3 flex items-center gap-2">
+              <div className={`w-1.5 h-5 sm:h-6 rounded-full ${colors.bg}`} />
               Résumé Exécutif
             </h2>
-            <p className="text-slate-600 leading-relaxed">{reportData.summary}</p>
+            <p className="text-sm sm:text-base text-slate-600 leading-relaxed">{reportData.summary}</p>
           </div>
 
           {/* Key Metrics */}
           <div>
-            <h2 className="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
-              <div className={`w-1.5 h-6 rounded-full ${colors.bg}`} />
+            <h2 className="text-base sm:text-lg font-semibold text-slate-800 mb-3 sm:mb-4 flex items-center gap-2">
+              <div className={`w-1.5 h-5 sm:h-6 rounded-full ${colors.bg}`} />
               Métriques Clés
             </h2>
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 gap-3 sm:gap-4">
               {reportData.metrics.map((metric, i) => (
                 <MetricCard key={i} metric={metric} />
               ))}
@@ -596,16 +612,16 @@ export default function ReportModal({ reportId, onClose }: ReportModalProps) {
 
           {/* Performance Breakdown */}
           <div>
-            <h2 className="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
-              <div className={`w-1.5 h-6 rounded-full ${colors.bg}`} />
+            <h2 className="text-base sm:text-lg font-semibold text-slate-800 mb-3 sm:mb-4 flex items-center gap-2">
+              <div className={`w-1.5 h-5 sm:h-6 rounded-full ${colors.bg}`} />
               {reportData.breakdown.title}
             </h2>
             <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
               {reportData.breakdown.items.map((item, i) => (
-                <div key={i} className="p-4 border-b border-slate-100 last:border-b-0">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="font-medium text-slate-700">{item.label}</span>
-                    <span className="text-sm font-semibold text-slate-900">{item.value}</span>
+                <div key={i} className="p-3 sm:p-4 border-b border-slate-100 last:border-b-0">
+                  <div className="flex items-center justify-between mb-2 gap-2">
+                    <span className="text-sm sm:text-base font-medium text-slate-700 truncate">{item.label}</span>
+                    <span className="text-xs sm:text-sm font-semibold text-slate-900 whitespace-nowrap">{item.value}</span>
                   </div>
                   {item.percentage !== undefined && (
                     <ProgressBar
@@ -620,49 +636,53 @@ export default function ReportModal({ reportId, onClose }: ReportModalProps) {
 
           {/* Recommendations */}
           <div>
-            <h2 className="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
-              <div className={`w-1.5 h-6 rounded-full ${colors.bg}`} />
+            <h2 className="text-base sm:text-lg font-semibold text-slate-800 mb-3 sm:mb-4 flex items-center gap-2">
+              <div className={`w-1.5 h-5 sm:h-6 rounded-full ${colors.bg}`} />
               Recommandations IA
             </h2>
-            <div className="space-y-3">
+            <div className="space-y-2 sm:space-y-3">
               {reportData.recommendations.map((rec, i) => (
                 <div
                   key={i}
-                  className="flex items-start gap-4 p-4 bg-gradient-to-r from-cyan-50/50 to-teal-50/50 rounded-xl border border-cyan-100/50"
+                  className="flex items-start gap-3 sm:gap-4 p-3 sm:p-4 bg-gradient-to-r from-cyan-50/50 to-teal-50/50 rounded-xl border border-cyan-100/50"
                 >
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#0F4C81] to-[#00A5B5] text-white flex items-center justify-center text-sm font-bold shrink-0">
+                  <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-gradient-to-br from-[#0F4C81] to-[#00A5B5] text-white flex items-center justify-center text-xs sm:text-sm font-bold shrink-0">
                     {i + 1}
                   </div>
-                  <p className="text-slate-700 leading-relaxed">{rec}</p>
+                  <p className="text-sm sm:text-base text-slate-700 leading-relaxed">{rec}</p>
                 </div>
               ))}
             </div>
           </div>
         </div>
 
-        {/* Footer Actions */}
-        <div className="border-t border-slate-200 p-6 bg-slate-50 flex items-center justify-between">
-          <p className="text-sm text-slate-500">
-            Rapport généré automatiquement par PACIFIK'AI
-          </p>
-          <div className="flex items-center gap-3">
-            <button
-              onClick={handlePrint}
-              className="px-4 py-2.5 border border-slate-300 rounded-xl text-sm font-medium text-slate-700 hover:bg-white transition-colors flex items-center gap-2"
-            >
-              <Printer className="w-4 h-4" />
-              Imprimer
-            </button>
-            <button
-              onClick={handleDownloadPDF}
-              className="px-4 py-2.5 bg-gradient-to-r from-[#0F4C81] to-[#00A5B5] text-white rounded-xl text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 shadow-lg shadow-cyan-500/20"
-            >
-              <Download className="w-4 h-4" />
-              Télécharger PDF
-            </button>
+          {/* Footer Actions */}
+          <div className="border-t border-slate-200 p-4 sm:p-6 bg-slate-50 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p className="text-sm text-slate-500 text-center sm:text-left">
+              Rapport généré automatiquement par PACIFIK'AI
+            </p>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={handlePrint}
+                className="px-4 py-2.5 border border-slate-300 rounded-xl text-sm font-medium text-slate-700 hover:bg-white transition-colors flex items-center gap-2"
+              >
+                <Printer className="w-4 h-4" />
+                <span className="hidden sm:inline">Imprimer</span>
+              </button>
+              <button
+                onClick={handleDownloadPDF}
+                className="px-4 py-2.5 bg-gradient-to-r from-[#0F4C81] to-[#00A5B5] text-white rounded-xl text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 shadow-lg shadow-cyan-500/20"
+              >
+                <Download className="w-4 h-4" />
+                <span className="hidden sm:inline">Télécharger PDF</span>
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   )
+
+  // Render in portal to escape sidebar layout
+  return createPortal(modalContent, document.body)
 }
