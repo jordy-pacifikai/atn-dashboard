@@ -111,11 +111,11 @@ const navigationGroups: NavGroup[] = [
         roi: '+40% trafic organique',
       },
       {
-        name: 'Social Media',
+        name: 'Social Monitor',
         href: '/social',
         icon: Sparkles,
-        description: 'Posts automatiques',
-        roi: '+50% engagement',
+        description: 'Veille réseaux sociaux',
+        roi: '+50% réactivité',
       },
       {
         name: 'Visual Factory',
