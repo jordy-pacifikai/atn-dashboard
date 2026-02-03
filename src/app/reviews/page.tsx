@@ -336,9 +336,8 @@ export default function ReviewsPage() {
       </div>
 
       {/* Filtres */}
-      <div className="flex gap-2">
+      <div data-guide="reviews-filters" className="flex gap-2">
         <button
-          data-guide="reviews-filter-all"
           className={`px-4 py-2 rounded-lg text-sm ${
             filterStatus === null ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'
           }`}
@@ -347,7 +346,6 @@ export default function ReviewsPage() {
           Tous
         </button>
         <button
-          data-guide="reviews-filter-pending"
           className={`px-4 py-2 rounded-lg text-sm ${
             filterStatus === 'pending' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'
           }`}
@@ -356,7 +354,6 @@ export default function ReviewsPage() {
           À valider
         </button>
         <button
-          data-guide="reviews-filter-approved"
           className={`px-4 py-2 rounded-lg text-sm ${
             filterStatus === 'approved' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'
           }`}
@@ -365,7 +362,6 @@ export default function ReviewsPage() {
           Approuvés
         </button>
         <button
-          data-guide="reviews-filter-published"
           className={`px-4 py-2 rounded-lg text-sm ${
             filterStatus === 'published' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'
           }`}
@@ -374,7 +370,6 @@ export default function ReviewsPage() {
           Publiés
         </button>
         <button
-          data-guide="reviews-filter-rejected"
           className={`px-4 py-2 rounded-lg text-sm ${
             filterStatus === 'rejected' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'
           }`}

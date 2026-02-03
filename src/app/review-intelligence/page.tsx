@@ -365,9 +365,8 @@ export default function ReviewIntelligencePage() {
         </div>
       </div>
 
-      <div className="flex gap-2">
+      <div data-guide="intel-filters" className="flex gap-2">
         <button
-          data-guide="reviews-filter-all"
           className={`px-4 py-2 rounded-lg text-sm flex items-center gap-2 ${
             filter === 'all' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'
           }`}
@@ -377,7 +376,6 @@ export default function ReviewIntelligencePage() {
           Tous
         </button>
         <button
-          data-guide="reviews-filter-irony"
           className={`px-4 py-2 rounded-lg text-sm flex items-center gap-2 ${
             filter === 'irony' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'
           }`}
@@ -387,7 +385,6 @@ export default function ReviewIntelligencePage() {
           Ironie
         </button>
         <button
-          data-guide="reviews-filter-action"
           className={`px-4 py-2 rounded-lg text-sm flex items-center gap-2 ${
             filter === 'action' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'
           }`}

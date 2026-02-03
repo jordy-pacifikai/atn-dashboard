@@ -303,37 +303,32 @@ export default function CompetitorsPage() {
       </div>
 
       {/* Filtres */}
-      <div className="flex gap-2">
+      <div data-guide="competitors-filters" className="flex gap-2">
         <button
-          data-guide="competitors-filter-all"
           className={`px-4 py-2 rounded-lg text-sm ${filterPriority === null ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'}`}
           onClick={() => setFilterPriority(null)}
         >
           Toutes
         </button>
         <button
-          data-guide="competitors-filter-urgent"
           className={`px-4 py-2 rounded-lg text-sm ${filterPriority === 'urgent' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'}`}
           onClick={() => setFilterPriority('urgent')}
         >
           {priorityConfigs.urgent.label}
         </button>
         <button
-          data-guide="competitors-filter-high"
           className={`px-4 py-2 rounded-lg text-sm ${filterPriority === 'high' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'}`}
           onClick={() => setFilterPriority('high')}
         >
           {priorityConfigs.high.label}
         </button>
         <button
-          data-guide="competitors-filter-medium"
           className={`px-4 py-2 rounded-lg text-sm ${filterPriority === 'medium' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'}`}
           onClick={() => setFilterPriority('medium')}
         >
           {priorityConfigs.medium.label}
         </button>
         <button
-          data-guide="competitors-filter-low"
           className={`px-4 py-2 rounded-lg text-sm ${filterPriority === 'low' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'}`}
           onClick={() => setFilterPriority('low')}
         >

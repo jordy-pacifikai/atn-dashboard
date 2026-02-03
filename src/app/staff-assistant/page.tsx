@@ -159,20 +159,20 @@ export default function StaffAssistantPage() {
         </div>
       </div>
 
-      <div data-guide="staff-kpis" className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="card">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div data-guide="staff-kpi-total" className="card">
           <p className="text-sm text-slate-500">Questions traitées</p>
           <p className="text-2xl font-bold">{stats.total}</p>
         </div>
-        <div className="card">
+        <div data-guide="staff-kpi-helpful" className="card">
           <p className="text-sm text-slate-500">Réponses utiles</p>
           <p className="text-2xl font-bold text-emerald-600">{stats.helpful}</p>
         </div>
-        <div className="card">
+        <div data-guide="staff-kpi-procedures" className="card">
           <p className="text-sm text-slate-500">Procédures consultées</p>
           <p className="text-2xl font-bold text-blue-600">{stats.procedures}</p>
         </div>
-        <div className="card">
+        <div data-guide="staff-kpi-responsetime" className="card">
           <p className="text-sm text-slate-500">Temps de réponse</p>
           <p className="text-2xl font-bold">{stats.avgResponseTime}</p>
         </div>
