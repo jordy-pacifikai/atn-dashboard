@@ -341,23 +341,29 @@ export default function NewslettersPage() {
       const data = await response.json()
 
       if (data.records && data.records.length > 0) {
-        const mapped: NewsletterLog[] = data.records.map((record: { id: string; fields: Record<string, unknown> }) => ({
-          id: record.id,
-          contact: (record.fields.Contact as string) || 'contact@email.com',
-          segment: (record.fields.Segment as string) || 'General',
-          emailPreview: (record.fields.Email_Preview as string) || '',
-          personalizationScore: (record.fields.Personalization_Score as number) || 80,
-          engagementScore: (record.fields.Engagement_Score as number) || 70,
-          wordCount: (record.fields.Word_Count as number) || 200,
-          status: ((record.fields.Status as string)?.toLowerCase() || 'pending') as 'sent' | 'opened' | 'clicked' | 'pending',
-          date: (record.fields.Date as string) || new Date().toISOString(),
-          subject: (record.fields.Subject as string) || 'Newsletter Air Tahiti Nui',
-          headline: (record.fields.Headline as string) || 'Ia Orana !',
-          fullContent: (record.fields.Full_Content as string) || '',
-          imageUrl: (record.fields.Image_URL as string) || 'https://images.unsplash.com/photo-1589197331516-4d84b72ebde3?w=800',
-          ctaText: (record.fields.CTA_Text as string) || 'Découvrir',
-          ctaUrl: (record.fields.CTA_URL as string) || 'https://www.airtahitinui.com',
-        }))
+        const mapped: NewsletterLog[] = data.records.map((record: { id: string; fields: Record<string, unknown> }) => {
+          const segment = (record.fields.Segment as string) || 'General'
+          // Find matching fallback for this segment to get rich content
+          const fallback = fallbackNewsletters.find(f => f.segment === segment) || fallbackNewsletters[0]
+
+          return {
+            id: record.id,
+            contact: (record.fields.Contact as string) || 'contact@email.com',
+            segment,
+            emailPreview: (record.fields.Email_Preview as string) || fallback.emailPreview,
+            personalizationScore: (record.fields.Personalization_Score as number) || 80,
+            engagementScore: (record.fields.Engagement_Score as number) || 70,
+            wordCount: (record.fields.Word_Count as number) || fallback.wordCount,
+            status: ((record.fields.Status as string)?.toLowerCase() || 'pending') as 'sent' | 'opened' | 'clicked' | 'pending',
+            date: (record.fields.Date as string) || new Date().toISOString(),
+            subject: (record.fields.Subject as string) || fallback.subject,
+            headline: (record.fields.Headline as string) || fallback.headline,
+            fullContent: (record.fields.Full_Content as string) || fallback.fullContent,
+            imageUrl: (record.fields.Image_URL as string) || fallback.imageUrl,
+            ctaText: (record.fields.CTA_Text as string) || fallback.ctaText,
+            ctaUrl: (record.fields.CTA_URL as string) || fallback.ctaUrl,
+          }
+        })
         setNewsletters(mapped)
       } else {
         setNewsletters(fallbackNewsletters)

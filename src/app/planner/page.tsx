@@ -263,7 +263,7 @@ export default function PlannerPage() {
       </div>
 
       {/* Filters */}
-      <div className="flex items-center gap-4">
+      <div data-guide="planner-filters" className="flex items-center gap-4">
         <div className="flex items-center gap-2">
           <Filter className="w-4 h-4 text-slate-400" />
           <span className="text-sm text-slate-600">Filtres:</span>
@@ -271,14 +271,12 @@ export default function PlannerPage() {
 
         <div className="flex gap-2">
           <button
-            data-guide="planner-filter-all"
             className={`px-3 py-1.5 rounded-lg text-sm ${!filterType ? 'bg-slate-800 text-white' : 'bg-slate-100'}`}
             onClick={() => setFilterType(null)}
           >
             Tous
           </button>
           <button
-            data-guide="planner-filter-flight"
             className={`px-3 py-1.5 rounded-lg text-sm flex items-center gap-1 ${filterType === 'Flight' ? 'bg-blue-600 text-white' : 'bg-slate-100'}`}
             onClick={() => setFilterType(filterType === 'Flight' ? null : 'Flight')}
           >
@@ -286,7 +284,6 @@ export default function PlannerPage() {
             Vols
           </button>
           <button
-            data-guide="planner-filter-hotel"
             className={`px-3 py-1.5 rounded-lg text-sm flex items-center gap-1 ${filterType === 'Hotel' ? 'bg-purple-600 text-white' : 'bg-slate-100'}`}
             onClick={() => setFilterType(filterType === 'Hotel' ? null : 'Hotel')}
           >
@@ -294,7 +291,6 @@ export default function PlannerPage() {
             Hôtels
           </button>
           <button
-            data-guide="planner-filter-activity"
             className={`px-3 py-1.5 rounded-lg text-sm flex items-center gap-1 ${filterType === 'Activity' ? 'bg-emerald-600 text-white' : 'bg-slate-100'}`}
             onClick={() => setFilterType(filterType === 'Activity' ? null : 'Activity')}
           >
@@ -306,7 +302,6 @@ export default function PlannerPage() {
         <div className="h-6 w-px bg-slate-200"></div>
 
         <select
-          data-guide="planner-filter-status"
           value={filterStatus || ''}
           onChange={(e) => setFilterStatus(e.target.value || null)}
           className="px-3 py-1.5 rounded-lg text-sm border border-slate-200"

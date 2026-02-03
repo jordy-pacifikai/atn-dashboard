@@ -303,37 +303,32 @@ export default function ReportsPage() {
       </div>
 
       {/* Category filters */}
-      <div className="flex gap-2">
+      <div data-guide="reports-filters" className="flex gap-2">
         <button
-          data-guide="reports-filter-all"
           className={`px-4 py-2 rounded-lg text-sm ${!filterCategory ? 'bg-slate-800 text-white' : 'bg-slate-100'}`}
           onClick={() => setFilterCategory(null)}
         >
           Tous
         </button>
         <button
-          data-guide="reports-filter-performance"
           className={`px-4 py-2 rounded-lg text-sm ${filterCategory === 'performance' ? 'bg-slate-800 text-white' : 'bg-slate-100'}`}
           onClick={() => setFilterCategory(filterCategory === 'performance' ? null : 'performance')}
         >
           Performance
         </button>
         <button
-          data-guide="reports-filter-content"
           className={`px-4 py-2 rounded-lg text-sm ${filterCategory === 'content' ? 'bg-slate-800 text-white' : 'bg-slate-100'}`}
           onClick={() => setFilterCategory(filterCategory === 'content' ? null : 'content')}
         >
           Contenu
         </button>
         <button
-          data-guide="reports-filter-revenue"
           className={`px-4 py-2 rounded-lg text-sm ${filterCategory === 'revenue' ? 'bg-slate-800 text-white' : 'bg-slate-100'}`}
           onClick={() => setFilterCategory(filterCategory === 'revenue' ? null : 'revenue')}
         >
           Revenue
         </button>
         <button
-          data-guide="reports-filter-operations"
           className={`px-4 py-2 rounded-lg text-sm ${filterCategory === 'operations' ? 'bg-slate-800 text-white' : 'bg-slate-100'}`}
           onClick={() => setFilterCategory(filterCategory === 'operations' ? null : 'operations')}
         >

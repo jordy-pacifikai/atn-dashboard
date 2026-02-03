@@ -256,37 +256,32 @@ export default function BookingsPage() {
         </div>
       </div>
 
-      <div className="flex gap-2">
+      <div data-guide="bookings-filters" className="flex gap-2">
         <button
-          data-guide="bookings-filter-all"
           className={`px-4 py-2 rounded-lg text-sm ${!filterType ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'}`}
           onClick={() => setFilterType(null)}
         >
           Tous
         </button>
         <button
-          data-guide="bookings-filter-reservation"
           className={`px-4 py-2 rounded-lg text-sm ${filterType === 'reservation' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'}`}
           onClick={() => setFilterType('reservation')}
         >
           Réservation
         </button>
         <button
-          data-guide="bookings-filter-modification"
           className={`px-4 py-2 rounded-lg text-sm ${filterType === 'modification' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'}`}
           onClick={() => setFilterType('modification')}
         >
           Modification
         </button>
         <button
-          data-guide="bookings-filter-cancellation"
           className={`px-4 py-2 rounded-lg text-sm ${filterType === 'cancellation' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'}`}
           onClick={() => setFilterType('cancellation')}
         >
           Annulation
         </button>
         <button
-          data-guide="bookings-filter-information"
           className={`px-4 py-2 rounded-lg text-sm ${filterType === 'information' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'}`}
           onClick={() => setFilterType('information')}
         >

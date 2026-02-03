@@ -238,37 +238,32 @@ export default function RoiPage() {
         </div>
       </div>
 
-      <div className="flex gap-2">
+      <div data-guide="roi-filters" className="flex gap-2">
         <button
-          data-guide="roi-filter-all"
           className={`px-4 py-2 rounded-lg text-sm ${filterStatus === null ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'}`}
           onClick={() => setFilterStatus(null)}
         >
           Toutes
         </button>
         <button
-          data-guide="roi-filter-critical"
           className={`px-4 py-2 rounded-lg text-sm ${filterStatus === 'critical' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'}`}
           onClick={() => setFilterStatus('critical')}
         >
           CRITIQUE
         </button>
         <button
-          data-guide="roi-filter-warning"
           className={`px-4 py-2 rounded-lg text-sm ${filterStatus === 'warning' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'}`}
           onClick={() => setFilterStatus('warning')}
         >
           Attention
         </button>
         <button
-          data-guide="roi-filter-growth"
           className={`px-4 py-2 rounded-lg text-sm ${filterStatus === 'growth' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'}`}
           onClick={() => setFilterStatus('growth')}
         >
           Croissance
         </button>
         <button
-          data-guide="roi-filter-stable"
           className={`px-4 py-2 rounded-lg text-sm ${filterStatus === 'stable' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'}`}
           onClick={() => setFilterStatus('stable')}
         >
