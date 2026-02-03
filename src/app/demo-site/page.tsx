@@ -161,7 +161,7 @@ export default function DemoSitePage() {
             key={key}
             src={demoUrl}
             className="w-full border-0"
-            style={{ height: 'calc(100vh - 340px)', minHeight: '550px' }}
+            style={{ height: 'calc(100vh - 180px)', minHeight: '700px' }}
             title="Site démo Air Tahiti Nui"
           />
         </div>
