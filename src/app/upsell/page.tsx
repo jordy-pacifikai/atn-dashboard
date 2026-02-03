@@ -123,7 +123,7 @@ function OfferCard({ offer }: { offer: UpsellOffer }) {
           <div>
             <p className="font-medium text-sm">{offer.customerEmail}</p>
             <div className="flex items-center gap-2 mt-0.5">
-              <span className={`px-2 py-0.5 rounded text-xs ${segmentColors[offer.customerSegment]}`}>
+              <span className={`px-2 py-0.5 rounded text-xs ${segmentColors[offer.customerSegment] || 'bg-slate-100 text-slate-700'}`}>
                 {offer.customerSegment}
               </span>
               <span className={`px-2 py-0.5 rounded text-xs ${offerTypeColors[offer.offerType] || 'bg-slate-100'}`}>
@@ -132,8 +132,8 @@ function OfferCard({ offer }: { offer: UpsellOffer }) {
             </div>
           </div>
         </div>
-        <span className={`px-2 py-1 rounded text-xs font-medium ${statusConfig[offer.status].color}`}>
-          {statusConfig[offer.status].label}
+        <span className={`px-2 py-1 rounded text-xs font-medium ${statusConfig[offer.status]?.color || 'bg-slate-100 text-slate-700'}`}>
+          {statusConfig[offer.status]?.label || offer.status}
         </span>
       </div>
 
@@ -187,19 +187,39 @@ export default function UpsellPage() {
       const data = await response.json()
 
       if (data.records && data.records.length > 0) {
-        const mapped: UpsellOffer[] = data.records.map((record: { id: string; fields: Record<string, unknown> }) => ({
-          id: record.id,
-          customerEmail: (record.fields.Customer_Email as string) || 'contact@email.com',
-          customerSegment: (record.fields.Customer_Segment as string) || 'General',
-          bookingValue: (record.fields.Booking_Value as number) || 0,
-          offerType: (record.fields.Offer_Type as string) || 'Upgrade classe',
-          offerValue: (record.fields.Offer_Value as number) || 0,
-          personalizationScore: (record.fields.Personalization_Score as number) || 50,
-          offerText: (record.fields.Offer_Text as string) || '',
-          status: ((record.fields.Status as string)?.toLowerCase() || 'sent') as UpsellOffer['status'],
-          revenueGenerated: (record.fields.Revenue_Generated as number) || 0,
-          date: (record.fields.Date as string) || new Date().toISOString(),
-        }))
+        // Map French status to English
+        const statusMap: Record<string, UpsellOffer['status']> = {
+          'envoyé': 'sent',
+          'envoye': 'sent',
+          'sent': 'sent',
+          'ouvert': 'opened',
+          'opened': 'opened',
+          'cliqué': 'clicked',
+          'clique': 'clicked',
+          'clicked': 'clicked',
+          'converti': 'converted',
+          'converted': 'converted',
+          'ignoré': 'ignored',
+          'ignore': 'ignored',
+          'ignored': 'ignored',
+        }
+
+        const mapped: UpsellOffer[] = data.records.map((record: { id: string; fields: Record<string, unknown> }) => {
+          const rawStatus = ((record.fields.Status as string) || 'sent').toLowerCase()
+          return {
+            id: record.id,
+            customerEmail: (record.fields.Customer_Email as string) || 'contact@email.com',
+            customerSegment: (record.fields.Customer_Segment as string) || 'General',
+            bookingValue: (record.fields.Booking_Value as number) || 0,
+            offerType: (record.fields.Offer_Type as string) || 'Upgrade classe',
+            offerValue: (record.fields.Offer_Value as number) || 0,
+            personalizationScore: (record.fields.Personalization_Score as number) || 50,
+            offerText: (record.fields.Offer_Text as string) || '',
+            status: statusMap[rawStatus] || 'sent',
+            revenueGenerated: (record.fields.Revenue_Generated as number) || 0,
+            date: (record.fields.Date as string) || new Date().toISOString(),
+          }
+        })
         setOffers(mapped)
       } else {
         setOffers(fallbackOffers)
@@ -257,7 +277,7 @@ export default function UpsellPage() {
         <button
           onClick={generateOffers}
           disabled={syncing}
-          className="btn-primary flex items-center gap-2"
+          className="flex items-center gap-2 px-4 py-2 bg-atn-primary text-white rounded-lg text-sm font-medium hover:bg-opacity-90 disabled:opacity-50 transition-all flex items-center gap-2"
         >
           {syncing ? (
             <Loader2 className="w-4 h-4 animate-spin" />
@@ -268,7 +288,7 @@ export default function UpsellPage() {
         </button>
       </div>
 
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="card">
           <p className="text-sm text-slate-500">Offres envoyées</p>
           <p className="text-2xl font-bold">{totalOffers}</p>
