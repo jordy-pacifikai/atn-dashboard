@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Calendar as CalendarIcon, ChevronLeft, ChevronRight, Mail, FileText, GripVertical, Clock, Edit3, Trash2, Plus, X, Eye, ExternalLink, BarChart3, Globe, Target, Tag, Send, Users } from 'lucide-react'
 import Modal from '@/components/Modal'
 
@@ -1005,17 +1005,34 @@ function ArticlePreviewModal({ item, onClose }: { item: ScheduledContent; onClos
 }
 
 export default function CalendarPage() {
-  const [content, setContent] = useState<ScheduledContent[]>(generateDemoContent())
-  const [currentMonth, setCurrentMonth] = useState(new Date())
+  const [content, setContent] = useState<ScheduledContent[]>([])
+  const [currentMonth, setCurrentMonth] = useState<Date | null>(null)
   const [selectedContent, setSelectedContent] = useState<ScheduledContent | null>(null)
   const [showEditor, setShowEditor] = useState(false)
   const [showPreview, setShowPreview] = useState(false)
   const [previewContent, setPreviewContent] = useState<ScheduledContent | null>(null)
   const [dragOverDate, setDragOverDate] = useState<string | null>(null)
+  const [mounted, setMounted] = useState(false)
+
+  // Initialize on client only to avoid hydration mismatch
+  useEffect(() => {
+    setCurrentMonth(new Date())
+    setContent(generateDemoContent())
+    setMounted(true)
+  }, [])
 
   const handlePreview = (item: ScheduledContent) => {
     setPreviewContent(item)
     setShowPreview(true)
+  }
+
+  // Loading state while hydrating
+  if (!mounted || !currentMonth) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-atn-primary"></div>
+      </div>
+    )
   }
 
   // Calendar helpers

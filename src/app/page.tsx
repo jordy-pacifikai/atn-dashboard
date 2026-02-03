@@ -189,10 +189,12 @@ const flightStats = [
 ]
 
 export default function DashboardPage() {
-  const [currentTime, setCurrentTime] = useState(new Date())
+  const [currentTime, setCurrentTime] = useState<Date | null>(null)
   const [isRefreshing, setIsRefreshing] = useState(false)
 
   useEffect(() => {
+    // Set initial time only on client to avoid hydration mismatch
+    setCurrentTime(new Date())
     const timer = setInterval(() => setCurrentTime(new Date()), 60000)
     return () => clearInterval(timer)
   }, [])
@@ -214,7 +216,7 @@ export default function DashboardPage() {
         </div>
         <div className="flex items-center gap-3">
           <span className="text-sm text-[--text-tertiary]">
-            {currentTime.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' })}
+            {currentTime?.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' }) || ''}
           </span>
           <button
             onClick={handleRefresh}
