@@ -345,7 +345,7 @@ export default function ABTestsPage() {
             )}
             {syncing ? 'Sync...' : 'Actualiser'}
           </button>
-          <button data-guide="abtests-btn-new" className="flex items-center gap-2 px-4 py-2 bg-atn-primary text-white rounded-lg hover:bg-opacity-90">
+          <button data-guide="abtests-btn-new" className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-atn-primary to-atn-secondary text-white rounded-xl font-medium text-sm shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100">
             <FlaskConical className="w-4 h-4" />
             Nouveau test
           </button>

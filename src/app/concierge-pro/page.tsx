@@ -271,7 +271,7 @@ export default function ConciergeProPage() {
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
             />
-            <button data-guide="concierge-btn-send" className="px-6 py-3 bg-atn-primary text-white rounded-lg flex items-center gap-2 hover:bg-opacity-90">
+            <button data-guide="concierge-btn-send" className="px-6 py-3 bg-gradient-to-r from-atn-primary to-atn-secondary text-white rounded-xl flex items-center gap-2 font-medium shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all duration-200">
               <Send className="w-5 h-5" />
               Envoyer
             </button>

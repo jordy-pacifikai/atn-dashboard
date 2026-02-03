@@ -245,7 +245,7 @@ export default function PricingMonitorPage() {
           </h1>
           <p className="text-slate-500">Build 20: Veille tarifaire quotidienne</p>
         </div>
-        <button data-guide="pricing-btn-refresh" className="flex items-center gap-2 px-4 py-2 bg-atn-primary text-white rounded-lg hover:bg-opacity-90">
+        <button data-guide="pricing-btn-refresh" className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-atn-primary to-atn-secondary text-white rounded-xl font-medium text-sm shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100">
           <RefreshCw className="w-4 h-4" />
           Actualiser
         </button>

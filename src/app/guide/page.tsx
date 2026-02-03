@@ -1,7 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { useSearchParams } from 'next/navigation'
 import {
   LayoutDashboard, Mail, FileText, TrendingUp, MessageCircle,
   HelpCircle, Sparkles, Target, Zap, CheckCircle, Clock,
@@ -9,8 +10,9 @@ import {
   AlertTriangle, XCircle, Info, Database, Book, Users,
   Plane, Star, Eye, Calendar, Settings, CreditCard,
   Image as ImageIcon, Globe, Search, ChevronDown, ChevronRight,
-  Headphones, Route
+  Headphones, Route, Compass
 } from 'lucide-react'
+import SidebarGuide from '@/components/SidebarGuide'
 
 // ============ GLOSSAIRE DES TERMES ============
 const glossary = [
@@ -690,6 +692,16 @@ export default function GuidePage() {
   const [expandedPages, setExpandedPages] = useState<string[]>([])
   const [searchTerm, setSearchTerm] = useState('')
   const [filterCategory, setFilterCategory] = useState<string | null>(null)
+  const [showSidebarGuide, setShowSidebarGuide] = useState(false)
+  const searchParams = useSearchParams()
+
+  // Auto-launch sidebar guide if ?sidebar=true or ?auto=true
+  useEffect(() => {
+    const autoLaunch = searchParams.get('sidebar') === 'true' || searchParams.get('auto') === 'true'
+    if (autoLaunch) {
+      setShowSidebarGuide(true)
+    }
+  }, [searchParams])
 
   const toggleCategory = (cat: string) => {
     setExpandedCategories(prev =>
@@ -732,6 +744,13 @@ export default function GuidePage() {
 
   return (
     <div className="space-y-6 max-w-5xl">
+      {/* Sidebar Guide Modal */}
+      <SidebarGuide
+        isOpen={showSidebarGuide}
+        onClose={() => setShowSidebarGuide(false)}
+        autoPlay={false}
+      />
+
       {/* Header */}
       <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-violet-600 to-purple-700 p-8 text-white">
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2" />
@@ -741,10 +760,19 @@ export default function GuidePage() {
             Documentation complète
           </div>
           <h1 className="text-3xl font-bold mb-3">Guide du Dashboard ATN</h1>
-          <p className="text-white/80 max-w-2xl">
+          <p className="text-white/80 max-w-2xl mb-4">
             Explication détaillée de chaque page, chaque élément, comment interpréter les données,
             et ce dont ATN a besoin pour que tout fonctionne.
           </p>
+          {/* Launch Interactive Sidebar Guide */}
+          <button
+            onClick={() => setShowSidebarGuide(true)}
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-white text-violet-700 rounded-xl font-semibold text-sm hover:bg-violet-50 transition-colors shadow-lg"
+          >
+            <Compass className="w-5 h-5" />
+            Lancer le Guide Interactif de la Sidebar
+            <ArrowRight className="w-4 h-4" />
+          </button>
         </div>
       </div>
 

@@ -288,6 +288,8 @@ const statusConfig: Record<string, { label: string; color: string }> = {
 }
 
 function ArticlePreviewModal({ article, onClose }: { article: ContentArticle; onClose: () => void }) {
+  const [heroImgError, setHeroImgError] = useState(false)
+
   return (
     <Modal onClose={onClose}>
       <div className="bg-white rounded-xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col" onClick={e => e.stopPropagation()}>
@@ -309,14 +311,24 @@ function ArticlePreviewModal({ article, onClose }: { article: ContentArticle; on
         {/* Article Content */}
         <div className="flex-1 overflow-y-auto">
           {/* Hero Image */}
-          {article.imageUrl && (
+          {article.imageUrl && !heroImgError ? (
             <div className="relative h-64 bg-slate-200">
               <img
                 src={article.imageUrl}
                 alt={article.title}
                 className="w-full h-full object-cover"
+                onError={() => setHeroImgError(true)}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+              <div className="absolute bottom-0 left-0 right-0 p-6">
+                <h1 className="text-white text-2xl font-bold">{article.title}</h1>
+              </div>
+            </div>
+          ) : (
+            <div className="relative h-48 bg-gradient-to-br from-atn-primary to-atn-secondary">
+              <div className="absolute inset-0 flex items-center justify-center">
+                <FileText className="w-16 h-16 text-white/30" />
+              </div>
               <div className="absolute bottom-0 left-0 right-0 p-6">
                 <h1 className="text-white text-2xl font-bold">{article.title}</h1>
               </div>
@@ -363,9 +375,6 @@ function ArticlePreviewModal({ article, onClose }: { article: ContentArticle; on
 
           {/* Article body */}
           <div className="p-6">
-            {!article.imageUrl && (
-              <h1 className="text-2xl font-bold mb-6">{article.title}</h1>
-            )}
             <div className="prose prose-slate max-w-none">
               {article.fullContent.split('\n').map((paragraph, i) => {
                 if (paragraph.startsWith('# ')) {
@@ -434,23 +443,26 @@ function ArticlePreviewModal({ article, onClose }: { article: ContentArticle; on
 }
 
 function ArticleCard({ article, onClick }: { article: ContentArticle; onClick: () => void }) {
+  const [imgError, setImgError] = useState(false)
+
   return (
     <div
       className="card cursor-pointer hover:shadow-md transition-shadow"
       onClick={onClick}
     >
       <div className="flex gap-4">
-        {article.imageUrl ? (
+        {article.imageUrl && !imgError ? (
           <div className="w-32 h-24 bg-slate-200 rounded-lg overflow-hidden flex-shrink-0">
             <img
               src={article.imageUrl}
               alt={article.title}
               className="w-full h-full object-cover"
+              onError={() => setImgError(true)}
             />
           </div>
         ) : (
-          <div className="w-32 h-24 bg-slate-100 rounded-lg flex items-center justify-center flex-shrink-0">
-            <Image className="w-8 h-8 text-slate-300" />
+          <div className="w-32 h-24 bg-gradient-to-br from-atn-primary/20 to-atn-secondary/20 rounded-lg flex items-center justify-center flex-shrink-0">
+            <Image className="w-8 h-8 text-atn-primary/50" />
           </div>
         )}
 
@@ -500,27 +512,43 @@ export default function ContentPage() {
   const fetchArticles = async () => {
     try {
       const response = await fetch('/api/airtable?table=SEO_Content&sortField=Date&sortDir=desc&limit=50')
+
+      if (!response.ok) {
+        console.log('API returned error, using fallback articles')
+        setArticles(fallbackArticles)
+        setLoading(false)
+        return
+      }
+
       const data = await response.json()
 
-      if (data.records && data.records.length > 0) {
-        const mapped: ContentArticle[] = data.records.map((record: { id: string; fields: Record<string, unknown> }) => ({
-          id: record.id,
-          topic: (record.fields.Topic as string) || 'Général',
-          title: (record.fields.Title as string) || 'Article sans titre',
-          excerpt: (record.fields.Excerpt as string) || '',
-          seoScore: (record.fields.SEO_Score as number) || 80,
-          geoScore: (record.fields.GEO_Score as number) || 75,
-          wordCount: (record.fields.Word_Count as number) || 500,
-          imageUrl: (record.fields.Image_URL as string) || null,
-          status: ((record.fields.Status as string)?.toLowerCase() || 'draft') as 'draft' | 'published' | 'scheduled',
-          date: (record.fields.Date as string) || new Date().toISOString(),
-          fullContent: (record.fields.Full_Content as string) || '',
-          metaDescription: (record.fields.Meta_Description as string) || '',
-          keywords: (record.fields.Keywords as string[]) || [],
-          readingTime: (record.fields.Reading_Time as number) || 5,
-        }))
+      if (data.records && Array.isArray(data.records) && data.records.length > 0) {
+        const mapped: ContentArticle[] = data.records.map((record: { id: string; fields: Record<string, unknown> }) => {
+          // Find matching fallback for this topic to get rich content if missing
+          const topic = (record.fields.Topic as string) || 'Général'
+          const fallback = fallbackArticles.find(f => f.topic === topic) || fallbackArticles[0]
+
+          return {
+            id: record.id,
+            topic,
+            title: (record.fields.Title as string) || fallback.title,
+            excerpt: (record.fields.Excerpt as string) || fallback.excerpt,
+            seoScore: (record.fields.SEO_Score as number) || fallback.seoScore,
+            geoScore: (record.fields.GEO_Score as number) || fallback.geoScore,
+            wordCount: (record.fields.Word_Count as number) || fallback.wordCount,
+            imageUrl: (record.fields.Image_URL as string) || fallback.imageUrl,
+            status: ((record.fields.Status as string)?.toLowerCase() || 'draft') as 'draft' | 'published' | 'scheduled',
+            date: (record.fields.Date as string) || new Date().toISOString(),
+            fullContent: (record.fields.Full_Content as string) || fallback.fullContent,
+            metaDescription: (record.fields.Meta_Description as string) || fallback.metaDescription,
+            keywords: (record.fields.Keywords as string[]) || fallback.keywords,
+            readingTime: (record.fields.Reading_Time as number) || fallback.readingTime,
+          }
+        })
         setArticles(mapped)
       } else {
+        // No records in Airtable, use fallback
+        console.log('No Airtable records, using fallback articles')
         setArticles(fallbackArticles)
       }
     } catch (error) {
@@ -575,7 +603,7 @@ export default function ContentPage() {
           data-guide="content-btn-generate"
           onClick={syncContent}
           disabled={syncing}
-          className="flex items-center gap-2 px-4 py-2 bg-atn-primary text-white rounded-lg text-sm font-medium hover:bg-opacity-90 disabled:opacity-50 transition-all flex items-center gap-2"
+          className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-atn-primary to-atn-secondary text-white rounded-xl font-medium text-sm shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
         >
           {syncing ? (
             <Loader2 className="w-4 h-4 animate-spin" />
