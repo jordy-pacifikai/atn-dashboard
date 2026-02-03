@@ -398,7 +398,7 @@ export default function Sidebar() {
         className="absolute right-0 top-0 w-1 h-full group cursor-pointer z-50"
         title={sidebarCollapsed ? 'Agrandir' : 'Reduire'}
       >
-        <div className="w-full h-full bg-[--border-primary] group-hover:w-1.5 group-hover:bg-gradient-to-b group-hover:from-[#00C7BE] group-hover:via-[#007AFF] group-hover:to-[#5856D6] transition-all duration-200" />
+        <div className="w-full h-full bg-[--border-primary] group-hover:w-1.5 group-hover:bg-gradient-to-b group-hover:from-sky-300 group-hover:via-slate-400 group-hover:to-slate-700 transition-all duration-200" />
       </button>
     </aside>
   )
