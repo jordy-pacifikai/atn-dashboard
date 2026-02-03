@@ -40,6 +40,7 @@ interface ReportData {
 
 interface ReportModalProps {
   reportId: string
+  customPrompt?: string
   onClose: () => void
 }
 
@@ -47,7 +48,7 @@ interface ReportModalProps {
 // Mock Data Generator
 // =====================================================
 
-const generateMockReportData = (reportId: string): ReportData => {
+const generateMockReportData = (reportId: string, customPrompt?: string): ReportData => {
   const today = new Date()
   const dateStr = today.toLocaleDateString('fr-FR', {
     weekday: 'long',
@@ -55,6 +56,187 @@ const generateMockReportData = (reportId: string): ReportData => {
     month: 'long',
     day: 'numeric'
   })
+
+  // Custom report based on user prompt
+  if (reportId === 'custom' && customPrompt) {
+    const promptLower = customPrompt.toLowerCase()
+
+    // Detect report type from prompt
+    let category: 'performance' | 'content' | 'revenue' | 'operations' = 'performance'
+    let title = 'Rapport Personnalisé'
+    let subtitle = customPrompt
+
+    if (promptLower.includes('marketing') || promptLower.includes('newsletter') || promptLower.includes('email')) {
+      category = 'content'
+      title = 'Analyse Marketing Personnalisée'
+    } else if (promptLower.includes('roi') || promptLower.includes('revenu') || promptLower.includes('upsell') || promptLower.includes('vente')) {
+      category = 'revenue'
+      title = 'Analyse ROI Personnalisée'
+    } else if (promptLower.includes('satisfaction') || promptLower.includes('avis') || promptLower.includes('client') || promptLower.includes('nps')) {
+      category = 'operations'
+      title = 'Analyse Satisfaction Personnalisée'
+    } else if (promptLower.includes('seo') || promptLower.includes('contenu') || promptLower.includes('article') || promptLower.includes('blog')) {
+      category = 'content'
+      title = 'Analyse Contenu Personnalisée'
+    } else if (promptLower.includes('concurrent') || promptLower.includes('veille') || promptLower.includes('marché')) {
+      category = 'operations'
+      title = 'Veille Concurrentielle Personnalisée'
+    } else if (promptLower.includes('vol') || promptLower.includes('opération') || promptLower.includes('retard')) {
+      category = 'operations'
+      title = 'Analyse Opérations Personnalisée'
+    } else if (promptLower.includes('performance') || promptLower.includes('global') || promptLower.includes('mois')) {
+      category = 'performance'
+      title = 'Performance Globale'
+    }
+
+    // Detect period from prompt
+    let period = dateStr
+    if (promptLower.includes('mois') || promptLower.includes('mensuel')) {
+      period = 'Janvier 2026'
+    } else if (promptLower.includes('semaine') || promptLower.includes('hebdo')) {
+      period = 'Semaine du 27 Jan - 2 Fév 2026'
+    } else if (promptLower.includes('trimestre')) {
+      period = 'Q4 2025'
+    } else if (promptLower.includes('année') || promptLower.includes('annuel')) {
+      period = 'Année 2025'
+    }
+
+    // Generate contextual data based on category
+    const customReports: Record<string, Partial<ReportData>> = {
+      performance: {
+        summary: `Analyse personnalisée basée sur votre demande : "${customPrompt}". Les workflows IA ont traité 12,450 interactions ce mois avec une efficacité de 94.2%. Le temps de réponse moyen est passé de 3.2s à 1.1s (-66%). Les économies générées atteignent 4.2M XPF.`,
+        metrics: [
+          { label: 'Interactions totales', value: '12,450', change: 18.5, icon: 'up' },
+          { label: 'Efficacité IA', value: '94.2%', change: 3.8, icon: 'up' },
+          { label: 'Temps réponse', value: '1.1s', change: -66, icon: 'up' },
+          { label: 'Économies', value: '4.2M XPF', change: 22, icon: 'up' },
+        ],
+        breakdown: {
+          title: 'Performance par workflow',
+          items: [
+            { label: 'Chatbot Concierge', value: '4,850 interactions', percentage: 39 },
+            { label: 'Notifications automatiques', value: '3,200 envois', percentage: 26 },
+            { label: 'Upsell Engine', value: '2,100 offres', percentage: 17 },
+            { label: 'FAQ & Support', value: '1,450 réponses', percentage: 12 },
+            { label: 'Autres workflows', value: '850 actions', percentage: 6 },
+          ]
+        },
+        recommendations: [
+          'Optimiser le chatbot pour les questions sur les bagages spéciaux (volume +45% ce mois)',
+          'Activer le workflow de relance panier abandonné (potentiel +800K XPF/mois)',
+          'Implémenter le scoring prédictif pour prioriser les leads à fort potentiel'
+        ],
+        highlights: [
+          '🎯 94.2% efficacité IA (objectif: 90%)',
+          '💰 4.2M XPF économisés ce mois',
+          '⚡ Temps réponse -66% vs mois dernier'
+        ]
+      },
+      content: {
+        summary: `Analyse personnalisée basée sur votre demande : "${customPrompt}". Les campagnes marketing ont généré 89 conversions directes ce mois. Le taux d'ouverture des newsletters atteint 42.8% (benchmark industrie: 21%). Le contenu SEO a attiré 45,200 visiteurs organiques.`,
+        metrics: [
+          { label: 'Taux d\'ouverture', value: '42.8%', change: 5.4, icon: 'up' },
+          { label: 'Conversions', value: '89', change: 23.1, icon: 'up' },
+          { label: 'Trafic organique', value: '45,200', change: 32, icon: 'up' },
+          { label: 'Engagement social', value: '12.4K', change: 18, icon: 'up' },
+        ],
+        breakdown: {
+          title: 'Performance par canal',
+          items: [
+            { label: 'Email Marketing', value: '89 conversions', percentage: 42 },
+            { label: 'SEO / Blog', value: '45 conversions', percentage: 21 },
+            { label: 'Social Media', value: '38 conversions', percentage: 18 },
+            { label: 'Retargeting', value: '28 conversions', percentage: 13 },
+            { label: 'Referral', value: '12 conversions', percentage: 6 },
+          ]
+        },
+        recommendations: [
+          'Créer une série email "Découverte Polynésie" en 5 épisodes (fort potentiel nurturing)',
+          'Publier 3 articles SEO sur "Lune de miel Bora Bora" (volume recherche élevé)',
+          'Tester les Reels Instagram avec contenus UGC voyageurs'
+        ],
+        highlights: [
+          '📧 42.8% taux ouverture (2x industrie)',
+          '📈 +32% trafic organique',
+          '🎯 89 conversions directes'
+        ]
+      },
+      revenue: {
+        summary: `Analyse personnalisée basée sur votre demande : "${customPrompt}". Le ROI global des automatisations atteint 847% ce mois. Les revenus additionnels générés par l'upsell IA s'élèvent à 12.4M XPF. La route PPT-CDG représente 35% du revenu upsell.`,
+        metrics: [
+          { label: 'ROI Global', value: '847%', change: 34, icon: 'up' },
+          { label: 'Revenus upsell', value: '12.4M XPF', change: 28, icon: 'up' },
+          { label: 'Taux conversion', value: '8.7%', change: 2.1, icon: 'up' },
+          { label: 'Panier moyen', value: '18.5K XPF', change: 12, icon: 'up' },
+        ],
+        breakdown: {
+          title: 'Revenus par source',
+          items: [
+            { label: 'Upgrade Classe Affaires', value: '5.6M XPF', percentage: 45 },
+            { label: 'Bagages supplémentaires', value: '2.8M XPF', percentage: 23 },
+            { label: 'Sièges premium', value: '2.1M XPF', percentage: 17 },
+            { label: 'Assurance voyage', value: '1.2M XPF', percentage: 10 },
+            { label: 'Services lounge', value: '0.7M XPF', percentage: 5 },
+          ]
+        },
+        recommendations: [
+          'Lancer le bundle "Business Experience" (siège + lounge + bagage) à J-14',
+          'Activer le dynamic pricing sur les upgrades dernière minute (J-3 à J-1)',
+          'Tester les offres personnalisées basées sur l\'historique voyageur'
+        ],
+        highlights: [
+          '💰 12.4M XPF revenus additionnels',
+          '📊 ROI 847% sur les automatisations',
+          '🎯 8.7% taux de conversion upsell'
+        ]
+      },
+      operations: {
+        summary: `Analyse personnalisée basée sur votre demande : "${customPrompt}". Le NPS atteint 72 points (+5 vs mois dernier). La ponctualité des vols est à 98.2%. Le chatbot a résolu 94% des demandes sans escalade humaine. Temps moyen de résolution: 4.2h (-18%).`,
+        metrics: [
+          { label: 'Score NPS', value: '72', change: 5, icon: 'up' },
+          { label: 'Ponctualité', value: '98.2%', change: 1.8, icon: 'up' },
+          { label: 'Résolution auto', value: '94%', change: 3.2, icon: 'up' },
+          { label: 'Temps résolution', value: '4.2h', change: -18, icon: 'up' },
+        ],
+        breakdown: {
+          title: 'Satisfaction par point de contact',
+          items: [
+            { label: 'Chatbot Concierge', value: '4.6/5', percentage: 92 },
+            { label: 'Notifications proactives', value: '4.5/5', percentage: 90 },
+            { label: 'Réponse email', value: '4.3/5', percentage: 86 },
+            { label: 'Service téléphonique', value: '4.1/5', percentage: 82 },
+            { label: 'Réseaux sociaux', value: '4.0/5', percentage: 80 },
+          ]
+        },
+        recommendations: [
+          'Déployer le survey automatique post-vol (actuellement 23% de réponses)',
+          'Créer un workflow dédié pour les réclamations bagages (pain point #1)',
+          'Ajouter le suivi proactif des correspondances à risque'
+        ],
+        highlights: [
+          '🌟 NPS 72 (+5 points)',
+          '✈️ 98.2% ponctualité',
+          '🤖 94% résolution automatique'
+        ]
+      }
+    }
+
+    const categoryData = customReports[category] || customReports.performance
+
+    return {
+      id: 'custom',
+      title,
+      subtitle: subtitle.length > 60 ? subtitle.substring(0, 60) + '...' : subtitle,
+      period,
+      generatedAt: today.toISOString(),
+      category,
+      summary: categoryData.summary!,
+      metrics: categoryData.metrics!,
+      breakdown: categoryData.breakdown!,
+      recommendations: categoryData.recommendations!,
+      highlights: categoryData.highlights
+    }
+  }
 
   const reports: Record<string, ReportData> = {
     'daily-summary': {
@@ -407,7 +589,7 @@ const CategoryIcon = ({ category }: { category: string }) => {
 // Main Report Modal Component
 // =====================================================
 
-export default function ReportModal({ reportId, onClose }: ReportModalProps) {
+export default function ReportModal({ reportId, customPrompt, onClose }: ReportModalProps) {
   const [reportData, setReportData] = useState<ReportData | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [mounted, setMounted] = useState(false)
@@ -424,14 +606,15 @@ export default function ReportModal({ reportId, onClose }: ReportModalProps) {
   }, [])
 
   useEffect(() => {
-    // Simulate loading
+    // Simulate loading (longer for custom reports to feel more "generated")
     setIsLoading(true)
+    const delay = customPrompt ? 1500 : 800
     const timer = setTimeout(() => {
-      setReportData(generateMockReportData(reportId))
+      setReportData(generateMockReportData(reportId, customPrompt))
       setIsLoading(false)
-    }, 800)
+    }, delay)
     return () => clearTimeout(timer)
-  }, [reportId])
+  }, [reportId, customPrompt])
 
   const handlePrint = () => {
     if (reportRef.current) {

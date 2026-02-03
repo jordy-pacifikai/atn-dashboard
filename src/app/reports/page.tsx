@@ -185,6 +185,7 @@ export default function ReportsPage() {
   const [loading, setLoading] = useState(true)
   const [selectedReport, setSelectedReport] = useState<AIReport | null>(null)
   const [showReportModal, setShowReportModal] = useState<string | null>(null)
+  const [customReportPrompt, setCustomReportPrompt] = useState<string | null>(null)
 
   useEffect(() => {
     async function fetchAIReports() {
@@ -234,8 +235,9 @@ export default function ReportsPage() {
     setIsCustomGenerating(true)
     await new Promise(r => setTimeout(r, 500))
     setIsCustomGenerating(false)
-    // Show daily summary as default for custom reports
-    setShowReportModal('daily-summary')
+    // Show custom report with the user's prompt
+    setCustomReportPrompt(customPrompt)
+    setShowReportModal('custom')
     setCustomPrompt('')
   }
 
@@ -490,7 +492,11 @@ export default function ReportsPage() {
       {showReportModal && (
         <ReportModal
           reportId={showReportModal}
-          onClose={() => setShowReportModal(null)}
+          customPrompt={customReportPrompt || undefined}
+          onClose={() => {
+            setShowReportModal(null)
+            setCustomReportPrompt(null)
+          }}
         />
       )}
     </div>
