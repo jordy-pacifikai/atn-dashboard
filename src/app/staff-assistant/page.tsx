@@ -476,6 +476,9 @@ export default function StaffAssistantPage() {
           <h1 className="text-2xl font-bold flex items-center gap-3">
             <UserCog className="w-7 h-7 text-cyan-500" />
             Staff Assistant TALIA
+            <span className="px-3 py-1 bg-amber-100 text-amber-700 text-xs font-medium rounded-full">
+              Données démo
+            </span>
           </h1>
           <p className="text-slate-500">Build 19: Assistant interne employés ATN</p>
         </div>

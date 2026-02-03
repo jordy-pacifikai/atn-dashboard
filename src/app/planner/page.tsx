@@ -226,6 +226,9 @@ export default function PlannerPage() {
           <h1 className="text-2xl font-bold flex items-center gap-3">
             <ListTodo className="w-7 h-7 text-indigo-500" />
             Content Planner
+            <span className="px-3 py-1 bg-amber-100 text-amber-700 text-xs font-medium rounded-full">
+              Données démo
+            </span>
           </h1>
           <p className="text-slate-500">Planification éditoriale sur 30 jours</p>
         </div>

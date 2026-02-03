@@ -279,6 +279,9 @@ export default function ConciergeProPage() {
           <h1 className="text-2xl font-bold flex items-center gap-3">
             <Headphones className="w-7 h-7 text-sky-500" />
             Concierge Pro
+            <span className="px-3 py-1 bg-amber-100 text-amber-700 text-xs font-medium rounded-full">
+              Données démo
+            </span>
           </h1>
           <p className="text-slate-500">Build 18: Concierge avec contexte réservation</p>
         </div>

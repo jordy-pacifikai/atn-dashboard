@@ -248,6 +248,9 @@ export default function ReportsPage() {
           <h1 className="text-2xl font-bold flex items-center gap-3">
             <FileBarChart className="w-7 h-7 text-blue-500" />
             Rapports
+            <span className="px-3 py-1 bg-amber-100 text-amber-700 text-xs font-medium rounded-full">
+              Données démo
+            </span>
           </h1>
           <p className="text-slate-500">Génération de rapports sur demande</p>
         </div>
