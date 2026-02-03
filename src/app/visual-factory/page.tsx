@@ -79,76 +79,84 @@ const fallbackAssets: VisualAsset[] = [
 ]
 
 // Galerie d'images de demo par THEME pour coherence prompt/image
-const demoImagesByTheme: Record<string, { keywords: string[], images: string[] }> = {
-  // Paysages et lagons
-  lagon: {
-    keywords: ['lagon', 'bora', 'moorea', 'tahiti', 'île', 'aerien', 'vue', 'turquoise', 'bungalow', 'overwater'],
-    images: [
-      'https://images.unsplash.com/photo-1589197331516-4d84b72ebde3', // Bora Bora lagon
-      'https://images.unsplash.com/photo-1516815231560-8f41ec531527', // Moorea aerien
-      'https://images.unsplash.com/photo-1507525428034-b723cf961d3e', // Plage tropicale
-      'https://images.unsplash.com/photo-1514282401047-d79a71a590e8', // Lagon turquoise
-    ]
-  },
-  // Plongée et océan
-  plongee: {
-    keywords: ['plong', 'raie', 'requin', 'manta', 'sous-marin', 'ocean', 'mer', 'corail', 'fakarava', 'rangiroa'],
-    images: [
-      'https://images.unsplash.com/photo-1544551763-46a013bb70d5', // Raie manta
-      'https://images.unsplash.com/photo-1682687220742-aba13b6e50ba', // Plongee requins
-      'https://images.unsplash.com/photo-1559827260-dc66d52bef19', // Tortue marine
-      'https://images.unsplash.com/photo-1583212292454-1fe6229603b7', // Coraux
-    ]
-  },
-  // Culture et danse
+// IMPORTANT: Les themes sont testes par nombre de matches, donc les keywords specifiques priment
+const demoImagesByTheme: Record<string, { keywords: string[], images: string[], priority: number }> = {
+  // Culture et danse - PRIORITE HAUTE car keywords tres specifiques
   culture: {
-    keywords: ['danse', 'tahiti', 'tradition', 'costume', 'fête', 'vahiné', 'tiare', 'fleur', 'polynésien', 'ukulele'],
+    keywords: ['danse', 'danseur', 'danseuse', 'tradition', 'traditionnel', 'costume', 'fete', 'vahine', 'tiare', 'polynesien', 'ukulele', 'heiva', 'ori', 'tamure'],
     images: [
       'https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b', // Danse tahitienne
       'https://images.unsplash.com/photo-1601370690183-1c7796ecec61', // Fleur tiare
       'https://images.unsplash.com/photo-1518509562904-e7ef99cdcc86', // Ukulele hawaien
       'https://images.unsplash.com/photo-1590523278191-995cbcda646b', // Culture polynesienne
-    ]
+    ],
+    priority: 10
+  },
+  // Plongée et océan - PRIORITE HAUTE
+  plongee: {
+    keywords: ['plong', 'raie', 'requin', 'manta', 'sous-marin', 'ocean', 'corail', 'fakarava', 'rangiroa', 'tortue', 'poisson', 'aqua'],
+    images: [
+      'https://images.unsplash.com/photo-1544551763-46a013bb70d5', // Raie manta
+      'https://images.unsplash.com/photo-1682687220742-aba13b6e50ba', // Plongee requins
+      'https://images.unsplash.com/photo-1559827260-dc66d52bef19', // Tortue marine
+      'https://images.unsplash.com/photo-1583212292454-1fe6229603b7', // Coraux
+    ],
+    priority: 10
+  },
+  // Paysages et lagons - PRIORITE MOYENNE (fallback pour "tahiti", "moorea", etc)
+  lagon: {
+    keywords: ['lagon', 'bora', 'moorea', 'ile', 'aerien', 'vue', 'turquoise', 'bungalow', 'overwater', 'plage', 'sable'],
+    images: [
+      'https://images.unsplash.com/photo-1589197331516-4d84b72ebde3', // Bora Bora lagon
+      'https://images.unsplash.com/photo-1516815231560-8f41ec531527', // Moorea aerien
+      'https://images.unsplash.com/photo-1507525428034-b723cf961d3e', // Plage tropicale
+      'https://images.unsplash.com/photo-1514282401047-d79a71a590e8', // Lagon turquoise
+    ],
+    priority: 5
   },
   // Coucher de soleil
   sunset: {
-    keywords: ['coucher', 'soleil', 'sunset', 'crépuscule', 'soir', 'romantique', 'catamaran', 'pirogue'],
+    keywords: ['coucher', 'soleil', 'sunset', 'crepuscule', 'soir', 'romantique', 'catamaran', 'pirogue', 'golden'],
     images: [
       'https://images.unsplash.com/photo-1507525428034-b723cf961d3e', // Sunset plage
       'https://images.unsplash.com/photo-1476673160081-cf065f0c2b91', // Sunset palmiers
       'https://images.unsplash.com/photo-1519046904884-53103b34b206', // Sunset tropical
       'https://images.unsplash.com/photo-1499678329028-101435549a4e', // Golden hour plage
-    ]
+    ],
+    priority: 8
   },
   // Avion et voyage
   avion: {
-    keywords: ['avion', 'boeing', '787', 'dreamliner', 'vol', 'atterr', 'decoll', 'aeroport', 'cabine', 'classe', 'poerava', 'business'],
+    keywords: ['avion', 'boeing', '787', 'dreamliner', 'vol', 'atterr', 'decoll', 'aeroport', 'cabine', 'classe', 'poerava', 'business', 'hublot'],
     images: [
       'https://images.unsplash.com/photo-1540339832862-474599807836', // Avion ciel
       'https://images.unsplash.com/photo-1436491865332-7a61a109cc05', // Avion voyage
       'https://images.unsplash.com/photo-1569629743817-70d8db6c323b', // Cabine business
       'https://images.unsplash.com/photo-1556388158-158ea5ccacbd', // Vue hublot
-    ]
+    ],
+    priority: 10
   },
   // Montagne et nature
   montagne: {
-    keywords: ['montagne', 'verdoy', 'cascade', 'jungle', 'forêt', 'randonnée', 'nature', 'exploration'],
+    keywords: ['montagne', 'verdoy', 'cascade', 'jungle', 'foret', 'randonnee', 'nature', 'exploration', 'trek'],
     images: [
       'https://images.unsplash.com/photo-1505142468610-359e7d316be0', // Montagne tropicale
       'https://images.unsplash.com/photo-1464037866556-6812c9d1c72e', // Nature luxuriante
       'https://images.unsplash.com/photo-1518837695005-2083093ee35b', // Cascade
       'https://images.unsplash.com/photo-1544735716-ea9ef790f501', // Jungle
-    ]
+    ],
+    priority: 7
   },
   // Service et luxe
   luxe: {
-    keywords: ['champagne', 'service', 'luxe', 'premium', 'fruit', 'cocktail', 'repas', 'gastronomie'],
+    keywords: ['champagne', 'service', 'luxe', 'premium', 'fruit', 'cocktail', 'repas', 'gastronomie', 'spa', 'resort'],
     images: [
       'https://images.unsplash.com/photo-1566073771259-6a8506099945', // Resort luxe
       'https://images.unsplash.com/photo-1571896349842-33c89424de2d', // Petit dejeuner tropical
       'https://images.unsplash.com/photo-1559827291-72ee739d0d9a', // Fleurs tropicales
       'https://images.unsplash.com/photo-1544551763-77ef2d0cfc6c', // Ambiance luxe
-    ]
+    ],
+    priority: 6
   },
 }
 
@@ -159,17 +167,20 @@ function findBestImageForPrompt(prompt: string, format: string): string {
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '') // Enleve les accents
 
-  // Chercher le meilleur theme
+  // Chercher le meilleur theme avec scoring pondere (matches * priority)
   let bestTheme: string | null = null
-  let maxMatches = 0
+  let maxScore = 0
 
   for (const [theme, data] of Object.entries(demoImagesByTheme)) {
     const matches = data.keywords.filter(kw =>
       normalizedPrompt.includes(kw.normalize('NFD').replace(/[\u0300-\u036f]/g, ''))
     ).length
 
-    if (matches > maxMatches) {
-      maxMatches = matches
+    // Score = nombre de matches * priorite du theme
+    const score = matches * (data.priority || 5)
+
+    if (score > maxScore) {
+      maxScore = score
       bestTheme = theme
     }
   }
