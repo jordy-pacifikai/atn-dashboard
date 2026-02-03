@@ -6,19 +6,22 @@ interface SidebarContextType {
   isCollapsed: boolean
   toggleSidebar: () => void
   setCollapsed: (collapsed: boolean) => void
+  mounted: boolean
 }
 
 const SidebarContext = createContext<SidebarContextType | undefined>(undefined)
 
 export function SidebarProvider({ children }: { children: ReactNode }) {
   const [isCollapsed, setIsCollapsed] = useState(false)
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    // Load from localStorage
+    // Load from localStorage only after mount
     const stored = localStorage.getItem('sidebar-collapsed')
     if (stored !== null) {
       setIsCollapsed(stored === 'true')
     }
+    setMounted(true)
   }, [])
 
   const toggleSidebar = () => {
@@ -33,7 +36,7 @@ export function SidebarProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <SidebarContext.Provider value={{ isCollapsed, toggleSidebar, setCollapsed }}>
+    <SidebarContext.Provider value={{ isCollapsed, toggleSidebar, setCollapsed, mounted }}>
       {children}
     </SidebarContext.Provider>
   )

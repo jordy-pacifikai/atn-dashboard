@@ -275,24 +275,27 @@ const navigationGroups: NavGroup[] = [
 
 export default function Sidebar() {
   const pathname = usePathname()
-  const { isCollapsed, toggleSidebar } = useSidebar()
+  const { isCollapsed, toggleSidebar, mounted } = useSidebar()
+
+  // Use default width until mounted to prevent hydration mismatch
+  const sidebarCollapsed = mounted ? isCollapsed : false
 
   return (
     <aside
       className={`fixed left-0 top-10 h-[calc(100vh-40px)] sidebar-glass flex flex-col z-40 transition-all duration-300 ${
-        isCollapsed ? 'w-[72px]' : 'w-[280px]'
+        sidebarCollapsed ? 'w-[72px]' : 'w-[280px]'
       }`}
     >
       {/* Header */}
       <div className={`flex items-center justify-center h-[72px] ${
-        isCollapsed ? 'px-2' : 'px-4'
+        sidebarCollapsed ? 'px-2' : 'px-4'
       }`}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/logo-atn.svg"
           alt="Air Tahiti Nui"
           className={`object-contain transition-all duration-300 ${
-            isCollapsed ? 'w-[48px] h-[32px]' : 'w-full max-w-[200px] h-[50px]'
+            sidebarCollapsed ? 'w-[48px] h-[32px]' : 'w-full max-w-[200px] h-[50px]'
           }`}
         />
       </div>
@@ -301,11 +304,11 @@ export default function Sidebar() {
       <div className="mx-4 h-px bg-[--border-primary]" />
 
       {/* Navigation */}
-      <nav className={`flex-1 overflow-y-auto py-2 ${isCollapsed ? 'px-2' : 'px-3'} scrollbar-thin`}>
+      <nav className={`flex-1 overflow-y-auto py-2 ${sidebarCollapsed ? 'px-2' : 'px-3'} scrollbar-thin`}>
         {navigationGroups.map((group, groupIndex) => (
           <div key={group.label} className={groupIndex > 0 ? 'mt-4' : ''}>
             {/* Group Label */}
-            {!isCollapsed && (
+            {!sidebarCollapsed && (
               <p className="px-3 py-2 text-[10px] font-semibold uppercase tracking-widest text-[--text-tertiary]">
                 {group.label}
               </p>
@@ -329,8 +332,8 @@ export default function Sidebar() {
                         : isActive
                         ? 'bg-[--sidebar-active]'
                         : 'hover:bg-[--sidebar-hover]'
-                    } ${isCollapsed ? 'justify-center' : ''}`}
-                    title={isCollapsed ? `${item.name}${item.roi ? ` - ${item.roi}` : ''}` : undefined}
+                    } ${sidebarCollapsed ? 'justify-center' : ''}`}
+                    title={sidebarCollapsed ? `${item.name}${item.roi ? ` - ${item.roi}` : ''}` : undefined}
                   >
                     {/* Icon */}
                     <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 transition-all ${
@@ -343,7 +346,7 @@ export default function Sidebar() {
                       <item.icon className="w-4 h-4" />
                     </div>
 
-                    {!isCollapsed && (
+                    {!sidebarCollapsed && (
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">
                           <span className={`text-[13px] font-medium ${
@@ -373,7 +376,7 @@ export default function Sidebar() {
                     )}
 
                     {/* ROI indicator on hover */}
-                    {!isCollapsed && item.roi && (
+                    {!sidebarCollapsed && item.roi && (
                       <span className="text-[10px] text-[--atn-green] font-medium opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
                         {item.roi}
                       </span>
@@ -395,8 +398,8 @@ export default function Sidebar() {
       <div className="mx-4 h-px bg-[--border-primary]" />
 
       {/* CTA */}
-      <div className={`py-3 ${isCollapsed ? 'px-2' : 'px-4'}`}>
-        {!isCollapsed ? (
+      <div className={`py-3 ${sidebarCollapsed ? 'px-2' : 'px-4'}`}>
+        {!sidebarCollapsed ? (
           <a
             href="https://cal.com/pacifikai/demo"
             target="_blank"
@@ -423,15 +426,15 @@ export default function Sidebar() {
       </div>
 
       {/* Collapse Toggle */}
-      <div className={`pb-3 ${isCollapsed ? 'px-2' : 'px-4'}`}>
+      <div className={`pb-3 ${sidebarCollapsed ? 'px-2' : 'px-4'}`}>
         <button
           onClick={toggleSidebar}
           className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-[--text-tertiary] hover:text-[--text-secondary] hover:bg-[--sidebar-hover] transition-all ${
-            isCollapsed ? 'justify-center' : ''
+            sidebarCollapsed ? 'justify-center' : ''
           }`}
-          title={isCollapsed ? 'Agrandir' : 'Reduire'}
+          title={sidebarCollapsed ? 'Agrandir' : 'Reduire'}
         >
-          {isCollapsed ? (
+          {sidebarCollapsed ? (
             <ChevronRight className="w-[18px] h-[18px]" />
           ) : (
             <>
