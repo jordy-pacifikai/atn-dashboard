@@ -467,26 +467,6 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* CTA Reserve */}
-      <div className="card p-6 bg-gradient-to-r from-[--atn-primary]/5 to-[--atn-secondary]/5 border-[--atn-primary]/20">
-        <div className="flex items-center justify-between">
-          <div>
-            <h3 className="text-lg font-semibold text-[--text-primary]">Des questions sur ce prototype ?</h3>
-            <p className="text-sm text-[--text-secondary] mt-1">
-              Reservez un appel de 15 minutes pour discuter de vos besoins specifiques.
-            </p>
-          </div>
-          <a
-            href="https://cal.com/pacifikai/demo"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 px-6 py-3 bg-[--atn-primary] text-white rounded-xl hover:bg-[--atn-primary]/90 transition-colors font-medium"
-          >
-            <Calendar className="w-5 h-5" />
-            Reserver un appel
-          </a>
-        </div>
-      </div>
     </div>
   )
 }

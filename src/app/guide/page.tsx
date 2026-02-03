@@ -1026,10 +1026,6 @@ export default function GuidePage() {
               q: 'Comment interpréter les indicateurs verts/orange/rouges ?',
               a: 'Vert = tout fonctionne, la donnée est en temps réel. Orange = fonctionne partiellement, besoin d\'une config côté ATN. Rouge = accès manquant, la fonctionnalité n\'est pas active. Consultez chaque page de ce guide pour voir les actions requises.',
             },
-            {
-              q: 'Comment contacter PACIFIK\'AI pour des questions ?',
-              a: 'Email: jordy@pacifikai.com • Téléphone: +689 89 55 81 89 • Ou réservez un appel sur cal.com/pacifikai/demo',
-            },
           ].map((item, i) => (
             <div key={i} className="bg-white border border-[--border-primary] rounded-xl p-5">
               <p className="font-medium text-[--text-primary] mb-2">{item.q}</p>

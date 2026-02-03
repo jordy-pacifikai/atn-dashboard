@@ -511,7 +511,7 @@ export default function ContentPage() {
   // Fetch articles from Airtable
   const fetchArticles = async () => {
     try {
-      const response = await fetch('/api/airtable?table=SEO_Content&sortField=Date&sortDir=desc&limit=50')
+      const response = await fetch('/api/airtable?table=tblH8zjZEkVwmS0zY&sortField=Date&sortDir=desc&limit=50')
 
       if (!response.ok) {
         console.log('API returned error, using fallback articles')
