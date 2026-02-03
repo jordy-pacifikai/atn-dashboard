@@ -511,7 +511,7 @@ export default function ContentPage() {
   // Fetch articles from Airtable
   const fetchArticles = async () => {
     try {
-      const response = await fetch('/api/airtable?table=tblH8zjZEkVwmS0zY&sortField=Date&sortDir=desc&limit=50')
+      const response = await fetch('/api/airtable?table=tblH8zjZEkVwmS0zY&sortField=Score%20SEO&sortDir=desc&limit=50')
 
       if (!response.ok) {
         console.log('API returned error, using fallback articles')
@@ -523,26 +523,73 @@ export default function ContentPage() {
       const data = await response.json()
 
       if (data.records && Array.isArray(data.records) && data.records.length > 0) {
-        const mapped: ContentArticle[] = data.records.map((record: { id: string; fields: Record<string, unknown> }) => {
-          // Find matching fallback for this topic to get rich content if missing
-          const topic = (record.fields.Topic as string) || 'Général'
-          const fallback = fallbackArticles.find(f => f.topic === topic) || fallbackArticles[0]
+        const mapped: ContentArticle[] = data.records.map((record: { id: string; fields: Record<string, unknown>; createdTime?: string }) => {
+          // Actual Airtable fields: Topic, Article, Image, Mots, Score SEO, Score GEO
+          const title = (record.fields.Topic as string) || 'Article sans titre'
+          const fullContent = (record.fields.Article as string) || ''
+          const wordCount = (record.fields.Mots as number) || 0
+          const seoScore = (record.fields['Score SEO'] as number) || 0
+          const geoScore = (record.fields['Score GEO'] as number) || 0
+          const imageUrl = (record.fields.Image as string) || '/images/placeholder-article.jpg'
+
+          // Generate excerpt from content (first 200 chars)
+          const excerpt = fullContent
+            ? fullContent.replace(/[#*_\[\]]/g, '').substring(0, 200).trim() + '...'
+            : 'Découvrez cet article sur la Polynésie française...'
+
+          // Extract topic/category from title
+          const topicKeywords: Record<string, string> = {
+            'voyage': 'Voyage',
+            'période': 'Guide',
+            'plongée': 'Plongée',
+            'culture': 'Culture',
+            'hôtel': 'Hébergement',
+            'restaurant': 'Gastronomie',
+            'activité': 'Activités',
+            'plage': 'Destination',
+            'île': 'Destination',
+            'tahiti': 'Destination',
+            'bora': 'Destination',
+            'moorea': 'Destination',
+            'requin': 'Faune',
+            'baleine': 'Faune',
+            'raie': 'Faune',
+          }
+          let topic = 'Général'
+          const titleLower = title.toLowerCase()
+          for (const [keyword, category] of Object.entries(topicKeywords)) {
+            if (titleLower.includes(keyword)) {
+              topic = category
+              break
+            }
+          }
+
+          // Calculate reading time (avg 200 words/min)
+          const readingTime = Math.max(1, Math.ceil(wordCount / 200))
+
+          // Extract keywords from title
+          const keywords = title
+            .toLowerCase()
+            .replace(/[^a-zàâäéèêëïîôùûüÿœæç\s]/g, '')
+            .split(' ')
+            .filter(w => w.length > 3)
+            .slice(0, 5)
 
           return {
             id: record.id,
             topic,
-            title: (record.fields.Title as string) || fallback.title,
-            excerpt: (record.fields.Excerpt as string) || fallback.excerpt,
-            seoScore: (record.fields.SEO_Score as number) || fallback.seoScore,
-            geoScore: (record.fields.GEO_Score as number) || fallback.geoScore,
-            wordCount: (record.fields.Word_Count as number) || fallback.wordCount,
-            imageUrl: (record.fields.Image_URL as string) || fallback.imageUrl,
-            status: ((record.fields.Status as string)?.toLowerCase() || 'draft') as 'draft' | 'published' | 'scheduled',
-            date: (record.fields.Date as string) || new Date().toISOString(),
-            fullContent: (record.fields.Full_Content as string) || fallback.fullContent,
-            metaDescription: (record.fields.Meta_Description as string) || fallback.metaDescription,
-            keywords: (record.fields.Keywords as string[]) || fallback.keywords,
-            readingTime: (record.fields.Reading_Time as number) || fallback.readingTime,
+            title,
+            excerpt,
+            seoScore,
+            geoScore,
+            wordCount,
+            imageUrl,
+            status: 'published' as const,
+            date: record.createdTime || new Date().toISOString(),
+            fullContent,
+            metaDescription: excerpt.substring(0, 160),
+            keywords,
+            readingTime,
           }
         })
         setArticles(mapped)

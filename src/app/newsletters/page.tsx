@@ -159,114 +159,221 @@ const statusConfig: Record<string, { label: string; color: string }> = {
 }
 
 function EmailPreviewModal({ newsletter, onClose }: { newsletter: NewsletterLog; onClose: () => void }) {
+  // Extract first name from email
+  const firstName = newsletter.contact.split('@')[0].split('.')[0].charAt(0).toUpperCase() + newsletter.contact.split('@')[0].split('.')[0].slice(1)
+
+  // Format content with line breaks
+  const formattedContent = newsletter.fullContent.split('\n\n').map((paragraph, idx) => {
+    // Check if it's a list (starts with •)
+    if (paragraph.includes('•')) {
+      const items = paragraph.split('•').filter(Boolean)
+      return (
+        <ul key={idx} className="my-4 space-y-2">
+          {items.map((item, i) => (
+            <li key={i} className="flex items-start gap-3 text-[#2D3748]">
+              <span className="w-2 h-2 mt-2 rounded-full bg-gradient-to-r from-[#2CCCD4] to-[#C9A84C] flex-shrink-0"></span>
+              <span>{item.trim()}</span>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+    return <p key={idx} className="mb-4 text-[#2D3748] leading-relaxed">{paragraph}</p>
+  })
+
   return (
     <Modal onClose={onClose}>
-      <div className="bg-white rounded-xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col" onClick={e => e.stopPropagation()}>
-        {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b bg-slate-50">
-          <div>
-            <h2 className="font-bold text-lg">Aperçu de l'email</h2>
-            <p className="text-sm text-slate-500">Envoyé à {newsletter.contact}</p>
+      <div className="bg-[#FBF9F7] rounded-3xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl" onClick={e => e.stopPropagation()}>
+        {/* Email metadata bar */}
+        <div className="p-4 bg-white border-b border-slate-100 text-sm space-y-1">
+          <div className="flex items-center justify-between">
+            <div className="space-y-1">
+              <div className="flex gap-2">
+                <span className="text-slate-400 w-12">De:</span>
+                <span className="text-slate-700">Air Tahiti Nui &lt;newsletter@airtahitinui.com&gt;</span>
+              </div>
+              <div className="flex gap-2">
+                <span className="text-slate-400 w-12">A:</span>
+                <span className="text-slate-700">{newsletter.contact}</span>
+              </div>
+              <div className="flex gap-2">
+                <span className="text-slate-400 w-12">Objet:</span>
+                <span className="font-semibold text-[#0D2137]">{newsletter.subject}</span>
+              </div>
+            </div>
+            <button onClick={onClose} className="p-2 hover:bg-slate-100 rounded-xl transition-colors">
+              <X className="w-5 h-5 text-slate-400" />
+            </button>
           </div>
-          <button onClick={onClose} className="p-2 hover:bg-slate-200 rounded-lg">
-            <X className="w-5 h-5" />
-          </button>
         </div>
 
-        {/* Email Preview */}
-        <div className="flex-1 overflow-y-auto">
-          {/* Email metadata */}
-          <div className="p-4 bg-slate-100 border-b text-sm space-y-1">
-            <div className="flex gap-2">
-              <span className="text-slate-500 w-16">De:</span>
-              <span>Air Tahiti Nui &lt;newsletter@pacifikai.com&gt;</span>
-            </div>
-            <div className="flex gap-2">
-              <span className="text-slate-500 w-16">À:</span>
-              <span>{newsletter.contact}</span>
-            </div>
-            <div className="flex gap-2">
-              <span className="text-slate-500 w-16">Objet:</span>
-              <span className="font-medium">{newsletter.subject}</span>
-            </div>
-          </div>
+        {/* Email Preview - Polynesian Theme */}
+        <div className="flex-1 overflow-y-auto bg-[#FBF9F7] p-6">
+          <div className="max-w-[600px] mx-auto bg-white rounded-3xl overflow-hidden shadow-xl">
 
-          {/* Rendered Email Template */}
-          <div className="bg-[#f5f5f5] p-6">
-            <div className="max-w-[600px] mx-auto bg-white rounded-lg overflow-hidden shadow-lg">
-              {/* Email Header */}
-              <div className="bg-gradient-to-r from-[#1B365D] to-[#0D1B2A] p-8 text-center">
+            {/* ============================================
+                HEADER with Wave Pattern
+                ============================================ */}
+            <div className="relative" style={{ background: 'linear-gradient(135deg, #0D2137 0%, #1a3a5c 50%, #1aa3aa 100%)' }}>
+              {/* Floating particles */}
+              <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                <div className="absolute w-2 h-2 rounded-full bg-[#C9A84C] opacity-40 animate-pulse" style={{ left: '15%', top: '30%' }}></div>
+                <div className="absolute w-1.5 h-1.5 rounded-full bg-[#C9A84C] opacity-30 animate-pulse" style={{ left: '75%', top: '40%', animationDelay: '1s' }}></div>
+                <div className="absolute w-2 h-2 rounded-full bg-[#C9A84C] opacity-50 animate-pulse" style={{ left: '85%', top: '20%', animationDelay: '2s' }}></div>
+              </div>
+
+              {/* Header content */}
+              <div className="relative z-10 text-center pt-10 pb-20 px-8">
+                {/* Logo */}
                 <img
-                  src="https://www.airtahitinui.com/sites/default/files/styles/logo/public/2021-08/logo-atn.png"
+                  src="/demo-site-content/images/logo_flower.svg"
                   alt="Air Tahiti Nui"
-                  className="h-12 mx-auto mb-4"
+                  className="h-14 mx-auto mb-5"
                   onError={(e) => {
-                    e.currentTarget.style.display = 'none'
+                    e.currentTarget.src = 'https://atn-demo-pacifikai.vercel.app/images/logo_flower.svg'
                   }}
                 />
-                <h1 className="text-[#D4AF37] text-2xl font-light">{newsletter.headline}</h1>
+
+                {/* Headline */}
+                <h1 className="text-white text-2xl font-serif mb-3" style={{ fontFamily: 'Playfair Display, Georgia, serif' }}>
+                  {newsletter.headline}
+                </h1>
+
+                {/* Subheadline */}
+                <p className="text-white/80 text-sm">
+                  Votre voyage de reve commence ici
+                </p>
               </div>
 
-              {/* Hero Image */}
-              <div className="relative">
-                <img
-                  src={newsletter.imageUrl}
-                  alt="Polynésie"
-                  className="w-full h-64 object-cover"
-                />
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/50 to-transparent p-4">
-                  <span className={`px-3 py-1 rounded-full text-xs ${segmentColors[newsletter.segment]}`}>
-                    {newsletter.segment}
-                  </span>
-                </div>
-              </div>
-
-              {/* Email Body */}
-              <div className="p-8">
-                <div className="text-slate-700 leading-relaxed whitespace-pre-line">
-                  {newsletter.fullContent}
-                </div>
-
-                {/* CTA Button */}
-                <div className="text-center mt-8">
-                  <a
-                    href={newsletter.ctaUrl}
-                    className="inline-block bg-gradient-to-r from-[#D4AF37] to-[#B8960C] text-[#1B365D] px-8 py-4 rounded-full font-semibold text-lg hover:opacity-90 transition-opacity"
-                  >
-                    {newsletter.ctaText}
-                  </a>
-                </div>
-              </div>
-
-              {/* Email Footer */}
-              <div className="bg-[#1B365D] p-6 text-center">
-                <p className="text-[#D4AF37] text-sm mb-2">Équipe Air Tahiti Nui</p>
-                <p className="text-slate-400 text-xs">Email généré par IA PACIFIK'AI</p>
-                <div className="mt-4 pt-4 border-t border-slate-600">
-                  <p className="text-slate-500 text-xs">
-                    Vous recevez cet email car vous êtes inscrit à notre newsletter.<br />
-                    <a href="#" className="text-[#D4AF37] hover:underline">Se désinscrire</a>
-                  </p>
-                </div>
+              {/* Wave SVG divider */}
+              <div className="absolute bottom-0 left-0 right-0 h-12 overflow-hidden">
+                <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="absolute bottom-0 w-full h-full">
+                  <path d="M0,60 C150,120 350,0 600,60 C850,120 1050,0 1200,60 L1200,120 L0,120 Z" fill="white"></path>
+                </svg>
               </div>
             </div>
+
+            {/* ============================================
+                HERO IMAGE with Segment Badge
+                ============================================ */}
+            <div className="relative">
+              <img
+                src={newsletter.imageUrl}
+                alt="Polynesie"
+                className="w-full h-56 object-cover"
+              />
+              {/* Gradient overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0D2137]/60 to-transparent"></div>
+
+              {/* Segment badge */}
+              <div className="absolute top-4 left-4">
+                <span className="inline-block px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider"
+                  style={{ background: 'linear-gradient(135deg, #C9A84C 0%, #E4C76B 100%)', color: '#0D2137' }}>
+                  {newsletter.segment}
+                </span>
+              </div>
+            </div>
+
+            {/* ============================================
+                EMAIL CONTENT
+                ============================================ */}
+            <div className="p-8">
+              {/* Greeting */}
+              <p className="text-[#2CCCD4] font-semibold text-lg mb-6">
+                Ia Orana {firstName} !
+              </p>
+
+              {/* Main content */}
+              <div className="text-base leading-relaxed">
+                {formattedContent}
+              </div>
+
+              {/* Highlight box */}
+              <div className="my-8 p-6 rounded-2xl border-l-4 border-[#2CCCD4]" style={{ background: 'linear-gradient(135deg, #F4F7F9 0%, #e8f4f5 100%)' }}>
+                <p className="text-xs uppercase tracking-wider text-[#2CCCD4] font-bold mb-2">Points forts</p>
+                <p className="text-[#0D2137] text-sm">Personnalisation {newsletter.personalizationScore}% • {newsletter.wordCount} mots • Segment {newsletter.segment}</p>
+              </div>
+
+              {/* CTA Button */}
+              <div className="text-center mt-8">
+                <a
+                  href={newsletter.ctaUrl}
+                  className="inline-block px-10 py-4 rounded-full text-sm font-bold uppercase tracking-wider transition-all hover:translate-y-[-2px] hover:shadow-lg"
+                  style={{
+                    background: 'linear-gradient(135deg, #C9A84C 0%, #E4C76B 100%)',
+                    color: '#0D2137',
+                    boxShadow: '0 8px 30px rgba(201, 168, 76, 0.4)'
+                  }}
+                >
+                  {newsletter.ctaText}
+                </a>
+              </div>
+            </div>
+
+            {/* ============================================
+                WAVE DIVIDER before Footer
+                ============================================ */}
+            <div className="relative h-12 bg-white overflow-hidden">
+              <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="absolute bottom-0 w-full h-full">
+                <path d="M0,40 C200,80 400,0 600,50 C800,100 1000,20 1200,60 L1200,120 L0,120 Z" fill="#0D2137"></path>
+              </svg>
+            </div>
+
+            {/* ============================================
+                FOOTER
+                ============================================ */}
+            <div className="p-8 text-center" style={{ background: 'linear-gradient(135deg, #0D2137 0%, #0a1929 100%)' }}>
+              {/* Social icons placeholder */}
+              <div className="flex justify-center gap-4 mb-6">
+                <span className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white/60 text-xs">f</span>
+                <span className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white/60 text-xs">in</span>
+                <span className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white/60 text-xs">X</span>
+              </div>
+
+              {/* Signature */}
+              <p className="text-[#C9A84C] font-serif text-lg mb-1" style={{ fontFamily: 'Playfair Display, Georgia, serif' }}>
+                Mauruuru & Nana !
+              </p>
+              <p className="text-white/60 text-sm mb-6">
+                L&apos;equipe Air Tahiti Nui
+              </p>
+
+              {/* Divider */}
+              <div className="h-px bg-white/10 mb-6"></div>
+
+              {/* Legal */}
+              <p className="text-white/40 text-xs mb-2">
+                Vous recevez cet email car vous etes inscrit a notre newsletter.
+              </p>
+              <p className="text-xs">
+                <a href="#" className="text-[#2CCCD4] hover:underline">Se desinscrire</a>
+                <span className="text-white/30 mx-2">|</span>
+                <a href="#" className="text-[#2CCCD4] hover:underline">Preferences</a>
+              </p>
+
+              {/* PACIFIK'AI credit */}
+              <p className="text-white/20 text-xs mt-6">
+                Email personnalise par IA PACIFIK&apos;AI
+              </p>
+            </div>
+
           </div>
         </div>
 
         {/* Footer with stats */}
-        <div className="p-4 border-t bg-slate-50 flex items-center justify-between">
+        <div className="p-4 border-t bg-white flex items-center justify-between">
           <div className="flex gap-6 text-sm">
             <div>
-              <span className="text-slate-500">Score perso:</span>
-              <span className="ml-2 font-bold text-emerald-600">{newsletter.personalizationScore}%</span>
+              <span className="text-slate-400">Perso:</span>
+              <span className="ml-2 font-bold text-emerald-500">{newsletter.personalizationScore}%</span>
             </div>
             <div>
-              <span className="text-slate-500">Engagement:</span>
-              <span className="ml-2 font-bold text-blue-600">{newsletter.engagementScore}%</span>
+              <span className="text-slate-400">Engagement:</span>
+              <span className="ml-2 font-bold text-[#2CCCD4]">{newsletter.engagementScore}%</span>
             </div>
             <div>
-              <span className="text-slate-500">Mots:</span>
-              <span className="ml-2 font-medium">{newsletter.wordCount}</span>
+              <span className="text-slate-400">Mots:</span>
+              <span className="ml-2 font-medium text-slate-600">{newsletter.wordCount}</span>
             </div>
           </div>
           <span className={`px-3 py-1 rounded-full text-sm font-medium ${statusConfig[newsletter.status].color}`}>
