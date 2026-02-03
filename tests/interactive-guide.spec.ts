@@ -146,6 +146,33 @@ const pagesWithGuides = [
       'concierge-btn-send',
     ],
   },
+  {
+    path: '/staff-assistant',
+    guides: [
+      'staff-kpi-questions',
+      'staff-kpi-helpful',
+      'staff-kpi-procedures',
+      'staff-kpi-responsetime',
+      'staff-question-section',
+      'staff-question-input',
+      'staff-btn-ask',
+      'staff-quicklink-procedures',
+      'staff-quicklink-operations',
+      'staff-quicklink-hr',
+      'staff-filter-all',
+      'staff-filter-procedures',
+      'staff-filter-hr',
+      'staff-filter-technical',
+      'staff-filter-operations',
+      'staff-search',
+      'staff-history-list',
+      'staff-knowledge-section',
+      'staff-kb-manual',
+      'staff-kb-faq',
+      'staff-kb-tech',
+      'staff-kb-regulations',
+    ],
+  },
 ];
 
 test.describe('Interactive Guide - Data Guide Attributes', () => {
