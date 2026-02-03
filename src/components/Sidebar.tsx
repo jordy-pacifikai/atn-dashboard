@@ -392,44 +392,13 @@ export default function Sidebar() {
         ))}
       </nav>
 
-      {/* Divider */}
-      <div className="mx-4 h-px bg-[--border-primary]" />
-
-      {/* CTA */}
-      <div className={`py-3 ${sidebarCollapsed ? 'px-2' : 'px-4'}`}>
-        {!sidebarCollapsed ? (
-          <a
-            href="https://cal.com/pacifikai/demo"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-[--atn-primary] to-[--atn-secondary] text-white rounded-xl hover:opacity-90 transition-opacity shadow-lg shadow-[--atn-primary]/20"
-          >
-            <Calendar className="w-5 h-5" />
-            <div>
-              <p className="text-sm font-semibold">Questions ?</p>
-              <p className="text-[11px] opacity-80">Reserver un appel</p>
-            </div>
-          </a>
-        ) : (
-          <a
-            href="https://cal.com/pacifikai/demo"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center w-full p-3 bg-gradient-to-r from-[--atn-primary] to-[--atn-secondary] text-white rounded-xl hover:opacity-90 transition-opacity"
-            title="Reserver un appel"
-          >
-            <Calendar className="w-5 h-5" />
-          </a>
-        )}
-      </div>
-
-      {/* Collapse Toggle - Subtle vertical bar on right edge */}
+      {/* Collapse Toggle - Full height vertical bar on right edge */}
       <button
         onClick={toggleSidebar}
-        className="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-16 group cursor-pointer z-50"
+        className="absolute right-0 top-0 w-1 h-full group cursor-pointer z-50"
         title={sidebarCollapsed ? 'Agrandir' : 'Reduire'}
       >
-        <div className="w-full h-full bg-[--border-primary] rounded-l-full group-hover:bg-[--atn-primary] group-hover:w-1.5 transition-all duration-200" />
+        <div className="w-full h-full bg-[--border-primary] group-hover:bg-[--atn-primary] group-hover:w-1.5 transition-all duration-200" />
       </button>
     </aside>
   )
