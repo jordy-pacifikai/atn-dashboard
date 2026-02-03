@@ -60,7 +60,7 @@ const pageConfigs: PageConfig[] = [
     elements: [
       {
         id: 'kpi-conversations',
-        selector: '.grid.grid-cols-2.lg\\:grid-cols-4 > div:nth-child(1)',
+        selector: '[data-guide="kpis-grid"] > div:nth-child(1)',
         name: 'KPI Conversations',
         description: 'Nombre total de conversations chatbot ce mois',
         interpretation: 'Chaque conversation = un client assisté automatiquement. Visez +20% par mois en période haute.',
@@ -70,7 +70,7 @@ const pageConfigs: PageConfig[] = [
       },
       {
         id: 'kpi-temps',
-        selector: '.grid.grid-cols-2.lg\\:grid-cols-4 > div:nth-child(2)',
+        selector: '[data-guide="kpis-grid"] > div:nth-child(2)',
         name: 'KPI Temps économisé',
         description: 'Heures de travail humain économisées par l\'IA',
         interpretation: 'Calculé: (conversations × 3min) + (newsletters × 45min) + (articles × 2h). Compare au coût d\'un employé.',
@@ -80,7 +80,7 @@ const pageConfigs: PageConfig[] = [
       },
       {
         id: 'kpi-satisfaction',
-        selector: '.grid.grid-cols-2.lg\\:grid-cols-4 > div:nth-child(3)',
+        selector: '[data-guide="kpis-grid"] > div:nth-child(3)',
         name: 'KPI Satisfaction',
         description: 'Taux de satisfaction des interactions chatbot',
         interpretation: 'Basé sur: résolution sans escalade (positif), demande agent humain (négatif), feedback explicite.',
@@ -91,7 +91,7 @@ const pageConfigs: PageConfig[] = [
       },
       {
         id: 'kpi-conversion',
-        selector: '.grid.grid-cols-2.lg\\:grid-cols-4 > div:nth-child(4)',
+        selector: '[data-guide="kpis-grid"] > div:nth-child(4)',
         name: 'KPI Taux conversion',
         description: 'Taux de conversion des leads chatbot',
         interpretation: 'Visiteur chatbot → clic lien réservation. Benchmark secteur: 8-12%. Visez 15%+.',
@@ -102,8 +102,7 @@ const pageConfigs: PageConfig[] = [
       },
       {
         id: 'agents-grid',
-        selector: '.col-span-2.card',
-        fallbackSelector: '.grid.grid-cols-3 > div:first-child',
+        selector: '[data-guide="agents-grid"]',
         name: 'Grille Agents IA',
         description: 'Les 6 agents IA qui travaillent pour vous 24/7',
         interpretation: 'Point vert = actif. Chaque agent a ses stats en temps réel. Cliquez pour accéder aux détails.',
@@ -113,7 +112,7 @@ const pageConfigs: PageConfig[] = [
       },
       {
         id: 'activity-feed',
-        selector: '.grid.grid-cols-3 > div:last-child',
+        selector: '[data-guide="activity-feed"]',
         name: 'Fil d\'activité',
         description: 'Les dernières actions de vos agents IA',
         interpretation: 'Bleu=chat, Ambre=alerte concurrence, Jaune=avis, Vert=contenu, Violet=newsletter. Alertes ambre = action requise.',
@@ -122,7 +121,7 @@ const pageConfigs: PageConfig[] = [
       },
       {
         id: 'flights-widget',
-        selector: '.grid.grid-cols-3.gap-6:last-of-type > div:first-child',
+        selector: '[data-guide="flights-widget"]',
         name: 'Widget Vols',
         description: 'Aperçu des vols du jour avec taux de remplissage',
         interpretation: 'Vert=à l\'heure, Ambre=retard. Remplissage: vert >85%, ambre 70-85%, rouge <70%.',
@@ -132,7 +131,7 @@ const pageConfigs: PageConfig[] = [
       },
       {
         id: 'chatbot-widget',
-        selector: '.grid.grid-cols-3.gap-6:last-of-type > div:nth-child(2)',
+        selector: '[data-guide="chatbot-widget"]',
         name: 'Widget Chatbot Tiare',
         description: 'Performance temps réel du chatbot',
         interpretation: 'Conversations/jour, taux résolution (>85% = excellent), temps réponse (<2s = bon).',
@@ -142,7 +141,7 @@ const pageConfigs: PageConfig[] = [
       },
       {
         id: 'upcoming-widget',
-        selector: '.grid.grid-cols-3.gap-6:last-of-type > div:last-child',
+        selector: '[data-guide="upcoming-widget"]',
         name: 'Widget À venir',
         description: 'Prochaines actions automatiques planifiées',
         interpretation: 'Violet=newsletter, Indigo=rapport, Vert=article SEO. Cliquez pour modifier le planning.',
@@ -653,29 +652,27 @@ export default function InteractiveGuide() {
     return { top, left, placement }
   }, [])
 
-  // Bloquer le scroll quand le guide est ouvert
-  useEffect(() => {
-    if (isOpen) {
-      // Sauvegarder le scroll container
-      scrollContainerRef.current = document.querySelector('main') || document.body
-      document.body.style.overflow = 'hidden'
-      if (scrollContainerRef.current && scrollContainerRef.current !== document.body) {
-        scrollContainerRef.current.style.overflow = 'hidden'
-      }
-    } else {
-      document.body.style.overflow = ''
-      if (scrollContainerRef.current && scrollContainerRef.current !== document.body) {
-        scrollContainerRef.current.style.overflow = ''
-      }
-    }
+  // Fonction pour bloquer/débloquer le scroll
+  const setScrollLock = useCallback((lock: boolean) => {
+    const html = document.documentElement
+    const body = document.body
 
-    return () => {
-      document.body.style.overflow = ''
-      if (scrollContainerRef.current && scrollContainerRef.current !== document.body) {
-        scrollContainerRef.current.style.overflow = ''
-      }
+    if (lock) {
+      html.style.overflow = 'hidden'
+      body.style.overflow = 'hidden'
+    } else {
+      html.style.overflow = ''
+      body.style.overflow = ''
     }
-  }, [isOpen])
+  }, [])
+
+  // Débloquer le scroll quand le guide se ferme
+  useEffect(() => {
+    if (!isOpen) {
+      setScrollLock(false)
+    }
+    return () => setScrollLock(false)
+  }, [isOpen, setScrollLock])
 
   // Mettre à jour le highlight quand l'élément change
   useEffect(() => {
@@ -687,20 +684,25 @@ export default function InteractiveGuide() {
 
     const el = findElement(currentElement.selector, currentElement.fallbackSelector)
     if (el) {
-      // Scroll vers l'élément AVANT de calculer les positions
+      // Débloquer le scroll temporairement pour scroller vers l'élément
+      setScrollLock(false)
+
+      // Scroll vers l'élément
       el.scrollIntoView({ behavior: 'smooth', block: 'center' })
 
-      // Attendre que le scroll soit terminé pour calculer les positions
+      // Attendre que le scroll soit terminé, puis bloquer et calculer les positions
       setTimeout(() => {
         setHighlightedElement(el)
         updateHighlightRect(el)
         setTooltipPosition(calculateTooltipPosition(el))
-      }, 400)
+        // Rebloquer le scroll après avoir positionné
+        setScrollLock(true)
+      }, 500)
     } else {
       setHighlightedElement(null)
       setHighlightRect(null)
     }
-  }, [isOpen, currentElement, findElement, calculateTooltipPosition, updateHighlightRect])
+  }, [isOpen, currentElement, findElement, calculateTooltipPosition, updateHighlightRect, setScrollLock])
 
   // Mettre à jour les positions lors du resize
   useEffect(() => {

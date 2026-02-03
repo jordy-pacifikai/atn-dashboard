@@ -228,7 +228,7 @@ export default function DashboardPage() {
       </div>
 
       {/* KPIs */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div data-guide="kpis-grid" className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {kpis.map((kpi, i) => (
           <div key={i} className="card p-4">
             <div className="flex items-center justify-between mb-3">
@@ -255,7 +255,7 @@ export default function DashboardPage() {
       {/* Main Grid */}
       <div className="grid grid-cols-3 gap-6">
         {/* Agents IA - 2 colonnes */}
-        <div className="col-span-2 card p-6">
+        <div data-guide="agents-grid" className="col-span-2 card p-6">
           <div className="flex items-center justify-between mb-4">
             <div>
               <h2 className="text-lg font-semibold text-[--text-primary]">Agents IA Actifs</h2>
@@ -313,7 +313,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Activite recente - 1 colonne */}
-        <div className="card p-6">
+        <div data-guide="activity-feed" className="card p-6">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold text-[--text-primary]">Activite recente</h2>
             <Activity className="w-4 h-4 text-[--text-tertiary]" />
@@ -343,7 +343,7 @@ export default function DashboardPage() {
       {/* Bottom Grid */}
       <div className="grid grid-cols-3 gap-6">
         {/* Vols aujourd'hui */}
-        <div className="card p-6">
+        <div data-guide="flights-widget" className="card p-6">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <Plane className="w-5 h-5 text-[--atn-primary]" />
@@ -377,7 +377,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Performance chatbot */}
-        <div className="card p-6">
+        <div data-guide="chatbot-widget" className="card p-6">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <MessageSquare className="w-5 h-5 text-[--atn-primary]" />
@@ -422,7 +422,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Prochaines actions */}
-        <div className="card p-6">
+        <div data-guide="upcoming-widget" className="card p-6">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <Calendar className="w-5 h-5 text-[--atn-primary]" />
