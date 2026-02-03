@@ -1887,8 +1887,27 @@ const COMPLETE_GUIDE: PageGuide[] = [
 // COMPOSANT PRINCIPAL
 // ==========================================
 
-export default function InteractiveGuide() {
-  const [isOpen, setIsOpen] = useState(false)
+interface InteractiveGuideProps {
+  isOpen?: boolean
+  onComplete?: () => void
+}
+
+export default function InteractiveGuide({ isOpen: externalIsOpen, onComplete }: InteractiveGuideProps = {}) {
+  // Support both controlled (from props) and uncontrolled (internal state) modes
+  const [internalIsOpen, setInternalIsOpen] = useState(false)
+  const isControlled = externalIsOpen !== undefined
+  const isOpen = isControlled ? externalIsOpen : internalIsOpen
+
+  const setIsOpen = (value: boolean) => {
+    if (!isControlled) {
+      setInternalIsOpen(value)
+    }
+    // If closing and onComplete callback exists, call it
+    if (!value && onComplete) {
+      onComplete()
+    }
+  }
+
   const [currentPageIndex, setCurrentPageIndex] = useState(0)
   const [currentStepIndex, setCurrentStepIndex] = useState(0)
   const [highlightedElement, setHighlightedElement] = useState<HTMLElement | null>(null)
