@@ -313,7 +313,7 @@ export default function Sidebar() {
                 {group.label}
               </p>
             )}
-            {isCollapsed && groupIndex > 0 && (
+            {sidebarCollapsed && groupIndex > 0 && (
               <div className="mx-2 my-2 h-px bg-[--border-primary]" />
             )}
 
@@ -383,7 +383,7 @@ export default function Sidebar() {
                     )}
 
                     {/* Badge for collapsed */}
-                    {isCollapsed && item.badge && (
+                    {sidebarCollapsed && item.badge && (
                       <span className="absolute -top-1 -right-1 w-2 h-2 bg-[--atn-green] rounded-full" />
                     )}
                   </Link>
