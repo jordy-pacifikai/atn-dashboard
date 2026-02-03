@@ -312,6 +312,7 @@ export default function LeadScoringPage() {
           <p className="text-slate-500">Build 23: Scoring comportemental prospects</p>
         </div>
         <button
+          data-guide="leadscoring-btn-recalculate"
           onClick={recalculateScores}
           disabled={syncing}
           className="flex items-center gap-2 px-4 py-2 bg-atn-primary text-white rounded-lg hover:bg-opacity-90 disabled:opacity-50"
@@ -350,28 +351,28 @@ export default function LeadScoringPage() {
           <Star className="w-5 h-5 text-amber-500" />
           Règles de scoring
         </h2>
-        <div className="grid grid-cols-6 gap-3 text-center">
-          <div data-guide="leadscoring-rule-booking" className="p-3 bg-white rounded-lg">
+        <div data-guide="leadscoring-rules-grid" className="grid grid-cols-6 gap-3 text-center">
+          <div className="p-3 bg-white rounded-lg">
             <p className="text-lg font-bold text-amber-600">+25</p>
             <p className="text-xs text-slate-600">Booking start</p>
           </div>
-          <div data-guide="leadscoring-rule-emailclick" className="p-3 bg-white rounded-lg">
+          <div className="p-3 bg-white rounded-lg">
             <p className="text-lg font-bold text-amber-600">+15</p>
             <p className="text-xs text-slate-600">Email click</p>
           </div>
-          <div data-guide="leadscoring-rule-pageview" className="p-3 bg-white rounded-lg">
+          <div className="p-3 bg-white rounded-lg">
             <p className="text-lg font-bold text-amber-600">+10</p>
             <p className="text-xs text-slate-600">Page view (&gt;2min)</p>
           </div>
-          <div data-guide="leadscoring-rule-search" className="p-3 bg-white rounded-lg">
+          <div className="p-3 bg-white rounded-lg">
             <p className="text-lg font-bold text-amber-600">+8</p>
             <p className="text-xs text-slate-600">Search</p>
           </div>
-          <div data-guide="leadscoring-rule-emailopen" className="p-3 bg-white rounded-lg">
+          <div className="p-3 bg-white rounded-lg">
             <p className="text-lg font-bold text-amber-600">+5</p>
             <p className="text-xs text-slate-600">Email open</p>
           </div>
-          <div data-guide="leadscoring-rule-download" className="p-3 bg-white rounded-lg">
+          <div className="p-3 bg-white rounded-lg">
             <p className="text-lg font-bold text-amber-600">+10</p>
             <p className="text-xs text-slate-600">Download</p>
           </div>
@@ -379,9 +380,8 @@ export default function LeadScoringPage() {
       </div>
 
       {/* Filtres */}
-      <div className="flex gap-2">
+      <div data-guide="leadscoring-filters" className="flex gap-2">
         <button
-          data-guide="leadscoring-filter-all"
           className={`px-4 py-2 rounded-lg text-sm flex items-center gap-2 ${
             filterGrade === 'all' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
           }`}
@@ -391,7 +391,6 @@ export default function LeadScoringPage() {
           Tous
         </button>
         <button
-          data-guide="leadscoring-filter-a"
           className={`px-4 py-2 rounded-lg text-sm flex items-center gap-2 ${
             filterGrade === 'A' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
           }`}
@@ -401,7 +400,6 @@ export default function LeadScoringPage() {
           Grade A
         </button>
         <button
-          data-guide="leadscoring-filter-b"
           className={`px-4 py-2 rounded-lg text-sm flex items-center gap-2 ${
             filterGrade === 'B' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
           }`}
@@ -411,7 +409,6 @@ export default function LeadScoringPage() {
           Grade B
         </button>
         <button
-          data-guide="leadscoring-filter-c"
           className={`px-4 py-2 rounded-lg text-sm flex items-center gap-2 ${
             filterGrade === 'C' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
           }`}
@@ -421,7 +418,6 @@ export default function LeadScoringPage() {
           Grade C
         </button>
         <button
-          data-guide="leadscoring-filter-d"
           className={`px-4 py-2 rounded-lg text-sm flex items-center gap-2 ${
             filterGrade === 'D' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
           }`}

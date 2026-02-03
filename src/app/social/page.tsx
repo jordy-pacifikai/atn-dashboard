@@ -98,9 +98,15 @@ function MentionCard({ mention, onRespond }: { mention: SocialMention; onRespond
   }
 
   const sentimentColors = {
-    positive: 'text-emerald-600',
-    neutral: 'text-amber-600',
-    negative: 'text-red-600',
+    positive: 'bg-emerald-100 text-emerald-700',
+    neutral: 'bg-amber-100 text-amber-700',
+    negative: 'bg-red-100 text-red-700',
+  }
+
+  const sentimentLabels = {
+    positive: 'Positif',
+    neutral: 'Neutre',
+    negative: 'Négatif',
   }
 
   return (
@@ -137,9 +143,9 @@ function MentionCard({ mention, onRespond }: { mention: SocialMention; onRespond
           <TrendingUp className="w-4 h-4" />
           <span>{mention.reach.toLocaleString()} reach</span>
         </div>
-        <div className={`flex items-center gap-1 ${sentimentColors[mention.sentiment]}`}>
-          <span>Sentiment: {mention.sentimentScore}%</span>
-        </div>
+        <span className={`px-2 py-1 rounded text-xs font-medium ${sentimentColors[mention.sentiment]}`}>
+          {sentimentLabels[mention.sentiment]} {mention.sentimentScore}%
+        </span>
       </div>
 
       {/* Response section */}

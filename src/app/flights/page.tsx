@@ -291,6 +291,7 @@ export default function FlightsPage() {
             <span className="text-sm text-slate-600">Surveillance active</span>
           </div>
           <button
+            data-guide="flights-btn-sync"
             onClick={syncFlightStatus}
             disabled={syncing}
             className="flex items-center gap-2 px-4 py-2 bg-atn-primary text-white rounded-lg hover:bg-opacity-90 disabled:opacity-50"
@@ -326,9 +327,8 @@ export default function FlightsPage() {
       </div>
 
       {/* Filtres */}
-      <div className="flex gap-2">
+      <div data-guide="flights-filters" className="flex gap-2">
         <button
-          data-guide="flights-filter-all"
           className={`px-4 py-2 rounded-lg text-sm ${
             filterType === null ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'
           }`}
@@ -337,7 +337,6 @@ export default function FlightsPage() {
           Tous
         </button>
         <button
-          data-guide="flights-filter-delay"
           className={`px-4 py-2 rounded-lg text-sm ${
             filterType === 'delay' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'
           }`}
@@ -346,7 +345,6 @@ export default function FlightsPage() {
           Retards
         </button>
         <button
-          data-guide="flights-filter-cancelled"
           className={`px-4 py-2 rounded-lg text-sm ${
             filterType === 'cancelled' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'
           }`}
@@ -355,7 +353,6 @@ export default function FlightsPage() {
           Annulations
         </button>
         <button
-          data-guide="flights-filter-gate"
           className={`px-4 py-2 rounded-lg text-sm ${
             filterType === 'gate_change' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'
           }`}

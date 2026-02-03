@@ -1,10 +1,17 @@
 'use client'
 
-import { ReactNode } from 'react'
+import { ReactNode, useEffect } from 'react'
+import { usePathname } from 'next/navigation'
 import { useSidebar } from '@/context/SidebarContext'
 
 export default function MainContent({ children }: { children: ReactNode }) {
   const { isCollapsed, mounted } = useSidebar()
+  const pathname = usePathname()
+
+  // Scroll to top on page change
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' })
+  }, [pathname])
 
   // Use default width until mounted to prevent hydration mismatch
   const sidebarCollapsed = mounted ? isCollapsed : false
