@@ -19,8 +19,6 @@ import {
   TrendingUp,
   Zap,
   Settings,
-  ChevronLeft,
-  ChevronRight,
   Sparkles,
   Image as ImageIcon,
   Route,
@@ -425,25 +423,14 @@ export default function Sidebar() {
         )}
       </div>
 
-      {/* Collapse Toggle */}
-      <div className={`pb-3 ${sidebarCollapsed ? 'px-2' : 'px-4'}`}>
-        <button
-          onClick={toggleSidebar}
-          className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-[--text-tertiary] hover:text-[--text-secondary] hover:bg-[--sidebar-hover] transition-all ${
-            sidebarCollapsed ? 'justify-center' : ''
-          }`}
-          title={sidebarCollapsed ? 'Agrandir' : 'Reduire'}
-        >
-          {sidebarCollapsed ? (
-            <ChevronRight className="w-[18px] h-[18px]" />
-          ) : (
-            <>
-              <ChevronLeft className="w-[18px] h-[18px]" />
-              <span className="text-[12px] font-medium">Reduire</span>
-            </>
-          )}
-        </button>
-      </div>
+      {/* Collapse Toggle - Subtle vertical bar on right edge */}
+      <button
+        onClick={toggleSidebar}
+        className="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-16 group cursor-pointer z-50"
+        title={sidebarCollapsed ? 'Agrandir' : 'Reduire'}
+      >
+        <div className="w-full h-full bg-[--border-primary] rounded-l-full group-hover:bg-[--atn-primary] group-hover:w-1.5 transition-all duration-200" />
+      </button>
     </aside>
   )
 }
