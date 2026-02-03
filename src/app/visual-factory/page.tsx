@@ -78,30 +78,117 @@ const fallbackAssets: VisualAsset[] = [
   },
 ]
 
-// Galerie d'images de demo pour simulation de génération
-const demoImagePool = {
-  banner: [
-    'https://images.unsplash.com/photo-1589197331516-4d84b72ebde3?w=1200&h=628&fit=crop',
-    'https://images.unsplash.com/photo-1540339832862-474599807836?w=1200&h=628&fit=crop',
-    'https://images.unsplash.com/photo-1464037866556-6812c9d1c72e?w=1200&h=628&fit=crop',
-    'https://images.unsplash.com/photo-1499678329028-101435549a4e?w=1200&h=628&fit=crop',
-  ],
-  social: [
-    'https://images.unsplash.com/photo-1516815231560-8f41ec531527?w=1080&h=1080&fit=crop',
-    'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1080&h=1080&fit=crop',
-    'https://images.unsplash.com/photo-1505142468610-359e7d316be0?w=1080&h=1080&fit=crop',
-    'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=1080&h=1080&fit=crop',
-  ],
-  story: [
-    'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1080&h=1920&fit=crop',
-    'https://images.unsplash.com/photo-1476673160081-cf065f0c2b91?w=1080&h=1920&fit=crop',
-    'https://images.unsplash.com/photo-1519046904884-53103b34b206?w=1080&h=1920&fit=crop',
-  ],
-  email: [
-    'https://images.unsplash.com/photo-1559827291-72ee739d0d9a?w=600&h=200&fit=crop',
-    'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&h=200&fit=crop',
-    'https://images.unsplash.com/photo-1544551763-77ef2d0cfc6c?w=600&h=200&fit=crop',
-  ],
+// Galerie d'images de demo par THEME pour coherence prompt/image
+const demoImagesByTheme: Record<string, { keywords: string[], images: string[] }> = {
+  // Paysages et lagons
+  lagon: {
+    keywords: ['lagon', 'bora', 'moorea', 'tahiti', 'île', 'aerien', 'vue', 'turquoise', 'bungalow', 'overwater'],
+    images: [
+      'https://images.unsplash.com/photo-1589197331516-4d84b72ebde3', // Bora Bora lagon
+      'https://images.unsplash.com/photo-1516815231560-8f41ec531527', // Moorea aerien
+      'https://images.unsplash.com/photo-1507525428034-b723cf961d3e', // Plage tropicale
+      'https://images.unsplash.com/photo-1514282401047-d79a71a590e8', // Lagon turquoise
+    ]
+  },
+  // Plongée et océan
+  plongee: {
+    keywords: ['plong', 'raie', 'requin', 'manta', 'sous-marin', 'ocean', 'mer', 'corail', 'fakarava', 'rangiroa'],
+    images: [
+      'https://images.unsplash.com/photo-1544551763-46a013bb70d5', // Raie manta
+      'https://images.unsplash.com/photo-1682687220742-aba13b6e50ba', // Plongee requins
+      'https://images.unsplash.com/photo-1559827260-dc66d52bef19', // Tortue marine
+      'https://images.unsplash.com/photo-1583212292454-1fe6229603b7', // Coraux
+    ]
+  },
+  // Culture et danse
+  culture: {
+    keywords: ['danse', 'tahiti', 'tradition', 'costume', 'fête', 'vahiné', 'tiare', 'fleur', 'polynésien', 'ukulele'],
+    images: [
+      'https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b', // Danse tahitienne
+      'https://images.unsplash.com/photo-1601370690183-1c7796ecec61', // Fleur tiare
+      'https://images.unsplash.com/photo-1518509562904-e7ef99cdcc86', // Ukulele hawaien
+      'https://images.unsplash.com/photo-1590523278191-995cbcda646b', // Culture polynesienne
+    ]
+  },
+  // Coucher de soleil
+  sunset: {
+    keywords: ['coucher', 'soleil', 'sunset', 'crépuscule', 'soir', 'romantique', 'catamaran', 'pirogue'],
+    images: [
+      'https://images.unsplash.com/photo-1507525428034-b723cf961d3e', // Sunset plage
+      'https://images.unsplash.com/photo-1476673160081-cf065f0c2b91', // Sunset palmiers
+      'https://images.unsplash.com/photo-1519046904884-53103b34b206', // Sunset tropical
+      'https://images.unsplash.com/photo-1499678329028-101435549a4e', // Golden hour plage
+    ]
+  },
+  // Avion et voyage
+  avion: {
+    keywords: ['avion', 'boeing', '787', 'dreamliner', 'vol', 'atterr', 'decoll', 'aeroport', 'cabine', 'classe', 'poerava', 'business'],
+    images: [
+      'https://images.unsplash.com/photo-1540339832862-474599807836', // Avion ciel
+      'https://images.unsplash.com/photo-1436491865332-7a61a109cc05', // Avion voyage
+      'https://images.unsplash.com/photo-1569629743817-70d8db6c323b', // Cabine business
+      'https://images.unsplash.com/photo-1556388158-158ea5ccacbd', // Vue hublot
+    ]
+  },
+  // Montagne et nature
+  montagne: {
+    keywords: ['montagne', 'verdoy', 'cascade', 'jungle', 'forêt', 'randonnée', 'nature', 'exploration'],
+    images: [
+      'https://images.unsplash.com/photo-1505142468610-359e7d316be0', // Montagne tropicale
+      'https://images.unsplash.com/photo-1464037866556-6812c9d1c72e', // Nature luxuriante
+      'https://images.unsplash.com/photo-1518837695005-2083093ee35b', // Cascade
+      'https://images.unsplash.com/photo-1544735716-ea9ef790f501', // Jungle
+    ]
+  },
+  // Service et luxe
+  luxe: {
+    keywords: ['champagne', 'service', 'luxe', 'premium', 'fruit', 'cocktail', 'repas', 'gastronomie'],
+    images: [
+      'https://images.unsplash.com/photo-1566073771259-6a8506099945', // Resort luxe
+      'https://images.unsplash.com/photo-1571896349842-33c89424de2d', // Petit dejeuner tropical
+      'https://images.unsplash.com/photo-1559827291-72ee739d0d9a', // Fleurs tropicales
+      'https://images.unsplash.com/photo-1544551763-77ef2d0cfc6c', // Ambiance luxe
+    ]
+  },
+}
+
+// Fonction pour trouver l'image la plus pertinente selon le prompt
+function findBestImageForPrompt(prompt: string, format: string): string {
+  const promptLower = prompt.toLowerCase()
+  const normalizedPrompt = promptLower
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '') // Enleve les accents
+
+  // Chercher le meilleur theme
+  let bestTheme: string | null = null
+  let maxMatches = 0
+
+  for (const [theme, data] of Object.entries(demoImagesByTheme)) {
+    const matches = data.keywords.filter(kw =>
+      normalizedPrompt.includes(kw.normalize('NFD').replace(/[\u0300-\u036f]/g, ''))
+    ).length
+
+    if (matches > maxMatches) {
+      maxMatches = matches
+      bestTheme = theme
+    }
+  }
+
+  // Si aucun match, utiliser lagon par defaut (theme ATN)
+  const theme = bestTheme || 'lagon'
+  const images = demoImagesByTheme[theme].images
+  const matchedImage = images[Math.floor(Math.random() * images.length)]
+
+  // Ajouter les parametres de dimension selon le format
+  const dimensions: Record<string, string> = {
+    '1200x628': 'w=1200&h=628',
+    '1080x1080': 'w=1080&h=1080',
+    '1080x1920': 'w=1080&h=1920',
+    '600x200': 'w=600&h=200',
+  }
+
+  const dimParams = dimensions[format] || 'w=1200&h=628'
+  return `${matchedImage}?${dimParams}&fit=crop`
 }
 
 const assetTypes = [
@@ -343,9 +430,8 @@ export default function VisualFactoryPage() {
         clearInterval(progressInterval)
         setGenerationProgress(100)
 
-        // Sélectionner une image aléatoire du pool
-        const pool = demoImagePool[selectedType as keyof typeof demoImagePool] || demoImagePool.banner
-        const randomImage = pool[Math.floor(Math.random() * pool.length)]
+        // Sélectionner une image cohérente avec le prompt
+        const matchedImage = findBestImageForPrompt(prompt, assetFormat)
 
         // Sauvegarder dans Airtable
         try {
@@ -355,7 +441,7 @@ export default function VisualFactoryPage() {
             body: JSON.stringify({
               Type: selectedType,
               Prompt: prompt,
-              Image_URL: randomImage,
+              Image_URL: matchedImage,
               Status: 'ready',
               Campaign: 'Visual Factory',
               Format: assetFormat,
@@ -368,7 +454,7 @@ export default function VisualFactoryPage() {
           // Mettre à jour avec le vrai ID Airtable
           setAssets(prev => prev.map(a =>
             a.id === tempId
-              ? { ...a, id: savedRecord.id, status: 'ready' as const, imageUrl: randomImage }
+              ? { ...a, id: savedRecord.id, status: 'ready' as const, imageUrl: matchedImage }
               : a
           ))
 
@@ -379,7 +465,7 @@ export default function VisualFactoryPage() {
           // Fallback: juste mettre à jour localement
           setAssets(prev => prev.map(a =>
             a.id === tempId
-              ? { ...a, status: 'ready' as const, imageUrl: randomImage }
+              ? { ...a, status: 'ready' as const, imageUrl: matchedImage }
               : a
           ))
         }
