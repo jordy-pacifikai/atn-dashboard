@@ -25,11 +25,7 @@ const pagesWithGuides = [
       'news-kpi-perso',
       'news-kpi-openrate',
       'news-kpi-segments',
-      'news-filter-all',
-      'news-filter-honeymoon',
-      'news-filter-family',
-      'news-filter-divers',
-      'news-filter-business',
+      'news-filters',
       'news-newsletters-list',
     ],
   },
@@ -70,11 +66,7 @@ const pagesWithGuides = [
       'social-kpi-sentiment',
       'social-kpi-pending',
       'social-kpi-negative',
-      'social-filter-all',
-      'social-filter-twitter',
-      'social-filter-instagram',
-      'social-filter-facebook',
-      'social-filter-linkedin',
+      'social-filters',
       'social-mentions-list',
     ],
   },
@@ -126,10 +118,7 @@ const pagesWithGuides = [
       'content-kpi-seo',
       'content-kpi-words',
       'content-kpi-images',
-      'content-filter-all',
-      'content-filter-published',
-      'content-filter-draft',
-      'content-filter-scheduled',
+      'content-filters',
       'content-articles-list',
     ],
   },
@@ -171,6 +160,22 @@ const pagesWithGuides = [
       'staff-kb-faq',
       'staff-kb-tech',
       'staff-kb-regulations',
+    ],
+  },
+  {
+    path: '/visual-factory',
+    guides: [
+      'visual-kpi-total',
+      'visual-kpi-ready',
+      'visual-kpi-approved',
+      'visual-kpi-generating',
+      'visual-generator-section',
+      'visual-type-selector',
+      'visual-prompt-input',
+      'visual-btn-generate',
+      'visual-btn-brandcolors',
+      'visual-btn-addtext',
+      'visual-gallery-section',
     ],
   },
 ];
@@ -252,12 +257,12 @@ test.describe('Interactive Guide - Functionality', () => {
 
     await page.waitForTimeout(1500);
 
-    // Vérifier le compteur d'étapes (1 / X) - 10 éléments pour /social
+    // Vérifier le compteur d'étapes (1 / X) - 6 éléments pour /social (filtres regroupés)
     const stepCounter = page.locator('text=/1 \\/ \\d+/');
     await expect(stepCounter).toBeVisible({ timeout: 10000 });
 
-    // Vérifier que le nombre total correspond au nombre de guides configurés (10)
+    // Vérifier que le nombre total correspond au nombre de guides configurés (6)
     const counterText = await stepCounter.textContent();
-    expect(counterText).toContain('/ 10');
+    expect(counterText).toContain('/ 6');
   });
 });

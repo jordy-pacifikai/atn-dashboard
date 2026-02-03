@@ -443,37 +443,32 @@ export default function NewslettersPage() {
         </div>
       </div>
 
-      <div className="flex gap-2">
+      <div data-guide="news-filters" className="flex gap-2">
         <button
-          data-guide="news-filter-all"
           className={`px-4 py-2 rounded-lg text-sm ${!filterSegment ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'}`}
           onClick={() => setFilterSegment(null)}
         >
           Tous
         </button>
         <button
-          data-guide="news-filter-honeymoon"
           className={`px-4 py-2 rounded-lg text-sm ${filterSegment === 'Lune de miel' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'}`}
           onClick={() => setFilterSegment('Lune de miel')}
         >
           Lune de miel
         </button>
         <button
-          data-guide="news-filter-family"
           className={`px-4 py-2 rounded-lg text-sm ${filterSegment === 'Famille' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'}`}
           onClick={() => setFilterSegment('Famille')}
         >
           Famille
         </button>
         <button
-          data-guide="news-filter-divers"
           className={`px-4 py-2 rounded-lg text-sm ${filterSegment === 'Plongeurs' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'}`}
           onClick={() => setFilterSegment('Plongeurs')}
         >
           Plongeurs
         </button>
         <button
-          data-guide="news-filter-business"
           className={`px-4 py-2 rounded-lg text-sm ${filterSegment === 'Business' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'}`}
           onClick={() => setFilterSegment('Business')}
         >

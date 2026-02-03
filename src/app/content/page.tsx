@@ -604,30 +604,26 @@ export default function ContentPage() {
         </div>
       </div>
 
-      <div className="flex gap-2">
+      <div data-guide="content-filters" className="flex gap-2">
         <button
-          data-guide="content-filter-all"
           className={`px-4 py-2 rounded-lg text-sm ${filterStatus === null ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'}`}
           onClick={() => setFilterStatus(null)}
         >
           Tous
         </button>
         <button
-          data-guide="content-filter-published"
           className={`px-4 py-2 rounded-lg text-sm ${filterStatus === 'published' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'}`}
           onClick={() => setFilterStatus('published')}
         >
           {statusConfig.published.label}
         </button>
         <button
-          data-guide="content-filter-draft"
           className={`px-4 py-2 rounded-lg text-sm ${filterStatus === 'draft' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'}`}
           onClick={() => setFilterStatus('draft')}
         >
           {statusConfig.draft.label}
         </button>
         <button
-          data-guide="content-filter-scheduled"
           className={`px-4 py-2 rounded-lg text-sm ${filterStatus === 'scheduled' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'}`}
           onClick={() => setFilterStatus('scheduled')}
         >

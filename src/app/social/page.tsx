@@ -307,16 +307,14 @@ export default function SocialPage() {
       </div>
 
       {/* Filtres */}
-      <div className="flex gap-2">
+      <div data-guide="social-filters" className="flex gap-2">
         <button
-          data-guide="social-filter-all"
           className={`px-4 py-2 rounded-lg text-sm ${!filterPlatform ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'}`}
           onClick={() => setFilterPlatform(null)}
         >
           Tous
         </button>
         <button
-          data-guide="social-filter-twitter"
           className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm ${
             filterPlatform === 'Twitter/X' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'
           }`}
@@ -326,7 +324,6 @@ export default function SocialPage() {
           Twitter/X
         </button>
         <button
-          data-guide="social-filter-instagram"
           className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm ${
             filterPlatform === 'Instagram' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'
           }`}
@@ -336,7 +333,6 @@ export default function SocialPage() {
           Instagram
         </button>
         <button
-          data-guide="social-filter-facebook"
           className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm ${
             filterPlatform === 'Facebook' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'
           }`}
@@ -346,7 +342,6 @@ export default function SocialPage() {
           Facebook
         </button>
         <button
-          data-guide="social-filter-linkedin"
           className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm ${
             filterPlatform === 'LinkedIn' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'
           }`}

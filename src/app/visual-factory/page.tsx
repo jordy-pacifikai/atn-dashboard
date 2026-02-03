@@ -229,9 +229,8 @@ export default function VisualFactoryPage() {
           Nouveau visuel
         </h2>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
+        <div data-guide="visual-type-selector" className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
           <button
-            data-guide="visual-type-banner"
             className={`p-4 rounded-lg border-2 transition-all ${
               selectedType === 'banner'
                 ? 'border-atn-primary bg-atn-primary/5'
@@ -244,7 +243,6 @@ export default function VisualFactoryPage() {
             <p className="text-xs text-slate-500">1200x628</p>
           </button>
           <button
-            data-guide="visual-type-social"
             className={`p-4 rounded-lg border-2 transition-all ${
               selectedType === 'social'
                 ? 'border-atn-primary bg-atn-primary/5'
@@ -257,7 +255,6 @@ export default function VisualFactoryPage() {
             <p className="text-xs text-slate-500">1080x1080</p>
           </button>
           <button
-            data-guide="visual-type-story"
             className={`p-4 rounded-lg border-2 transition-all ${
               selectedType === 'story'
                 ? 'border-atn-primary bg-atn-primary/5'
@@ -270,7 +267,6 @@ export default function VisualFactoryPage() {
             <p className="text-xs text-slate-500">1080x1920</p>
           </button>
           <button
-            data-guide="visual-type-email"
             className={`p-4 rounded-lg border-2 transition-all ${
               selectedType === 'email'
                 ? 'border-atn-primary bg-atn-primary/5'
