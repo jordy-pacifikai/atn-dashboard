@@ -284,25 +284,17 @@ export default function Sidebar() {
       }`}
     >
       {/* Header */}
-      <div className={`flex items-center h-[72px] ${
-        isCollapsed ? 'px-3 justify-center' : 'px-5 gap-3'
+      <div className={`flex items-center justify-center h-[72px] ${
+        isCollapsed ? 'px-2' : 'px-4'
       }`}>
-        <div className="relative flex-shrink-0">
-          <Image
-            src="/logo_flower.svg"
-            alt="Air Tahiti Nui"
-            width={isCollapsed ? 40 : 44}
-            height={isCollapsed ? 40 : 44}
-          />
-          <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-[--atn-green] rounded-full border-2 border-white" />
-        </div>
-
-        {!isCollapsed && (
-          <div className="overflow-hidden flex-1">
-            <h1 className="font-semibold text-[--text-primary] text-[15px] tracking-tight">Air Tahiti Nui</h1>
-            <p className="text-[11px] text-[--text-tertiary] font-medium">AI Agents Dashboard</p>
-          </div>
-        )}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/logo-atn.svg"
+          alt="Air Tahiti Nui"
+          className={`object-contain transition-all duration-300 ${
+            isCollapsed ? 'w-[48px] h-[32px]' : 'w-full max-w-[200px] h-[50px]'
+          }`}
+        />
       </div>
 
       {/* Divider */}
