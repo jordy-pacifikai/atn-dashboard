@@ -610,11 +610,19 @@ export default function ContentPage() {
   const syncContent = async () => {
     setSyncing(true)
     try {
-      await fetch('https://n8n.srv1140766.hstgr.cloud/webhook/atn-content-factory', {
+      const response = await fetch('https://n8n.srv1140766.hstgr.cloud/webhook/atn-generate-content', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'sync' })
+        body: JSON.stringify({ action: 'generate' })
       })
+
+      if (response.ok) {
+        const result = await response.json()
+        console.log('Article généré:', result)
+      }
+
+      // Attendre 2 secondes puis rafraîchir
+      await new Promise(resolve => setTimeout(resolve, 2000))
       await fetchArticles()
     } catch (error) {
       console.error('Error syncing content:', error)
