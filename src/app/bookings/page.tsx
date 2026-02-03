@@ -223,6 +223,7 @@ export default function BookingsPage() {
           <p className="text-slate-500">Build 5: Assistant de réservation intelligent</p>
         </div>
         <button
+          data-guide="bookings-btn-sync"
           onClick={syncBookings}
           disabled={syncing}
           className="flex items-center gap-2 px-4 py-2 bg-atn-primary text-white rounded-lg hover:bg-opacity-90 disabled:opacity-50"
@@ -236,44 +237,64 @@ export default function BookingsPage() {
         </button>
       </div>
 
-      <div data-guide="bookings-stats" className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="card">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div data-guide="bookings-kpi-requests" className="card">
           <p className="text-sm text-slate-500">Demandes aujourd'hui</p>
           <p className="text-2xl font-bold">{totalRequests}</p>
         </div>
-        <div className="card">
+        <div data-guide="bookings-kpi-completed" className="card">
           <p className="text-sm text-slate-500">Traitées</p>
           <p className="text-2xl font-bold text-emerald-600">{completedCount}</p>
         </div>
-        <div className="card">
+        <div data-guide="bookings-kpi-reservations" className="card">
           <p className="text-sm text-slate-500">Nouvelles réservations</p>
           <p className="text-2xl font-bold">{reservationCount}</p>
         </div>
-        <div className="card">
+        <div data-guide="bookings-kpi-passengers" className="card">
           <p className="text-sm text-slate-500">Passagers concernés</p>
           <p className="text-2xl font-bold">{totalPassengers}</p>
         </div>
       </div>
 
-      <div data-guide="bookings-filters" className="flex gap-2">
+      <div className="flex gap-2">
         <button
+          data-guide="bookings-filter-all"
           className={`px-4 py-2 rounded-lg text-sm ${!filterType ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'}`}
           onClick={() => setFilterType(null)}
         >
           Tous
         </button>
-        {Object.entries(requestTypeConfig).map(([type, config]) => (
-          <button
-            key={type}
-            className={`px-4 py-2 rounded-lg text-sm ${filterType === type ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'}`}
-            onClick={() => setFilterType(type)}
-          >
-            {config.label}
-          </button>
-        ))}
+        <button
+          data-guide="bookings-filter-reservation"
+          className={`px-4 py-2 rounded-lg text-sm ${filterType === 'reservation' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'}`}
+          onClick={() => setFilterType('reservation')}
+        >
+          Réservation
+        </button>
+        <button
+          data-guide="bookings-filter-modification"
+          className={`px-4 py-2 rounded-lg text-sm ${filterType === 'modification' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'}`}
+          onClick={() => setFilterType('modification')}
+        >
+          Modification
+        </button>
+        <button
+          data-guide="bookings-filter-cancellation"
+          className={`px-4 py-2 rounded-lg text-sm ${filterType === 'cancellation' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'}`}
+          onClick={() => setFilterType('cancellation')}
+        >
+          Annulation
+        </button>
+        <button
+          data-guide="bookings-filter-information"
+          className={`px-4 py-2 rounded-lg text-sm ${filterType === 'information' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'}`}
+          onClick={() => setFilterType('information')}
+        >
+          Information
+        </button>
       </div>
 
-      <div data-guide="bookings-list" className="space-y-4">
+      <div data-guide="bookings-requests-list" className="space-y-4">
         {loading ? (
           <div className="flex items-center justify-center py-12">
             <Loader2 className="w-8 h-8 animate-spin text-atn-primary" />

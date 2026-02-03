@@ -288,7 +288,7 @@ export default function SettingsPage() {
       </div>
 
       {/* Language */}
-      <div className="card">
+      <div data-guide="settings-language" className="card">
         <h2 className="font-semibold flex items-center gap-2 mb-4">
           <Globe className="w-5 h-5 text-slate-400" />
           Langue & Région
@@ -319,6 +319,7 @@ export default function SettingsPage() {
       {/* Save button */}
       <div className="flex justify-end">
         <button
+          data-guide="settings-btn-save"
           className="flex items-center gap-2 px-4 py-2 bg-atn-primary text-white rounded-lg text-sm font-medium hover:bg-opacity-90 disabled:opacity-50 transition-all flex items-center gap-2"
           onClick={handleSave}
         >

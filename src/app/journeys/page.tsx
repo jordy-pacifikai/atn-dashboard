@@ -258,6 +258,7 @@ export default function JourneysPage() {
         </div>
         <div className="flex gap-2">
           <button
+            data-guide="journeys-btn-sync"
             onClick={syncJourneys}
             disabled={syncing}
             className="flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200 disabled:opacity-50"
@@ -269,33 +270,33 @@ export default function JourneysPage() {
             )}
             {syncing ? 'Sync...' : 'Actualiser'}
           </button>
-          <button className="flex items-center gap-2 px-4 py-2 bg-atn-primary text-white rounded-lg hover:bg-opacity-90">
+          <button data-guide="journeys-btn-new" className="flex items-center gap-2 px-4 py-2 bg-atn-primary text-white rounded-lg hover:bg-opacity-90">
             <Plus className="w-4 h-4" />
             Nouveau Journey
           </button>
         </div>
       </div>
 
-      <div data-guide="journeys-stats" className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="card">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div data-guide="journeys-kpi-active" className="card">
           <p className="text-sm text-slate-500">Journeys actifs</p>
           <p className="text-2xl font-bold text-emerald-600">{stats.activeJourneys}</p>
         </div>
-        <div className="card">
+        <div data-guide="journeys-kpi-inprogress" className="card">
           <p className="text-sm text-slate-500">Clients en parcours</p>
           <p className="text-2xl font-bold text-blue-600">{stats.totalInJourney.toLocaleString()}</p>
         </div>
-        <div className="card">
+        <div data-guide="journeys-kpi-completed" className="card">
           <p className="text-sm text-slate-500">Complétés aujourd'hui</p>
           <p className="text-2xl font-bold">{stats.completedToday}</p>
         </div>
-        <div className="card">
+        <div data-guide="journeys-kpi-conversion" className="card">
           <p className="text-sm text-slate-500">Conversion moyenne</p>
           <p className="text-2xl font-bold text-atn-primary">{stats.avgConversion}%</p>
         </div>
       </div>
 
-      <div data-guide="journeys-list" className="space-y-4">
+      <div data-guide="journeys-journeys-list" className="space-y-4">
         {loading ? (
           <div className="flex items-center justify-center py-12">
             <Loader2 className="w-8 h-8 animate-spin text-atn-primary" />

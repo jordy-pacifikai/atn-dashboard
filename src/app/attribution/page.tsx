@@ -254,6 +254,7 @@ export default function AttributionPage() {
           <p className="text-slate-500">Build 24: Multi-touch attribution 5 modèles</p>
         </div>
         <button
+          data-guide="attribution-btn-refresh"
           onClick={refreshAttribution}
           disabled={syncing}
           className="flex items-center gap-2 px-4 py-2 bg-atn-primary text-white rounded-lg hover:bg-opacity-90 disabled:opacity-50"
@@ -267,46 +268,92 @@ export default function AttributionPage() {
         </button>
       </div>
 
-      <div data-guide="attribution-stats" className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="card">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div data-guide="attribution-kpi-channels" className="card">
           <p className="text-sm text-slate-500">Canaux trackés</p>
           <p className="text-2xl font-bold">{data.length}</p>
         </div>
-        <div className="card">
+        <div data-guide="attribution-kpi-conversions" className="card">
           <p className="text-sm text-slate-500">Conversions totales</p>
           <p className="text-2xl font-bold text-emerald-600">{totalConversions}</p>
         </div>
-        <div className="card">
+        <div data-guide="attribution-kpi-revenue" className="card">
           <p className="text-sm text-slate-500">Revenue total</p>
           <p className="text-2xl font-bold">{formatCurrency(totalRevenue)}</p>
         </div>
-        <div className="card">
+        <div data-guide="attribution-kpi-touchpoints" className="card">
           <p className="text-sm text-slate-500">Avg touchpoints/conv</p>
           <p className="text-2xl font-bold text-atn-primary">3.2</p>
         </div>
       </div>
 
       {/* Sélection du modèle */}
-      <div data-guide="attribution-models" className="card">
+      <div data-guide="attribution-models-section" className="card">
         <h2 className="font-semibold mb-4 flex items-center gap-2">
           <Filter className="w-5 h-5" />
           Modèle d'attribution
         </h2>
         <div className="grid grid-cols-5 gap-3">
-          {(Object.keys(modelLabels) as ModelType[]).map(model => (
-            <button
-              key={model}
-              className={`p-4 rounded-lg border-2 transition-all text-left ${
-                selectedModel === model
-                  ? 'border-atn-primary bg-atn-primary/5'
-                  : 'border-slate-200 hover:border-slate-300'
-              }`}
-              onClick={() => setSelectedModel(model)}
-            >
-              <p className="font-medium text-sm">{modelLabels[model]}</p>
-              <p className="text-xs text-slate-500 mt-1">{modelDescriptions[model]}</p>
-            </button>
-          ))}
+          <button
+            data-guide="attribution-model-firsttouch"
+            className={`p-4 rounded-lg border-2 transition-all text-left ${
+              selectedModel === 'firstTouch'
+                ? 'border-atn-primary bg-atn-primary/5'
+                : 'border-slate-200 hover:border-slate-300'
+            }`}
+            onClick={() => setSelectedModel('firstTouch')}
+          >
+            <p className="font-medium text-sm">{modelLabels.firstTouch}</p>
+            <p className="text-xs text-slate-500 mt-1">{modelDescriptions.firstTouch}</p>
+          </button>
+          <button
+            data-guide="attribution-model-lasttouch"
+            className={`p-4 rounded-lg border-2 transition-all text-left ${
+              selectedModel === 'lastTouch'
+                ? 'border-atn-primary bg-atn-primary/5'
+                : 'border-slate-200 hover:border-slate-300'
+            }`}
+            onClick={() => setSelectedModel('lastTouch')}
+          >
+            <p className="font-medium text-sm">{modelLabels.lastTouch}</p>
+            <p className="text-xs text-slate-500 mt-1">{modelDescriptions.lastTouch}</p>
+          </button>
+          <button
+            data-guide="attribution-model-linear"
+            className={`p-4 rounded-lg border-2 transition-all text-left ${
+              selectedModel === 'linear'
+                ? 'border-atn-primary bg-atn-primary/5'
+                : 'border-slate-200 hover:border-slate-300'
+            }`}
+            onClick={() => setSelectedModel('linear')}
+          >
+            <p className="font-medium text-sm">{modelLabels.linear}</p>
+            <p className="text-xs text-slate-500 mt-1">{modelDescriptions.linear}</p>
+          </button>
+          <button
+            data-guide="attribution-model-timedecay"
+            className={`p-4 rounded-lg border-2 transition-all text-left ${
+              selectedModel === 'timeDecay'
+                ? 'border-atn-primary bg-atn-primary/5'
+                : 'border-slate-200 hover:border-slate-300'
+            }`}
+            onClick={() => setSelectedModel('timeDecay')}
+          >
+            <p className="font-medium text-sm">{modelLabels.timeDecay}</p>
+            <p className="text-xs text-slate-500 mt-1">{modelDescriptions.timeDecay}</p>
+          </button>
+          <button
+            data-guide="attribution-model-positionbased"
+            className={`p-4 rounded-lg border-2 transition-all text-left ${
+              selectedModel === 'positionBased'
+                ? 'border-atn-primary bg-atn-primary/5'
+                : 'border-slate-200 hover:border-slate-300'
+            }`}
+            onClick={() => setSelectedModel('positionBased')}
+          >
+            <p className="font-medium text-sm">{modelLabels.positionBased}</p>
+            <p className="text-xs text-slate-500 mt-1">{modelDescriptions.positionBased}</p>
+          </button>
         </div>
       </div>
 

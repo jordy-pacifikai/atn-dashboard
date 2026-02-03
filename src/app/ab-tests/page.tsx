@@ -333,6 +333,7 @@ export default function ABTestsPage() {
         </div>
         <div className="flex gap-2">
           <button
+            data-guide="abtests-btn-refresh"
             onClick={refreshTests}
             disabled={syncing}
             className="flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200 disabled:opacity-50"
@@ -344,33 +345,33 @@ export default function ABTestsPage() {
             )}
             {syncing ? 'Sync...' : 'Actualiser'}
           </button>
-          <button className="flex items-center gap-2 px-4 py-2 bg-atn-primary text-white rounded-lg hover:bg-opacity-90">
+          <button data-guide="abtests-btn-new" className="flex items-center gap-2 px-4 py-2 bg-atn-primary text-white rounded-lg hover:bg-opacity-90">
             <FlaskConical className="w-4 h-4" />
             Nouveau test
           </button>
         </div>
       </div>
 
-      <div data-guide="abtests-stats" className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="card">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div data-guide="abtests-kpi-running" className="card">
           <p className="text-sm text-slate-500">Tests en cours</p>
           <p className="text-2xl font-bold text-blue-600">{stats.running}</p>
         </div>
-        <div className="card">
+        <div data-guide="abtests-kpi-completed" className="card">
           <p className="text-sm text-slate-500">Tests terminés</p>
           <p className="text-2xl font-bold text-emerald-600">{stats.completed}</p>
         </div>
-        <div className="card">
+        <div data-guide="abtests-kpi-lift" className="card">
           <p className="text-sm text-slate-500">Lift moyen</p>
           <p className="text-2xl font-bold text-atn-primary">{stats.avgLift}</p>
         </div>
-        <div className="card">
+        <div data-guide="abtests-kpi-revenue" className="card">
           <p className="text-sm text-slate-500">Revenue total testé</p>
           <p className="text-2xl font-bold">{formatCurrency(stats.totalRevenue)}</p>
         </div>
       </div>
 
-      <div data-guide="abtests-methodology" className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+      <div data-guide="abtests-methodology-box" className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
         <div className="flex items-center gap-2 mb-2">
           <AlertCircle className="w-5 h-5 text-blue-600" />
           <span className="font-medium text-blue-800">Méthodologie statistique</span>
@@ -381,7 +382,7 @@ export default function ABTestsPage() {
         </p>
       </div>
 
-      <div data-guide="abtests-list" className="space-y-4">
+      <div data-guide="abtests-tests-list" className="space-y-4">
         {loading ? (
           <div className="flex items-center justify-center py-12">
             <Loader2 className="w-8 h-8 animate-spin text-atn-primary" />

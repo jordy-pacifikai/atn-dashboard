@@ -159,74 +159,113 @@ export default function StaffAssistantPage() {
         </div>
       </div>
 
-      <div data-guide="staff-stats" className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="card">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div data-guide="staff-kpi-questions" className="card">
           <p className="text-sm text-slate-500">Questions traitées</p>
           <p className="text-2xl font-bold">{stats.total}</p>
         </div>
-        <div className="card">
+        <div data-guide="staff-kpi-helpful" className="card">
           <p className="text-sm text-slate-500">Réponses utiles</p>
           <p className="text-2xl font-bold text-emerald-600">{stats.helpful}</p>
         </div>
-        <div className="card">
+        <div data-guide="staff-kpi-procedures" className="card">
           <p className="text-sm text-slate-500">Procédures consultées</p>
           <p className="text-2xl font-bold text-blue-600">{stats.procedures}</p>
         </div>
-        <div className="card">
+        <div data-guide="staff-kpi-responsetime" className="card">
           <p className="text-sm text-slate-500">Temps de réponse</p>
           <p className="text-2xl font-bold">{stats.avgResponseTime}</p>
         </div>
       </div>
 
       {/* Nouvelle question */}
-      <div data-guide="staff-question" className="card bg-gradient-to-r from-cyan-50 to-blue-50">
+      <div data-guide="staff-question-section" className="card bg-gradient-to-r from-cyan-50 to-blue-50">
         <h2 className="font-semibold mb-4 flex items-center gap-2">
           <MessageSquare className="w-5 h-5 text-cyan-600" />
           Poser une question à TALIA
         </h2>
         <div className="flex gap-3">
           <input
+            data-guide="staff-question-input"
             type="text"
             placeholder="Exemple: Quelle est la procédure pour..."
             className="flex-1 px-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:border-cyan-500 bg-white"
             value={newQuestion}
             onChange={(e) => setNewQuestion(e.target.value)}
           />
-          <button className="px-6 py-3 bg-cyan-500 text-white rounded-lg font-medium flex items-center gap-2 hover:bg-cyan-600">
+          <button data-guide="staff-btn-ask" className="px-6 py-3 bg-cyan-500 text-white rounded-lg font-medium flex items-center gap-2 hover:bg-cyan-600">
             <Send className="w-5 h-5" />
             Demander
           </button>
         </div>
         <div className="flex gap-2 mt-3">
-          <button className="px-3 py-1.5 bg-white rounded-full text-xs text-slate-600 hover:bg-slate-50">
-            📋 Procédures embarquement
+          <button data-guide="staff-quicklink-procedures" className="px-3 py-1.5 bg-white rounded-full text-xs text-slate-600 hover:bg-slate-50">
+            Procédures embarquement
           </button>
-          <button className="px-3 py-1.5 bg-white rounded-full text-xs text-slate-600 hover:bg-slate-50">
-            ✈️ Opérations vol
+          <button data-guide="staff-quicklink-operations" className="px-3 py-1.5 bg-white rounded-full text-xs text-slate-600 hover:bg-slate-50">
+            Opérations vol
           </button>
-          <button className="px-3 py-1.5 bg-white rounded-full text-xs text-slate-600 hover:bg-slate-50">
-            👥 Questions RH
+          <button data-guide="staff-quicklink-hr" className="px-3 py-1.5 bg-white rounded-full text-xs text-slate-600 hover:bg-slate-50">
+            Questions RH
           </button>
         </div>
       </div>
 
       {/* Filtres */}
-      <div data-guide="staff-filters" className="flex items-center justify-between">
+      <div className="flex items-center justify-between">
         <div className="flex gap-2">
-          {categories.map(cat => (
-            <button
-              key={cat.id}
-              className={`px-4 py-2 rounded-lg text-sm flex items-center gap-2 ${
-                selectedCategory === cat.id ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-              }`}
-              onClick={() => setSelectedCategory(cat.id)}
-            >
-              <cat.icon className="w-4 h-4" />
-              {cat.label}
-            </button>
-          ))}
+          <button
+            data-guide="staff-filter-all"
+            className={`px-4 py-2 rounded-lg text-sm flex items-center gap-2 ${
+              selectedCategory === 'all' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+            }`}
+            onClick={() => setSelectedCategory('all')}
+          >
+            <HelpCircle className="w-4 h-4" />
+            Toutes
+          </button>
+          <button
+            data-guide="staff-filter-procedures"
+            className={`px-4 py-2 rounded-lg text-sm flex items-center gap-2 ${
+              selectedCategory === 'procedures' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+            }`}
+            onClick={() => setSelectedCategory('procedures')}
+          >
+            <FileText className="w-4 h-4" />
+            Procédures
+          </button>
+          <button
+            data-guide="staff-filter-hr"
+            className={`px-4 py-2 rounded-lg text-sm flex items-center gap-2 ${
+              selectedCategory === 'hr' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+            }`}
+            onClick={() => setSelectedCategory('hr')}
+          >
+            <UserCog className="w-4 h-4" />
+            RH
+          </button>
+          <button
+            data-guide="staff-filter-technical"
+            className={`px-4 py-2 rounded-lg text-sm flex items-center gap-2 ${
+              selectedCategory === 'technical' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+            }`}
+            onClick={() => setSelectedCategory('technical')}
+          >
+            <Settings className="w-4 h-4" />
+            Technique
+          </button>
+          <button
+            data-guide="staff-filter-operations"
+            className={`px-4 py-2 rounded-lg text-sm flex items-center gap-2 ${
+              selectedCategory === 'operations' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+            }`}
+            onClick={() => setSelectedCategory('operations')}
+          >
+            <Clock className="w-4 h-4" />
+            Opérations
+          </button>
         </div>
-        <div className="relative">
+        <div data-guide="staff-search" className="relative">
           <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
           <input
             type="text"
@@ -239,30 +278,35 @@ export default function StaffAssistantPage() {
       </div>
 
       {/* Historique des questions */}
-      <div className="space-y-4">
+      <div data-guide="staff-history-list" className="space-y-4">
         {filteredQueries.map(query => (
           <QueryCard key={query.id} query={query} />
         ))}
       </div>
 
       {/* Base de connaissances */}
-      <div data-guide="staff-knowledge" className="card">
+      <div data-guide="staff-knowledge-section" className="card">
         <h2 className="font-semibold mb-4 flex items-center gap-2">
           <Book className="w-5 h-5" />
           Base de connaissances
         </h2>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          {[
-            { label: 'Manuel des procédures', count: 156 },
-            { label: 'FAQ RH', count: 89 },
-            { label: 'Documentation technique', count: 234 },
-            { label: 'Réglementations', count: 67 },
-          ].map((item) => (
-            <button key={item.label} className="p-4 bg-slate-50 rounded-lg hover:bg-slate-100 text-left">
-              <p className="font-medium text-sm">{item.label}</p>
-              <p className="text-xs text-slate-500">{item.count} documents</p>
-            </button>
-          ))}
+          <button data-guide="staff-kb-manual" className="p-4 bg-slate-50 rounded-lg hover:bg-slate-100 text-left">
+            <p className="font-medium text-sm">Manuel des procédures</p>
+            <p className="text-xs text-slate-500">156 documents</p>
+          </button>
+          <button data-guide="staff-kb-faq" className="p-4 bg-slate-50 rounded-lg hover:bg-slate-100 text-left">
+            <p className="font-medium text-sm">FAQ RH</p>
+            <p className="text-xs text-slate-500">89 documents</p>
+          </button>
+          <button data-guide="staff-kb-tech" className="p-4 bg-slate-50 rounded-lg hover:bg-slate-100 text-left">
+            <p className="font-medium text-sm">Documentation technique</p>
+            <p className="text-xs text-slate-500">234 documents</p>
+          </button>
+          <button data-guide="staff-kb-regulations" className="p-4 bg-slate-50 rounded-lg hover:bg-slate-100 text-left">
+            <p className="font-medium text-sm">Réglementations</p>
+            <p className="text-xs text-slate-500">67 documents</p>
+          </button>
         </div>
       </div>
     </div>

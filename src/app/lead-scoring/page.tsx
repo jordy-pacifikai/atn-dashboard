@@ -325,66 +325,115 @@ export default function LeadScoringPage() {
         </button>
       </div>
 
-      <div data-guide="leadscoring-stats" className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="card">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div data-guide="leadscoring-kpi-total" className="card">
           <p className="text-sm text-slate-500">Total leads</p>
           <p className="text-2xl font-bold">{stats.total}</p>
         </div>
-        <div className="card">
+        <div data-guide="leadscoring-kpi-hot" className="card">
           <p className="text-sm text-slate-500">Hot Leads (A)</p>
           <p className="text-2xl font-bold text-emerald-600">{stats.hotLeads}</p>
         </div>
-        <div className="card">
+        <div data-guide="leadscoring-kpi-score" className="card">
           <p className="text-sm text-slate-500">Score moyen</p>
           <p className="text-2xl font-bold text-atn-primary">{stats.avgScore}</p>
         </div>
-        <div className="card">
+        <div data-guide="leadscoring-kpi-pipeline" className="card">
           <p className="text-sm text-slate-500">Valeur pipeline</p>
           <p className="text-2xl font-bold">{new Intl.NumberFormat('fr-FR').format(stats.totalPredictedValue)} XPF</p>
         </div>
       </div>
 
       {/* Scoring rules */}
-      <div data-guide="leadscoring-rules" className="card bg-gradient-to-r from-amber-50 to-orange-50">
+      <div data-guide="leadscoring-rules-section" className="card bg-gradient-to-r from-amber-50 to-orange-50">
         <h2 className="font-semibold mb-4 flex items-center gap-2">
           <Star className="w-5 h-5 text-amber-500" />
           Règles de scoring
         </h2>
         <div className="grid grid-cols-6 gap-3 text-center">
-          {[
-            { action: 'Booking start', points: 25 },
-            { action: 'Email click', points: 15 },
-            { action: 'Page view (>2min)', points: 10 },
-            { action: 'Search', points: 8 },
-            { action: 'Email open', points: 5 },
-            { action: 'Download', points: 10 },
-          ].map(rule => (
-            <div key={rule.action} className="p-3 bg-white rounded-lg">
-              <p className="text-lg font-bold text-amber-600">+{rule.points}</p>
-              <p className="text-xs text-slate-600">{rule.action}</p>
-            </div>
-          ))}
+          <div data-guide="leadscoring-rule-booking" className="p-3 bg-white rounded-lg">
+            <p className="text-lg font-bold text-amber-600">+25</p>
+            <p className="text-xs text-slate-600">Booking start</p>
+          </div>
+          <div data-guide="leadscoring-rule-emailclick" className="p-3 bg-white rounded-lg">
+            <p className="text-lg font-bold text-amber-600">+15</p>
+            <p className="text-xs text-slate-600">Email click</p>
+          </div>
+          <div data-guide="leadscoring-rule-pageview" className="p-3 bg-white rounded-lg">
+            <p className="text-lg font-bold text-amber-600">+10</p>
+            <p className="text-xs text-slate-600">Page view (&gt;2min)</p>
+          </div>
+          <div data-guide="leadscoring-rule-search" className="p-3 bg-white rounded-lg">
+            <p className="text-lg font-bold text-amber-600">+8</p>
+            <p className="text-xs text-slate-600">Search</p>
+          </div>
+          <div data-guide="leadscoring-rule-emailopen" className="p-3 bg-white rounded-lg">
+            <p className="text-lg font-bold text-amber-600">+5</p>
+            <p className="text-xs text-slate-600">Email open</p>
+          </div>
+          <div data-guide="leadscoring-rule-download" className="p-3 bg-white rounded-lg">
+            <p className="text-lg font-bold text-amber-600">+10</p>
+            <p className="text-xs text-slate-600">Download</p>
+          </div>
         </div>
       </div>
 
       {/* Filtres */}
-      <div data-guide="leadscoring-filters" className="flex gap-2">
-        {(['all', 'A', 'B', 'C', 'D'] as const).map(grade => (
-          <button
-            key={grade}
-            className={`px-4 py-2 rounded-lg text-sm flex items-center gap-2 ${
-              filterGrade === grade ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-            }`}
-            onClick={() => setFilterGrade(grade)}
-          >
-            <Filter className="w-4 h-4" />
-            {grade === 'all' ? 'Tous' : `Grade ${grade}`}
-          </button>
-        ))}
+      <div className="flex gap-2">
+        <button
+          data-guide="leadscoring-filter-all"
+          className={`px-4 py-2 rounded-lg text-sm flex items-center gap-2 ${
+            filterGrade === 'all' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+          }`}
+          onClick={() => setFilterGrade('all')}
+        >
+          <Filter className="w-4 h-4" />
+          Tous
+        </button>
+        <button
+          data-guide="leadscoring-filter-a"
+          className={`px-4 py-2 rounded-lg text-sm flex items-center gap-2 ${
+            filterGrade === 'A' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+          }`}
+          onClick={() => setFilterGrade('A')}
+        >
+          <Filter className="w-4 h-4" />
+          Grade A
+        </button>
+        <button
+          data-guide="leadscoring-filter-b"
+          className={`px-4 py-2 rounded-lg text-sm flex items-center gap-2 ${
+            filterGrade === 'B' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+          }`}
+          onClick={() => setFilterGrade('B')}
+        >
+          <Filter className="w-4 h-4" />
+          Grade B
+        </button>
+        <button
+          data-guide="leadscoring-filter-c"
+          className={`px-4 py-2 rounded-lg text-sm flex items-center gap-2 ${
+            filterGrade === 'C' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+          }`}
+          onClick={() => setFilterGrade('C')}
+        >
+          <Filter className="w-4 h-4" />
+          Grade C
+        </button>
+        <button
+          data-guide="leadscoring-filter-d"
+          className={`px-4 py-2 rounded-lg text-sm flex items-center gap-2 ${
+            filterGrade === 'D' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+          }`}
+          onClick={() => setFilterGrade('D')}
+        >
+          <Filter className="w-4 h-4" />
+          Grade D
+        </button>
       </div>
 
       {/* Liste des leads */}
-      <div data-guide="leadscoring-list" className="space-y-4">
+      <div data-guide="leadscoring-leads-list" className="space-y-4">
         {loading ? (
           <div className="flex items-center justify-center py-12">
             <Loader2 className="w-8 h-8 animate-spin text-atn-primary" />

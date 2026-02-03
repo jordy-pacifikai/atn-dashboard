@@ -320,6 +320,7 @@ export default function ReviewIntelligencePage() {
           <p className="text-slate-500">Build 16: Analyse sentiment + détection ironie</p>
         </div>
         <button
+          data-guide="reviews-btn-analyze"
           onClick={analyzeReviews}
           disabled={syncing}
           className="flex items-center gap-2 px-4 py-2 bg-atn-primary text-white rounded-lg hover:bg-opacity-90 disabled:opacity-50"
@@ -333,29 +334,29 @@ export default function ReviewIntelligencePage() {
         </button>
       </div>
 
-      <div data-guide="reviews-stats" className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="card">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div data-guide="reviews-kpi-positive" className="card">
           <div className="flex items-center gap-2 mb-1">
             <ThumbsUp className="w-4 h-4 text-emerald-600" />
             <p className="text-sm text-slate-500">Positifs</p>
           </div>
           <p className="text-2xl font-bold text-emerald-600">{stats.positive}</p>
         </div>
-        <div className="card">
+        <div data-guide="reviews-kpi-negative" className="card">
           <div className="flex items-center gap-2 mb-1">
             <ThumbsDown className="w-4 h-4 text-red-600" />
             <p className="text-sm text-slate-500">Négatifs</p>
           </div>
           <p className="text-2xl font-bold text-red-600">{stats.negative}</p>
         </div>
-        <div className="card">
+        <div data-guide="reviews-kpi-irony" className="card">
           <div className="flex items-center gap-2 mb-1">
             <AlertTriangle className="w-4 h-4 text-purple-600" />
             <p className="text-sm text-slate-500">Ironie détectée</p>
           </div>
           <p className="text-2xl font-bold text-purple-600">{stats.ironyDetected}</p>
         </div>
-        <div className="card">
+        <div data-guide="reviews-kpi-action" className="card">
           <div className="flex items-center gap-2 mb-1">
             <MessageSquare className="w-4 h-4 text-amber-600" />
             <p className="text-sm text-slate-500">Action requise</p>
@@ -364,22 +365,40 @@ export default function ReviewIntelligencePage() {
         </div>
       </div>
 
-      <div data-guide="reviews-filters" className="flex gap-2">
-        {(['all', 'irony', 'action'] as const).map(f => (
-          <button
-            key={f}
-            className={`px-4 py-2 rounded-lg text-sm flex items-center gap-2 ${
-              filter === f ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'
-            }`}
-            onClick={() => setFilter(f)}
-          >
-            <Filter className="w-4 h-4" />
-            {f === 'all' ? 'Tous' : f === 'irony' ? 'Ironie' : 'Action requise'}
-          </button>
-        ))}
+      <div className="flex gap-2">
+        <button
+          data-guide="reviews-filter-all"
+          className={`px-4 py-2 rounded-lg text-sm flex items-center gap-2 ${
+            filter === 'all' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'
+          }`}
+          onClick={() => setFilter('all')}
+        >
+          <Filter className="w-4 h-4" />
+          Tous
+        </button>
+        <button
+          data-guide="reviews-filter-irony"
+          className={`px-4 py-2 rounded-lg text-sm flex items-center gap-2 ${
+            filter === 'irony' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'
+          }`}
+          onClick={() => setFilter('irony')}
+        >
+          <Filter className="w-4 h-4" />
+          Ironie
+        </button>
+        <button
+          data-guide="reviews-filter-action"
+          className={`px-4 py-2 rounded-lg text-sm flex items-center gap-2 ${
+            filter === 'action' ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'
+          }`}
+          onClick={() => setFilter('action')}
+        >
+          <Filter className="w-4 h-4" />
+          Action requise
+        </button>
       </div>
 
-      <div data-guide="reviews-list" className="space-y-4">
+      <div data-guide="reviews-analyses-list" className="space-y-4">
         {loading ? (
           <div className="flex items-center justify-center py-12">
             <Loader2 className="w-8 h-8 animate-spin text-atn-primary" />

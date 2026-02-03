@@ -1106,6 +1106,7 @@ export default function CalendarPage() {
           <p className="text-slate-500">Planifiez newsletters et articles - glissez-déposez pour réorganiser</p>
         </div>
         <button
+          data-guide="calendar-btn-new"
           className="flex items-center gap-2 px-4 py-2 bg-atn-primary text-white rounded-lg text-sm font-medium hover:bg-opacity-90 disabled:opacity-50 transition-all flex items-center gap-2"
           onClick={() => {
             setSelectedContent(null)
@@ -1210,26 +1211,26 @@ export default function CalendarPage() {
       </div>
 
       {/* Stats */}
-      <div data-guide="calendar-stats" className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="card">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div data-guide="calendar-kpi-newsletters" className="card">
           <p className="text-sm text-slate-500">Newsletters ce mois</p>
           <p className="text-2xl font-bold text-pink-600">
             {content.filter(c => c.type === 'newsletter' && c.date.startsWith(currentMonth.toISOString().slice(0, 7))).length}
           </p>
         </div>
-        <div className="card">
+        <div data-guide="calendar-kpi-articles" className="card">
           <p className="text-sm text-slate-500">Articles ce mois</p>
           <p className="text-2xl font-bold text-purple-600">
             {content.filter(c => c.type === 'article' && c.date.startsWith(currentMonth.toISOString().slice(0, 7))).length}
           </p>
         </div>
-        <div className="card">
+        <div data-guide="calendar-kpi-scheduled" className="card">
           <p className="text-sm text-slate-500">Programmés</p>
           <p className="text-2xl font-bold text-blue-600">
             {content.filter(c => c.status === 'scheduled').length}
           </p>
         </div>
-        <div className="card">
+        <div data-guide="calendar-kpi-drafts" className="card">
           <p className="text-sm text-slate-500">Brouillons</p>
           <p className="text-2xl font-bold text-slate-600">
             {content.filter(c => c.status === 'draft').length}

@@ -203,52 +203,90 @@ export default function VisualFactoryPage() {
         </div>
       </div>
 
-      <div data-guide="visual-stats" className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="card">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div data-guide="visual-kpi-total" className="card">
           <p className="text-sm text-slate-500">Total générés</p>
           <p className="text-2xl font-bold">{stats.total}</p>
         </div>
-        <div className="card">
+        <div data-guide="visual-kpi-ready" className="card">
           <p className="text-sm text-slate-500">Prêts</p>
           <p className="text-2xl font-bold text-blue-600">{stats.ready}</p>
         </div>
-        <div className="card">
+        <div data-guide="visual-kpi-approved" className="card">
           <p className="text-sm text-slate-500">Approuvés</p>
           <p className="text-2xl font-bold text-emerald-600">{stats.approved}</p>
         </div>
-        <div className="card">
+        <div data-guide="visual-kpi-generating" className="card">
           <p className="text-sm text-slate-500">En cours</p>
           <p className="text-2xl font-bold text-amber-600">{stats.generating}</p>
         </div>
       </div>
 
       {/* Générateur */}
-      <div data-guide="visual-generator" className="card">
+      <div data-guide="visual-generator-section" className="card">
         <h2 className="font-semibold mb-4 flex items-center gap-2">
           <Wand2 className="w-5 h-5 text-fuchsia-500" />
           Nouveau visuel
         </h2>
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
-          {assetTypes.map(type => (
-            <button
-              key={type.id}
-              className={`p-4 rounded-lg border-2 transition-all ${
-                selectedType === type.id
-                  ? 'border-atn-primary bg-atn-primary/5'
-                  : 'border-slate-200 hover:border-slate-300'
-              }`}
-              onClick={() => setSelectedType(type.id)}
-            >
-              <type.icon className={`w-6 h-6 mb-2 ${selectedType === type.id ? 'text-atn-primary' : 'text-slate-400'}`} />
-              <p className="text-sm font-medium">{type.label}</p>
-              <p className="text-xs text-slate-500">{type.format}</p>
-            </button>
-          ))}
+          <button
+            data-guide="visual-type-banner"
+            className={`p-4 rounded-lg border-2 transition-all ${
+              selectedType === 'banner'
+                ? 'border-atn-primary bg-atn-primary/5'
+                : 'border-slate-200 hover:border-slate-300'
+            }`}
+            onClick={() => setSelectedType('banner')}
+          >
+            <LayoutGrid className={`w-6 h-6 mb-2 ${selectedType === 'banner' ? 'text-atn-primary' : 'text-slate-400'}`} />
+            <p className="text-sm font-medium">Bannière Web</p>
+            <p className="text-xs text-slate-500">1200x628</p>
+          </button>
+          <button
+            data-guide="visual-type-social"
+            className={`p-4 rounded-lg border-2 transition-all ${
+              selectedType === 'social'
+                ? 'border-atn-primary bg-atn-primary/5'
+                : 'border-slate-200 hover:border-slate-300'
+            }`}
+            onClick={() => setSelectedType('social')}
+          >
+            <Image className={`w-6 h-6 mb-2 ${selectedType === 'social' ? 'text-atn-primary' : 'text-slate-400'}`} />
+            <p className="text-sm font-medium">Post Social</p>
+            <p className="text-xs text-slate-500">1080x1080</p>
+          </button>
+          <button
+            data-guide="visual-type-story"
+            className={`p-4 rounded-lg border-2 transition-all ${
+              selectedType === 'story'
+                ? 'border-atn-primary bg-atn-primary/5'
+                : 'border-slate-200 hover:border-slate-300'
+            }`}
+            onClick={() => setSelectedType('story')}
+          >
+            <Sparkles className={`w-6 h-6 mb-2 ${selectedType === 'story' ? 'text-atn-primary' : 'text-slate-400'}`} />
+            <p className="text-sm font-medium">Story/Reel</p>
+            <p className="text-xs text-slate-500">1080x1920</p>
+          </button>
+          <button
+            data-guide="visual-type-email"
+            className={`p-4 rounded-lg border-2 transition-all ${
+              selectedType === 'email'
+                ? 'border-atn-primary bg-atn-primary/5'
+                : 'border-slate-200 hover:border-slate-300'
+            }`}
+            onClick={() => setSelectedType('email')}
+          >
+            <Type className={`w-6 h-6 mb-2 ${selectedType === 'email' ? 'text-atn-primary' : 'text-slate-400'}`} />
+            <p className="text-sm font-medium">Header Email</p>
+            <p className="text-xs text-slate-500">600x200</p>
+          </button>
         </div>
 
         <div className="flex gap-3">
           <input
+            data-guide="visual-prompt-input"
             type="text"
             placeholder="Décrivez le visuel souhaité..."
             className="flex-1 px-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:border-atn-primary"
@@ -256,6 +294,7 @@ export default function VisualFactoryPage() {
             onChange={(e) => setPrompt(e.target.value)}
           />
           <button
+            data-guide="visual-btn-generate"
             className="px-6 py-3 bg-gradient-to-r from-fuchsia-500 to-purple-600 text-white rounded-lg font-medium flex items-center gap-2 hover:opacity-90 disabled:opacity-50"
             disabled={!selectedType || !prompt || generating}
             onClick={generateVisual}
@@ -270,11 +309,11 @@ export default function VisualFactoryPage() {
         </div>
 
         <div className="flex gap-4 mt-4 pt-4 border-t border-slate-100">
-          <button className="flex items-center gap-2 text-sm text-slate-600 hover:text-slate-800">
+          <button data-guide="visual-btn-brandcolors" className="flex items-center gap-2 text-sm text-slate-600 hover:text-slate-800">
             <Palette className="w-4 h-4" />
             Brand colors
           </button>
-          <button className="flex items-center gap-2 text-sm text-slate-600 hover:text-slate-800">
+          <button data-guide="visual-btn-addtext" className="flex items-center gap-2 text-sm text-slate-600 hover:text-slate-800">
             <Type className="w-4 h-4" />
             Ajouter texte
           </button>
@@ -282,7 +321,7 @@ export default function VisualFactoryPage() {
       </div>
 
       {/* Galerie */}
-      <div>
+      <div data-guide="visual-gallery-section">
         <h2 className="font-semibold mb-4">Assets récents</h2>
         {loading ? (
           <div className="flex items-center justify-center py-12">

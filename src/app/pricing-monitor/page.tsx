@@ -245,26 +245,26 @@ export default function PricingMonitorPage() {
           </h1>
           <p className="text-slate-500">Build 20: Veille tarifaire quotidienne</p>
         </div>
-        <button className="flex items-center gap-2 px-4 py-2 bg-atn-primary text-white rounded-lg hover:bg-opacity-90">
+        <button data-guide="pricing-btn-refresh" className="flex items-center gap-2 px-4 py-2 bg-atn-primary text-white rounded-lg hover:bg-opacity-90">
           <RefreshCw className="w-4 h-4" />
           Actualiser
         </button>
       </div>
 
-      <div data-guide="pricing-stats" className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="card">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div data-guide="pricing-kpi-routes" className="card">
           <p className="text-sm text-slate-500">Routes surveillées</p>
           <p className="text-2xl font-bold">{stats.routesMonitored}</p>
         </div>
-        <div className="card">
+        <div data-guide="pricing-kpi-alerts" className="card">
           <p className="text-sm text-slate-500">Alertes actives</p>
           <p className="text-2xl font-bold text-amber-600">{stats.alerts}</p>
         </div>
-        <div className="card">
+        <div data-guide="pricing-kpi-competitors" className="card">
           <p className="text-sm text-slate-500">Concurrents suivis</p>
           <p className="text-2xl font-bold">{stats.competitorsTracked}</p>
         </div>
-        <div className="card">
+        <div data-guide="pricing-kpi-avgdiff" className="card">
           <p className="text-sm text-slate-500">Écart moyen</p>
           <p className={`text-2xl font-bold ${stats.avgDiff > 0 ? 'text-red-600' : 'text-emerald-600'}`}>
             {stats.avgDiff > 0 ? '+' : ''}{stats.avgDiff.toFixed(1)}%
@@ -274,7 +274,7 @@ export default function PricingMonitorPage() {
 
       {/* Alertes */}
       {stats.alerts > 0 && (
-        <div data-guide="pricing-alerts" className="p-4 bg-amber-50 border border-amber-200 rounded-lg">
+        <div data-guide="pricing-alerts-box" className="p-4 bg-amber-50 border border-amber-200 rounded-lg">
           <div className="flex items-center gap-2 mb-2">
             <AlertTriangle className="w-5 h-5 text-amber-600" />
             <span className="font-medium text-amber-800">Alertes tarifaires</span>
@@ -287,7 +287,7 @@ export default function PricingMonitorPage() {
       )}
 
       {/* Routes */}
-      <div data-guide="pricing-routes" className="grid grid-cols-2 gap-6">
+      <div data-guide="pricing-routes-list" className="grid grid-cols-2 gap-6">
         {demoRoutes.map(route => (
           <RouteCard key={route.id} route={route} />
         ))}

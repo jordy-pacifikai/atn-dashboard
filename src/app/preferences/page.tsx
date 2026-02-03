@@ -316,6 +316,7 @@ export default function PreferencesPage() {
         </div>
         <div className="flex gap-2">
           <button
+            data-guide="preferences-btn-sync"
             onClick={syncPreferences}
             disabled={syncing}
             className="flex items-center gap-2 px-4 py-2 bg-atn-primary text-white rounded-lg hover:bg-opacity-90 disabled:opacity-50"
@@ -327,34 +328,34 @@ export default function PreferencesPage() {
             )}
             {syncing ? 'Sync...' : 'Actualiser'}
           </button>
-          <button className="flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200">
+          <button data-guide="preferences-btn-export" className="flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200">
             <Download className="w-4 h-4" />
             Export RGPD
           </button>
         </div>
       </div>
 
-      <div data-guide="preferences-stats" className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="card">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div data-guide="preferences-kpi-total" className="card">
           <p className="text-sm text-slate-500">Total clients</p>
           <p className="text-2xl font-bold">{stats.total}</p>
         </div>
-        <div className="card">
+        <div data-guide="preferences-kpi-full" className="card">
           <p className="text-sm text-slate-500">Consentement complet</p>
           <p className="text-2xl font-bold text-emerald-600">{stats.fullConsent}</p>
         </div>
-        <div className="card">
+        <div data-guide="preferences-kpi-partial" className="card">
           <p className="text-sm text-slate-500">Consentement partiel</p>
           <p className="text-2xl font-bold text-amber-600">{stats.partialConsent}</p>
         </div>
-        <div className="card">
+        <div data-guide="preferences-kpi-optout" className="card">
           <p className="text-sm text-slate-500">Opt-out complet</p>
           <p className="text-2xl font-bold text-red-600">{stats.optedOut}</p>
         </div>
       </div>
 
       {/* RGPD Info */}
-      <div data-guide="preferences-rgpd" className="p-4 bg-lime-50 border border-lime-200 rounded-lg">
+      <div data-guide="preferences-rgpd-box" className="p-4 bg-lime-50 border border-lime-200 rounded-lg">
         <div className="flex items-center gap-2 mb-2">
           <Shield className="w-5 h-5 text-lime-600" />
           <span className="font-medium text-lime-800">Conformité RGPD</span>
@@ -366,7 +367,7 @@ export default function PreferencesPage() {
       </div>
 
       {/* Search */}
-      <div className="relative">
+      <div data-guide="preferences-search" className="relative">
         <Search className="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
         <input
           type="text"
@@ -378,7 +379,7 @@ export default function PreferencesPage() {
       </div>
 
       {/* Liste des clients */}
-      <div data-guide="preferences-list" className="space-y-4">
+      <div data-guide="preferences-customers-list" className="space-y-4">
         {loading ? (
           <div className="flex items-center justify-center py-12">
             <Loader2 className="w-8 h-8 animate-spin text-atn-primary" />

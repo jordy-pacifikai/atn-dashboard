@@ -231,6 +231,7 @@ export default function PlannerPage() {
         </div>
         <div className="flex gap-2">
           <button
+            data-guide="planner-btn-calendar"
             onClick={() => window.location.href = '/calendar'}
             className="px-4 py-2 border border-slate-200 rounded-lg flex items-center gap-2 hover:bg-slate-50"
           >
@@ -241,28 +242,28 @@ export default function PlannerPage() {
       </div>
 
       {/* Stats */}
-      <div data-guide="planner-stats" className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="card">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div data-guide="planner-kpi-week" className="card">
           <p className="text-sm text-slate-500">Cette semaine</p>
           <p className="text-2xl font-bold">{thisWeek.length}</p>
           <p className="text-xs text-slate-400">{thisWeek.filter(c => c.type === 'Flight').length} vols, {thisWeek.filter(c => c.type === 'Hotel').length} hôtels</p>
         </div>
-        <div className="card">
+        <div data-guide="planner-kpi-booked" className="card">
           <p className="text-sm text-slate-500">Réservés</p>
           <p className="text-2xl font-bold text-amber-600">{booked}</p>
         </div>
-        <div className="card">
+        <div data-guide="planner-kpi-confirmed" className="card">
           <p className="text-sm text-slate-500">Confirmés</p>
           <p className="text-2xl font-bold text-emerald-600">{confirmed}</p>
         </div>
-        <div className="card">
+        <div data-guide="planner-kpi-value" className="card">
           <p className="text-sm text-slate-500">Valeur totale</p>
           <p className="text-2xl font-bold text-atn-secondary">{new Intl.NumberFormat('fr-FR').format(totalValue)} XPF</p>
         </div>
       </div>
 
       {/* Filters */}
-      <div data-guide="planner-filters" className="flex items-center gap-4">
+      <div className="flex items-center gap-4">
         <div className="flex items-center gap-2">
           <Filter className="w-4 h-4 text-slate-400" />
           <span className="text-sm text-slate-600">Filtres:</span>
@@ -270,12 +271,14 @@ export default function PlannerPage() {
 
         <div className="flex gap-2">
           <button
+            data-guide="planner-filter-all"
             className={`px-3 py-1.5 rounded-lg text-sm ${!filterType ? 'bg-slate-800 text-white' : 'bg-slate-100'}`}
             onClick={() => setFilterType(null)}
           >
             Tous
           </button>
           <button
+            data-guide="planner-filter-flight"
             className={`px-3 py-1.5 rounded-lg text-sm flex items-center gap-1 ${filterType === 'Flight' ? 'bg-blue-600 text-white' : 'bg-slate-100'}`}
             onClick={() => setFilterType(filterType === 'Flight' ? null : 'Flight')}
           >
@@ -283,6 +286,7 @@ export default function PlannerPage() {
             Vols
           </button>
           <button
+            data-guide="planner-filter-hotel"
             className={`px-3 py-1.5 rounded-lg text-sm flex items-center gap-1 ${filterType === 'Hotel' ? 'bg-purple-600 text-white' : 'bg-slate-100'}`}
             onClick={() => setFilterType(filterType === 'Hotel' ? null : 'Hotel')}
           >
@@ -290,6 +294,7 @@ export default function PlannerPage() {
             Hôtels
           </button>
           <button
+            data-guide="planner-filter-activity"
             className={`px-3 py-1.5 rounded-lg text-sm flex items-center gap-1 ${filterType === 'Activity' ? 'bg-emerald-600 text-white' : 'bg-slate-100'}`}
             onClick={() => setFilterType(filterType === 'Activity' ? null : 'Activity')}
           >
@@ -301,6 +306,7 @@ export default function PlannerPage() {
         <div className="h-6 w-px bg-slate-200"></div>
 
         <select
+          data-guide="planner-filter-status"
           value={filterStatus || ''}
           onChange={(e) => setFilterStatus(e.target.value || null)}
           className="px-3 py-1.5 rounded-lg text-sm border border-slate-200"
@@ -317,7 +323,7 @@ export default function PlannerPage() {
       </div>
 
       {/* Content list */}
-      <div data-guide="planner-list" className="space-y-2">
+      <div data-guide="planner-items-list" className="space-y-2">
         {filteredItems.map(item => (
           <PlannerRow
             key={item.id}

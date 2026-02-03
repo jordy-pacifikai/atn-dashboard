@@ -181,20 +181,20 @@ export default function ConciergeProPage() {
         </div>
       </div>
 
-      <div data-guide="concierge-stats" className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="card">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div data-guide="concierge-kpi-active" className="card">
           <p className="text-sm text-slate-500">Conversations actives</p>
           <p className="text-2xl font-bold text-blue-600">{stats.active}</p>
         </div>
-        <div className="card">
+        <div data-guide="concierge-kpi-resolved" className="card">
           <p className="text-sm text-slate-500">Résolues aujourd'hui</p>
           <p className="text-2xl font-bold text-emerald-600">{stats.resolved}</p>
         </div>
-        <div className="card">
+        <div data-guide="concierge-kpi-withbooking" className="card">
           <p className="text-sm text-slate-500">Avec réservation</p>
           <p className="text-2xl font-bold">{stats.withBooking}</p>
         </div>
-        <div className="card">
+        <div data-guide="concierge-kpi-languages" className="card">
           <p className="text-sm text-slate-500">Langues actives</p>
           <p className="text-2xl font-bold">3</p>
         </div>
@@ -202,7 +202,7 @@ export default function ConciergeProPage() {
 
       <div className="grid grid-cols-3 gap-6">
         {/* Liste des conversations */}
-        <div data-guide="concierge-conversations" className="card">
+        <div data-guide="concierge-conversations-list" className="card">
           <h2 className="font-semibold mb-4 flex items-center gap-2">
             <MessageSquare className="w-5 h-5" />
             Conversations
@@ -220,7 +220,7 @@ export default function ConciergeProPage() {
         </div>
 
         {/* Conversation sélectionnée */}
-        <div data-guide="concierge-chat" className="col-span-2 card">
+        <div data-guide="concierge-chat-panel" className="col-span-2 card">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-atn-primary/10 rounded-full flex items-center justify-center">
@@ -264,13 +264,14 @@ export default function ConciergeProPage() {
           {/* Input */}
           <div className="flex gap-3">
             <input
+              data-guide="concierge-input"
               type="text"
               placeholder="Écrire une réponse..."
               className="flex-1 px-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:border-atn-primary"
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
             />
-            <button className="px-6 py-3 bg-atn-primary text-white rounded-lg flex items-center gap-2 hover:bg-opacity-90">
+            <button data-guide="concierge-btn-send" className="px-6 py-3 bg-atn-primary text-white rounded-lg flex items-center gap-2 hover:bg-opacity-90">
               <Send className="w-5 h-5" />
               Envoyer
             </button>
