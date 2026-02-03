@@ -281,7 +281,7 @@ export default function CompetitorsPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div data-guide="competitors-stats" className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="card">
           <p className="text-sm text-slate-500">Alertes urgentes</p>
           <p className="text-2xl font-bold text-red-600">{urgentCount}</p>
@@ -303,7 +303,7 @@ export default function CompetitorsPage() {
       </div>
 
       {/* Filtres */}
-      <div className="flex gap-2">
+      <div data-guide="competitors-filters" className="flex gap-2">
         {[null, 'urgent', 'high', 'medium', 'low'].map((priority) => (
           <button
             key={priority || 'all'}
@@ -318,7 +318,7 @@ export default function CompetitorsPage() {
       </div>
 
       {/* Liste des alertes */}
-      <div className="space-y-4">
+      <div data-guide="competitors-list" className="space-y-4">
         {loading ? (
           <div className="flex items-center justify-center py-12">
             <Loader2 className="w-8 h-8 animate-spin text-atn-primary" />

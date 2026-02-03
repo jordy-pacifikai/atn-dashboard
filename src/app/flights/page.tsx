@@ -306,7 +306,7 @@ export default function FlightsPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div data-guide="flights-stats" className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="card">
           <p className="text-sm text-slate-500">Passagers impactés</p>
           <p className="text-2xl font-bold">{totalAffected}</p>
@@ -326,7 +326,7 @@ export default function FlightsPage() {
       </div>
 
       {/* Filtres */}
-      <div className="flex gap-2">
+      <div data-guide="flights-filters" className="flex gap-2">
         {[
           { value: null, label: 'Tous' },
           { value: 'delay', label: 'Retards' },
@@ -346,7 +346,7 @@ export default function FlightsPage() {
       </div>
 
       {/* Liste des alertes */}
-      <div className="space-y-4">
+      <div data-guide="flights-list" className="space-y-4">
         {loading ? (
           <div className="flex items-center justify-center py-12">
             <Loader2 className="w-8 h-8 animate-spin text-atn-primary" />

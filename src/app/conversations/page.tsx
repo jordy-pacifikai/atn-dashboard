@@ -161,7 +161,7 @@ export default function ConversationsPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div data-guide="conv-stats" className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="card">
           <p className="text-sm text-slate-500">Total conversations</p>
           <p className="text-2xl font-bold">{totalConversations}</p>
@@ -189,7 +189,7 @@ export default function ConversationsPage() {
       </div>
 
       {/* Filtres */}
-      <div className="flex gap-4">
+      <div data-guide="conv-filters" className="flex gap-4">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
           <input
@@ -220,7 +220,7 @@ export default function ConversationsPage() {
       </div>
 
       {/* Liste des conversations */}
-      <div className="card">
+      <div data-guide="conv-list" className="card">
         {loading ? (
           <div className="flex items-center justify-center py-12">
             <Loader2 className="w-8 h-8 animate-spin text-atn-secondary" />

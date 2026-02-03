@@ -38,7 +38,7 @@ export default function DemoSitePage() {
   return (
     <div className="max-w-6xl mx-auto space-y-6 animate-fadeIn">
       {/* Guidance Banner - Étape 2 */}
-      <div className="card p-4 bg-gradient-to-r from-[--atn-primary]/5 to-[--atn-secondary]/5 border-[--atn-primary]/20">
+      <div data-guide="demo-banner" className="card p-4 bg-gradient-to-r from-[--atn-primary]/5 to-[--atn-secondary]/5 border-[--atn-primary]/20">
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 rounded-full bg-[--atn-primary] text-white flex items-center justify-center flex-shrink-0 shadow-lg shadow-[--atn-primary]/30">
             <span className="text-lg font-bold">2</span>
@@ -60,7 +60,7 @@ export default function DemoSitePage() {
       </div>
 
       {/* Tips - Questions à tester */}
-      <div className="card p-4">
+      <div data-guide="demo-tips" className="card p-4">
         <div className="flex items-start gap-3">
           <div className="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center flex-shrink-0">
             <Lightbulb className="w-4 h-4 text-amber-500" />
@@ -84,7 +84,7 @@ export default function DemoSitePage() {
       </div>
 
       {/* Toolbar */}
-      <div className="card p-3">
+      <div data-guide="demo-toolbar" className="card p-3">
         <div className="flex items-center justify-between">
           {/* Viewport Switcher */}
           <div className="flex items-center gap-1 bg-[--bg-secondary] rounded-lg p-1">

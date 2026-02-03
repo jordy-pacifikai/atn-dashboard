@@ -424,7 +424,7 @@ export default function NewslettersPage() {
         </button>
       </div>
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div data-guide="news-stats" className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="card">
           <p className="text-sm text-slate-500">Emails envoyés</p>
           <p className="text-2xl font-bold">{totalSent}</p>
@@ -443,7 +443,7 @@ export default function NewslettersPage() {
         </div>
       </div>
 
-      <div className="flex gap-2">
+      <div data-guide="news-filters" className="flex gap-2">
         <button
           className={`px-4 py-2 rounded-lg text-sm ${!filterSegment ? 'bg-atn-primary text-white' : 'bg-slate-100 text-slate-700'}`}
           onClick={() => setFilterSegment(null)}
@@ -461,7 +461,7 @@ export default function NewslettersPage() {
         ))}
       </div>
 
-      <div className="space-y-4">
+      <div data-guide="news-list" className="space-y-4">
         {loading ? (
           <div className="flex items-center justify-center py-12">
             <Loader2 className="w-8 h-8 animate-spin text-atn-primary" />

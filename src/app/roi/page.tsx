@@ -219,7 +219,7 @@ export default function RoiPage() {
         </button>
       </div>
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div data-guide="roi-stats" className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="card">
           <p className="text-sm text-slate-500">Revenu total</p>
           <p className="text-2xl font-bold">{(totalRevenue / 1000000).toFixed(1)}M XPF</p>
@@ -238,7 +238,7 @@ export default function RoiPage() {
         </div>
       </div>
 
-      <div className="flex gap-2">
+      <div data-guide="roi-filters" className="flex gap-2">
         {[null, 'critical', 'warning', 'growth', 'stable'].map((status) => (
           <button
             key={status || 'all'}
@@ -250,7 +250,7 @@ export default function RoiPage() {
         ))}
       </div>
 
-      <div className="space-y-4">
+      <div data-guide="roi-list" className="space-y-4">
         {loading ? (
           <div className="flex items-center justify-center py-12">
             <Loader2 className="w-8 h-8 animate-spin text-atn-primary" />

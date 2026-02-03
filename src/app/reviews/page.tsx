@@ -313,7 +313,7 @@ export default function ReviewsPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div data-guide="reviews-stats" className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="card">
           <p className="text-sm text-slate-500">Note moyenne</p>
           <div className="flex items-center gap-2 mt-1">
@@ -336,7 +336,7 @@ export default function ReviewsPage() {
       </div>
 
       {/* Filtres */}
-      <div className="flex gap-2">
+      <div data-guide="reviews-filters" className="flex gap-2">
         {[null, 'pending', 'approved', 'published', 'rejected'].map((status) => (
           <button
             key={status || 'all'}
@@ -354,7 +354,7 @@ export default function ReviewsPage() {
       </div>
 
       {/* Liste des avis */}
-      <div className="space-y-4">
+      <div data-guide="reviews-list" className="space-y-4">
         {loading ? (
           <div className="flex items-center justify-center py-12">
             <Loader2 className="w-8 h-8 animate-spin text-atn-primary" />
