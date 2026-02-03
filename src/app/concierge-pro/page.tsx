@@ -22,6 +22,7 @@ interface Conversation {
   status: 'active' | 'resolved' | 'escalated'
   category: string
   sentiment: 'positive' | 'neutral' | 'negative'
+  aiEnabled: boolean // Toggle IA par conversation
 }
 
 const demoConversations: Conversation[] = [
@@ -45,6 +46,7 @@ const demoConversations: Conversation[] = [
     status: 'active',
     category: 'Modification siège',
     sentiment: 'positive',
+    aiEnabled: true,
   },
   {
     id: '2',
@@ -64,6 +66,7 @@ const demoConversations: Conversation[] = [
     status: 'resolved',
     category: 'Bagages',
     sentiment: 'neutral',
+    aiEnabled: true,
   },
   {
     id: '3',
@@ -83,6 +86,7 @@ const demoConversations: Conversation[] = [
     status: 'active',
     category: 'Confirmation',
     sentiment: 'positive',
+    aiEnabled: false, // Cette conversation est en mode manuel
   },
 ]
 
@@ -160,11 +164,17 @@ function ConversationCard({ conversation, selected, onClick }: { conversation: C
 export default function ConciergeProPage() {
   const [selectedId, setSelectedId] = useState(demoConversations[0].id)
   const [newMessage, setNewMessage] = useState('')
-  const [aiEnabled, setAiEnabled] = useState(true)
   const [conversations, setConversations] = useState(demoConversations)
   const [isSending, setIsSending] = useState(false)
 
   const selectedConversation = conversations.find(c => c.id === selectedId)!
+
+  // Toggle IA pour la conversation sélectionnée
+  const toggleAiForConversation = () => {
+    setConversations(prev => prev.map(conv =>
+      conv.id === selectedId ? { ...conv, aiEnabled: !conv.aiEnabled } : conv
+    ))
+  }
 
   // Simuler envoi de message
   const handleSendMessage = async () => {
@@ -222,8 +232,9 @@ export default function ConciergeProPage() {
       return conv
     }))
 
-    // Si l'IA est activée, générer une réponse automatique
-    if (aiEnabled) {
+    // Si l'IA est activée pour cette conversation, générer une réponse automatique
+    const currentConv = conversations.find(c => c.id === selectedId)
+    if (currentConv?.aiEnabled) {
       await new Promise(r => setTimeout(r, 1500))
 
       const aiResponses = [
@@ -272,56 +283,7 @@ export default function ConciergeProPage() {
           <p className="text-slate-500">Build 18: Concierge avec contexte réservation</p>
         </div>
 
-        {/* Toggle IA */}
-        <div className="flex items-center gap-3">
-          <div className={`flex items-center gap-2 px-4 py-2 rounded-xl border transition-all ${
-            aiEnabled
-              ? 'bg-gradient-to-r from-sky-50 to-cyan-50 border-sky-200'
-              : 'bg-slate-50 border-slate-200'
-          }`}>
-            {aiEnabled ? (
-              <Bot className="w-5 h-5 text-sky-600" />
-            ) : (
-              <UserCircle className="w-5 h-5 text-slate-500" />
-            )}
-            <span className={`text-sm font-medium ${aiEnabled ? 'text-sky-700' : 'text-slate-600'}`}>
-              {aiEnabled ? 'Mode IA' : 'Mode Manuel'}
-            </span>
-          </div>
-
-          <button
-            onClick={() => setAiEnabled(!aiEnabled)}
-            className={`relative w-14 h-7 rounded-full transition-all duration-300 ${
-              aiEnabled
-                ? 'bg-gradient-to-r from-sky-500 to-cyan-500 shadow-md'
-                : 'bg-slate-300'
-            }`}
-          >
-            <span
-              className={`absolute top-0.5 left-0.5 w-6 h-6 bg-white rounded-full shadow-sm transition-transform duration-300 flex items-center justify-center ${
-                aiEnabled ? 'translate-x-7' : 'translate-x-0'
-              }`}
-            >
-              {aiEnabled ? (
-                <Sparkles className="w-3.5 h-3.5 text-sky-500" />
-              ) : (
-                <UserCircle className="w-3.5 h-3.5 text-slate-400" />
-              )}
-            </span>
-          </button>
-        </div>
       </div>
-
-      {/* Bannière mode manuel */}
-      {!aiEnabled && (
-        <div className="flex items-center gap-3 p-4 bg-amber-50 border border-amber-200 rounded-xl">
-          <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0" />
-          <div>
-            <p className="text-sm font-medium text-amber-800">Mode manuel activé</p>
-            <p className="text-xs text-amber-600">L'agent IA ne répondra pas automatiquement. Les réponses seront gérées manuellement.</p>
-          </div>
-        </div>
-      )}
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div data-guide="concierge-kpi-active" className="card">
@@ -373,15 +335,64 @@ export default function ConciergeProPage() {
                 <p className="text-sm text-slate-500">{selectedConversation.customer.email}</p>
               </div>
             </div>
-            <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-              selectedConversation.status === 'active' ? 'bg-blue-100 text-blue-700' :
-              selectedConversation.status === 'resolved' ? 'bg-emerald-100 text-emerald-700' :
-              'bg-red-100 text-red-700'
-            }`}>
-              {selectedConversation.status === 'active' ? 'En cours' :
-               selectedConversation.status === 'resolved' ? 'Résolu' : 'Escaladé'}
-            </span>
+            <div className="flex items-center gap-3">
+              {/* Toggle IA par conversation */}
+              <div data-guide="concierge-ai-toggle" className="flex items-center gap-2">
+                <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-medium transition-all ${
+                  selectedConversation.aiEnabled
+                    ? 'bg-sky-50 border-sky-200 text-sky-700'
+                    : 'bg-slate-50 border-slate-200 text-slate-600'
+                }`}>
+                  {selectedConversation.aiEnabled ? (
+                    <Bot className="w-3.5 h-3.5" />
+                  ) : (
+                    <UserCircle className="w-3.5 h-3.5" />
+                  )}
+                  {selectedConversation.aiEnabled ? 'IA' : 'Manuel'}
+                </div>
+                <button
+                  onClick={toggleAiForConversation}
+                  className={`relative w-11 h-6 rounded-full transition-all duration-300 ${
+                    selectedConversation.aiEnabled
+                      ? 'bg-gradient-to-r from-sky-500 to-cyan-500'
+                      : 'bg-slate-300'
+                  }`}
+                  title={selectedConversation.aiEnabled ? 'Désactiver l\'IA pour cette conversation' : 'Activer l\'IA pour cette conversation'}
+                >
+                  <span
+                    className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow-sm transition-transform duration-300 flex items-center justify-center ${
+                      selectedConversation.aiEnabled ? 'translate-x-5' : 'translate-x-0'
+                    }`}
+                  >
+                    {selectedConversation.aiEnabled ? (
+                      <Sparkles className="w-3 h-3 text-sky-500" />
+                    ) : (
+                      <UserCircle className="w-3 h-3 text-slate-400" />
+                    )}
+                  </span>
+                </button>
+              </div>
+              <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                selectedConversation.status === 'active' ? 'bg-blue-100 text-blue-700' :
+                selectedConversation.status === 'resolved' ? 'bg-emerald-100 text-emerald-700' :
+                'bg-red-100 text-red-700'
+              }`}>
+                {selectedConversation.status === 'active' ? 'En cours' :
+                 selectedConversation.status === 'resolved' ? 'Résolu' : 'Escaladé'}
+              </span>
+            </div>
           </div>
+
+          {/* Bannière mode manuel */}
+          {!selectedConversation.aiEnabled && (
+            <div className="flex items-center gap-3 p-3 mb-4 bg-amber-50 border border-amber-200 rounded-xl">
+              <AlertCircle className="w-4 h-4 text-amber-600 flex-shrink-0" />
+              <div>
+                <p className="text-xs font-medium text-amber-800">Mode manuel pour cette conversation</p>
+                <p className="text-xs text-amber-600">L'IA ne répondra pas automatiquement. Activez l'IA avec le toggle ci-dessus.</p>
+              </div>
+            </div>
+          )}
 
           <BookingContext customer={selectedConversation.customer} />
 
@@ -408,7 +419,7 @@ export default function ConciergeProPage() {
             <input
               data-guide="concierge-input"
               type="text"
-              placeholder={aiEnabled ? "Écrire une réponse (l'IA répondra ensuite automatiquement)..." : "Écrire une réponse manuelle..."}
+              placeholder={selectedConversation.aiEnabled ? "Écrire une réponse (l'IA répondra ensuite automatiquement)..." : "Écrire une réponse manuelle..."}
               className="flex-1 px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent"
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
@@ -436,8 +447,8 @@ export default function ConciergeProPage() {
           </div>
 
           {/* Indicateur mode IA */}
-          <div className={`mt-3 flex items-center gap-2 text-xs ${aiEnabled ? 'text-sky-600' : 'text-slate-500'}`}>
-            {aiEnabled ? (
+          <div className={`mt-3 flex items-center gap-2 text-xs ${selectedConversation.aiEnabled ? 'text-sky-600' : 'text-slate-500'}`}>
+            {selectedConversation.aiEnabled ? (
               <>
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>L'IA répondra automatiquement aux messages du client</span>
@@ -445,7 +456,7 @@ export default function ConciergeProPage() {
             ) : (
               <>
                 <UserCircle className="w-3.5 h-3.5" />
-                <span>Mode manuel - Vous gérez la conversation</span>
+                <span>Mode manuel - Vous gérez cette conversation</span>
               </>
             )}
           </div>

@@ -256,6 +256,14 @@ const pageDocumentation = [
             status: 'missing',
             action: 'Fournir accès API réservations + specs auth Mon Espace',
           },
+          {
+            name: 'Toggle IA par conversation',
+            what: 'Activer/désactiver l\'IA pour chaque conversation individuellement',
+            how: 'Cliquez sur le bouton toggle à côté du badge statut dans l\'en-tête de conversation. Mode "IA" = réponses auto, Mode "Manuel" = agent humain.',
+            why: 'Permet aux agents de prendre le contrôle sur des cas complexes sans désactiver l\'IA pour toutes les conversations',
+            source: 'Paramètre local par conversation',
+            status: 'ok',
+          },
         ],
       },
       {
