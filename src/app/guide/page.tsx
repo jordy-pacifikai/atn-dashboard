@@ -749,7 +749,7 @@ export default function GuidePage() {
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-1 p-1 bg-[--bg-secondary] rounded-xl">
+      <div data-guide="guide-tabs" className="flex gap-1 p-1 bg-[--bg-secondary] rounded-xl">
         {[
           { id: 'pages', label: 'Pages du Dashboard', icon: LayoutDashboard },
           { id: 'glossary', label: 'Glossaire des termes', icon: Book },
@@ -772,9 +772,9 @@ export default function GuidePage() {
 
       {/* Tab: Pages */}
       {activeTab === 'pages' && (
-        <div className="space-y-4">
+        <div data-guide="guide-pages-content" className="space-y-4">
           {/* Legend */}
-          <div className="flex items-center gap-6 p-4 bg-[--bg-secondary] rounded-xl text-sm">
+          <div data-guide="guide-legend" className="flex items-center gap-6 p-4 bg-[--bg-secondary] rounded-xl text-sm">
             <span className="font-medium text-[--text-primary]">Légende statut:</span>
             <div className="flex items-center gap-2">
               <CheckCircle className="w-4 h-4 text-emerald-500" />
@@ -900,9 +900,9 @@ export default function GuidePage() {
 
       {/* Tab: Glossary */}
       {activeTab === 'glossary' && (
-        <div className="space-y-4">
+        <div data-guide="guide-glossary-content" className="space-y-4">
           {/* Search & Filter */}
-          <div className="flex gap-4">
+          <div data-guide="guide-glossary-search" className="flex gap-4">
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[--text-tertiary]" />
               <input
@@ -950,7 +950,7 @@ export default function GuidePage() {
 
       {/* Tab: FAQ */}
       {activeTab === 'faq' && (
-        <div className="space-y-3">
+        <div data-guide="guide-faq-content" className="space-y-3">
           {[
             {
               q: 'C\'est quoi ce dashboard exactement ?',

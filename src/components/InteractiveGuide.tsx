@@ -886,6 +886,71 @@ const pageConfigs: PageConfig[] = [
     ],
   },
 
+  // ============ PAGE: GUIDE ============
+  {
+    route: '/guide',
+    pageName: 'Guide du Dashboard',
+    pageDescription: 'Documentation complète et glossaire des termes',
+    globalROI: 'Formation équipe',
+    demoScript: 'Cette page explique chaque fonctionnalité du dashboard. Consultez les pages, le glossaire ou la FAQ.',
+    elements: [
+      {
+        id: 'guide-tabs',
+        selector: '[data-guide="guide-tabs"]',
+        name: 'Onglets Navigation',
+        description: 'Naviguez entre Pages, Glossaire et FAQ',
+        interpretation: 'Cliquez sur un onglet pour changer de section.',
+        source: 'Interface locale',
+        status: 'ok',
+      },
+      {
+        id: 'guide-legend',
+        selector: '[data-guide="guide-legend"]',
+        name: 'Légende des Statuts',
+        description: 'Explication des indicateurs vert/orange/rouge',
+        interpretation: 'Vert=OK, Orange=config ATN requise, Rouge=accès manquant.',
+        source: 'Interface locale',
+        status: 'ok',
+      },
+      {
+        id: 'guide-pages-content',
+        selector: '[data-guide="guide-pages-content"]',
+        name: 'Documentation Pages',
+        description: 'Liste détaillée de toutes les pages du dashboard',
+        interpretation: 'Cliquez sur une catégorie puis une page pour voir les détails.',
+        source: 'Documentation PACIFIK\'AI',
+        status: 'ok',
+      },
+      {
+        id: 'guide-glossary-search',
+        selector: '[data-guide="guide-glossary-search"]',
+        name: 'Recherche Glossaire',
+        description: 'Rechercher et filtrer les termes techniques',
+        interpretation: 'Tapez un mot-clé ou filtrez par catégorie.',
+        source: 'Interface locale',
+        status: 'ok',
+      },
+      {
+        id: 'guide-glossary-content',
+        selector: '[data-guide="guide-glossary-content"]',
+        name: 'Glossaire des Termes',
+        description: 'Définitions des termes techniques utilisés',
+        interpretation: 'Chaque terme explique le concept + exemple concret.',
+        source: 'Documentation PACIFIK\'AI',
+        status: 'ok',
+      },
+      {
+        id: 'guide-faq-content',
+        selector: '[data-guide="guide-faq-content"]',
+        name: 'Questions Fréquentes',
+        description: 'Réponses aux questions les plus courantes',
+        interpretation: 'FAQ complète sur le fonctionnement du système.',
+        source: 'Documentation PACIFIK\'AI',
+        status: 'ok',
+      },
+    ],
+  },
+
   // ============ PAGE: ATTRIBUTION ============
   {
     route: '/attribution',
