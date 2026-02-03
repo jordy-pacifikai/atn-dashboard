@@ -255,7 +255,7 @@ export default function ChatWidget() {
           <div>
             <h3 className="font-semibold text-white">Assistant ATN</h3>
             {!isMinimized && (
-              <p className="text-xs text-white/70">Connecté aux 10 workflows</p>
+              <p className="text-xs text-white/70">Connecté aux 20 workflows</p>
             )}
           </div>
         </div>

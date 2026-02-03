@@ -324,6 +324,7 @@ export default function Sidebar() {
                   <Link
                     key={item.name}
                     href={item.href}
+                    data-sidebar-guide={item.name.toLowerCase().replace(/\s+/g, '-')}
                     className={`group relative flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 ${
                       item.highlight && !isActive
                         ? 'bg-[--atn-primary]/10 hover:bg-[--atn-primary]/15'
