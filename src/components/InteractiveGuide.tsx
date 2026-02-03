@@ -2185,9 +2185,13 @@ const defaultPageConfig: PageConfig = {
   elements: [],
 }
 
-export default function InteractiveGuide() {
+interface InteractiveGuideProps {
+  isOpen: boolean
+  onClose: () => void
+}
+
+export default function InteractiveGuide({ isOpen, onClose }: InteractiveGuideProps) {
   const pathname = usePathname()
-  const [isOpen, setIsOpen] = useState(false)
   const [currentElementIndex, setCurrentElementIndex] = useState(0)
   const [highlightedElement, setHighlightedElement] = useState<HTMLElement | null>(null)
   const [highlightRect, setHighlightRect] = useState<HighlightRect | null>(null)
@@ -2379,7 +2383,7 @@ export default function InteractiveGuide() {
   }
 
   const handleClose = () => {
-    setIsOpen(false)
+    onClose()
     setHighlightedElement(null)
     setIsAutoPlaying(false)
   }
@@ -2406,56 +2410,33 @@ export default function InteractiveGuide() {
     }
   }
 
-  // Si pas d'éléments configurés pour cette page
+  // Si pas d'éléments configurés pour cette page, afficher un modal simple
   if (elements.length === 0) {
-    return (
-      <>
-        {/* Bouton flottant - positionné au-dessus du chatbot */}
-        <button
-          onClick={() => setIsOpen(true)}
-          className="fixed bottom-24 right-6 z-50 flex items-center gap-2 px-4 py-3 bg-gradient-to-r from-violet-600 to-purple-600 text-white rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all"
-        >
-          <HelpCircle className="w-5 h-5" />
-          <span className="font-medium">Guide</span>
-        </button>
+    if (!isOpen) return null
 
-        {/* Modal simple */}
-        {isOpen && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50" onClick={handleClose}>
-            <div className="bg-white dark:bg-slate-800 rounded-2xl p-8 max-w-md mx-4" onClick={e => e.stopPropagation()}>
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-bold">{currentPageConfig.pageName}</h2>
-                <button onClick={handleClose} className="p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg">
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-              <p className="text-slate-600 dark:text-slate-300 mb-4">{currentPageConfig.pageDescription}</p>
-              <p className="text-sm text-slate-500">Guide détaillé non disponible pour cette page.</p>
-            </div>
+    return (
+      <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50" onClick={handleClose}>
+        <div className="bg-white dark:bg-slate-800 rounded-2xl p-8 max-w-md mx-4" onClick={e => e.stopPropagation()}>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-bold">{currentPageConfig.pageName}</h2>
+            <button onClick={handleClose} className="p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg">
+              <X className="w-5 h-5" />
+            </button>
           </div>
-        )}
-      </>
+          <p className="text-slate-600 dark:text-slate-300 mb-4">{currentPageConfig.pageDescription}</p>
+          <p className="text-sm text-slate-500">Guide détaillé non disponible pour cette page.</p>
+        </div>
+      </div>
     )
   }
 
+  // Don't render anything if not open
+  if (!isOpen) return null
+
   return (
     <>
-      {/* Bouton flottant - positionné au-dessus du chatbot */}
-      {!isOpen && (
-        <button
-          onClick={() => setIsOpen(true)}
-          className="fixed bottom-24 right-6 z-50 flex items-center gap-2 px-4 py-3 bg-gradient-to-r from-violet-600 to-purple-600 text-white rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all"
-        >
-          <HelpCircle className="w-5 h-5" />
-          <span className="font-medium">Guide interactif</span>
-          <span className="ml-1 px-2 py-0.5 bg-white/20 rounded-full text-xs">
-            {elements.length}
-          </span>
-        </button>
-      )}
-
       {/* Overlay highlight avec cutout transparent */}
-      {isOpen && highlightRect && (
+      {highlightRect && (
         <div className="fixed inset-0 z-[90] pointer-events-none">
           {/* SVG overlay avec cutout */}
           <svg className="absolute inset-0 w-full h-full">
@@ -2503,7 +2484,7 @@ export default function InteractiveGuide() {
       )}
 
       {/* Tooltip - FIXE dans le viewport, ne bouge pas avec le scroll */}
-      {isOpen && currentElement && highlightRect && (
+      {currentElement && highlightRect && (
         <div
           className="fixed z-[100] w-[400px] bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden"
           style={{
