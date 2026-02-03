@@ -606,14 +606,13 @@ export default function ContentPage() {
     }
   }
 
-  // Sync content (trigger n8n workflow)
+  // Sync content (trigger n8n workflow via API proxy to avoid CORS)
   const syncContent = async () => {
     setSyncing(true)
     try {
-      const response = await fetch('https://n8n.srv1140766.hstgr.cloud/webhook/atn-generate-content', {
+      const response = await fetch('/api/generate-content', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'generate' })
+        headers: { 'Content-Type': 'application/json' }
       })
 
       if (response.ok) {
