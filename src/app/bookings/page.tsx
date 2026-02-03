@@ -157,18 +157,44 @@ export default function BookingsPage() {
       const data = await response.json()
 
       if (data.records && data.records.length > 0) {
-        const mapped: BookingRequest[] = data.records.map((record: { id: string; fields: Record<string, unknown> }) => ({
-          id: record.id,
-          sessionId: (record.fields.Session_ID as string) || 'ses_unknown',
-          requestType: ((record.fields.Request_Type as string)?.toLowerCase() || 'information') as BookingRequest['requestType'],
-          route: (record.fields.Route as string) || 'PPT-LAX',
-          class: (record.fields.Class as string) || 'Moana Economy',
-          passengers: (record.fields.Passengers as number) || 1,
-          request: (record.fields.Request as string) || '',
-          response: (record.fields.Response as string) || '',
-          status: ((record.fields.Status as string)?.toLowerCase() || 'pending') as 'completed' | 'pending' | 'failed',
-          date: (record.fields.Date as string) || new Date().toISOString(),
-        }))
+        const mapped: BookingRequest[] = data.records.map((record: { id: string; fields: Record<string, unknown> }) => {
+          // Map Airtable Status values to internal status
+          const airtableStatus = (record.fields.Status as string) || 'En attente'
+          let mappedStatus: 'completed' | 'pending' | 'failed' = 'pending'
+
+          if (airtableStatus === 'Traité' || airtableStatus.toLowerCase() === 'completed') {
+            mappedStatus = 'completed'
+          } else if (airtableStatus === 'En attente' || airtableStatus.toLowerCase() === 'pending') {
+            mappedStatus = 'pending'
+          } else if (airtableStatus === 'Échec' || airtableStatus.toLowerCase() === 'failed') {
+            mappedStatus = 'failed'
+          }
+
+          // Map Airtable Request_Type to internal requestType
+          const airtableRequestType = (record.fields.Request_Type as string) || 'Information'
+          let mappedRequestType: BookingRequest['requestType'] = 'information'
+
+          if (airtableRequestType === 'Réservation' || airtableRequestType === 'Reservation') {
+            mappedRequestType = 'reservation'
+          } else if (airtableRequestType === 'Modification') {
+            mappedRequestType = 'modification'
+          } else if (airtableRequestType === 'Annulation') {
+            mappedRequestType = 'cancellation'
+          }
+
+          return {
+            id: record.id,
+            sessionId: (record.fields.Session_ID as string) || 'ses_unknown',
+            requestType: mappedRequestType,
+            route: (record.fields.Route as string) || 'PPT-LAX',
+            class: (record.fields.Class as string) || 'Moana Economy',
+            passengers: (record.fields.Passengers as number) || 1,
+            request: (record.fields.Request as string) || '',
+            response: (record.fields.Response as string) || '',
+            status: mappedStatus,
+            date: (record.fields.Date as string) || new Date().toISOString(),
+          }
+        })
         setBookings(mapped)
       } else {
         setBookings(fallbackBookings)
