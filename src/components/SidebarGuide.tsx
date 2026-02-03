@@ -60,6 +60,11 @@ const guideSteps: GuideStep[] = [
     ],
     dataSource: 'Agrégation de tous les workflows n8n + Airtable + API externes',
     updateFrequency: 'Temps réel (rafraîchissement auto toutes les 30s)',
+    dependencies: [
+      'Clé API Airtable (base ATN)',
+      'URL instance n8n + credentials',
+      'Variables d\'environnement Vercel configurées',
+    ],
   },
   {
     selector: '[data-sidebar-guide="demo-site"]',
@@ -90,6 +95,11 @@ const guideSteps: GuideStep[] = [
     ],
     dataSource: 'Environnement de test isolé',
     updateFrequency: 'À la demande',
+    dependencies: [
+      'URL site ATN de staging/test',
+      'Code d\'intégration chatbot (script JS)',
+      'Accès au domaine de test',
+    ],
   },
   // ============ AGENTS IA ============
   {
@@ -123,6 +133,14 @@ const guideSteps: GuideStep[] = [
     ],
     dataSource: 'Table Airtable Concierge_Logs + API Claude',
     updateFrequency: 'Temps réel',
+    dependencies: [
+      'FAQ officielle ATN (PDF ou texte)',
+      'Guide destinations (descriptions, infos pratiques)',
+      'Informations bagages par classe',
+      'Horaires et routes des vols',
+      'Procédures check-in et embarquement',
+      'Contacts service client pour escalade',
+    ],
   },
   {
     selector: '[data-sidebar-guide="concierge-pro"]',
@@ -153,7 +171,14 @@ const guideSteps: GuideStep[] = [
     ],
     dataSource: 'API GDS + Authentification Mon Espace ATN',
     updateFrequency: 'Temps réel avec contexte client',
-    dependencies: ['Accès API réservations', 'Specs auth Mon Espace'],
+    dependencies: [
+      'Accès API GDS (Amadeus/Sabre) - credentials',
+      'Documentation API Mon Espace ATN',
+      'Specs d\'authentification SSO/OAuth',
+      'Mapping des classes de voyage',
+      'Catalogue services additionnels',
+      'Webhook notifications réservations',
+    ],
   },
   {
     selector: '[data-sidebar-guide="staff-assistant"]',
@@ -184,7 +209,15 @@ const guideSteps: GuideStep[] = [
     ],
     dataSource: 'Documents internes ATN vectorisés',
     updateFrequency: 'Mise à jour à chaque ajout de documentation',
-    dependencies: ['Manuels de procédures', 'Politiques RH', 'Guidelines marque'],
+    dependencies: [
+      'Manuels de procédures internes (PDF)',
+      'Politiques RH et règlement intérieur',
+      'Guidelines marque et charte graphique',
+      'Grille tarifaire complète par route/classe',
+      'Procédures d\'urgence et protocoles',
+      'Organigramme et contacts internes',
+      'Base de connaissances produits/services',
+    ],
   },
   // ============ MARKETING AUTOMATISE ============
   {
@@ -217,7 +250,14 @@ const guideSteps: GuideStep[] = [
     ],
     dataSource: 'CRM segments + API Brevo',
     updateFrequency: 'Selon calendrier défini (hebdo/mensuel)',
-    dependencies: ['Clé API Brevo'],
+    dependencies: [
+      'Clé API Brevo (ex-Sendinblue)',
+      'Export base contacts clients (CSV/Excel)',
+      'Segments clients définis (lune de miel, famille, business...)',
+      'Templates email validés par marketing',
+      'Charte graphique newsletters',
+      'Calendrier éditorial',
+    ],
   },
   {
     selector: '[data-sidebar-guide="contenu-seo"]',
@@ -249,7 +289,14 @@ const guideSteps: GuideStep[] = [
     ],
     dataSource: 'Table SEO_Content + Google Search Console',
     updateFrequency: 'Publication selon calendrier éditorial',
-    dependencies: ['Accès Google Search Console'],
+    dependencies: [
+      'Accès Google Search Console (propriété vérifiée)',
+      'Accès CMS blog ATN (WordPress/autre)',
+      'Liste mots-clés cibles SEO',
+      'Guidelines rédactionnelles marque',
+      'Banque d\'images destinations',
+      'Calendrier éditorial validé',
+    ],
   },
   {
     selector: '[data-sidebar-guide="social-media"]',
@@ -280,7 +327,14 @@ const guideSteps: GuideStep[] = [
     ],
     dataSource: 'API Meta Business Suite',
     updateFrequency: 'Selon planning social défini',
-    dependencies: ['Accès Meta Business Suite'],
+    dependencies: [
+      'Accès Meta Business Suite (admin page FB/IG)',
+      'Token d\'accès longue durée Meta',
+      'Accès compte LinkedIn entreprise',
+      'Charte réseaux sociaux (ton, hashtags...)',
+      'Banque médias (photos, vidéos)',
+      'Planning publication validé',
+    ],
   },
   {
     selector: '[data-sidebar-guide="visual-factory"]',
@@ -311,6 +365,13 @@ const guideSteps: GuideStep[] = [
     ],
     dataSource: 'API Fal.ai + Claude Vision',
     updateFrequency: 'À la demande',
+    dependencies: [
+      'Charte graphique ATN (couleurs, polices, logo)',
+      'Banque d\'images haute qualité destinations',
+      'Templates visuels de référence',
+      'Guidelines marque pour visuels',
+      'Formats et dimensions requis par canal',
+    ],
   },
   // ============ INTELLIGENCE ============
   {
@@ -343,6 +404,13 @@ const guideSteps: GuideStep[] = [
     ],
     dataSource: 'Scraping sites concurrents (French Bee, Hawaiian, LATAM)',
     updateFrequency: 'Quotidien à 6h',
+    dependencies: [
+      'Liste des concurrents à surveiller',
+      'Routes prioritaires (PPT-LAX, PPT-CDG...)',
+      'Seuils d\'alerte prix (écart % à notifier)',
+      'Destinataires des alertes (emails, Slack)',
+      'Grille tarifaire ATN pour comparaison',
+    ],
   },
   {
     selector: '[data-sidebar-guide="gestion-avis"]',
@@ -374,7 +442,14 @@ const guideSteps: GuideStep[] = [
     ],
     dataSource: 'API Google Business Profile + TripAdvisor',
     updateFrequency: 'Temps réel',
-    dependencies: ['Accès Google Business Profile', 'Accès TripAdvisor Manager'],
+    dependencies: [
+      'Accès Google Business Profile (propriétaire/admin)',
+      'Accès TripAdvisor Management Center',
+      'Accès Trustpilot Business (si utilisé)',
+      'Guidelines ton de réponse aux avis',
+      'Procédure escalade avis critiques',
+      'Templates réponses types validés',
+    ],
   },
   {
     selector: '[data-sidebar-guide="review-intelligence"]',
@@ -406,6 +481,12 @@ const guideSteps: GuideStep[] = [
     ],
     dataSource: 'Workflow Build 16 - Review Intelligence',
     updateFrequency: 'Analyse quotidienne',
+    dependencies: [
+      'Mêmes accès que Gestion Avis',
+      'Liste des KPIs qualité à surveiller',
+      'Historique avis (export initial)',
+      'Destinataires alertes tendances négatives',
+    ],
   },
   {
     selector: '[data-sidebar-guide="lead-scoring"]',
@@ -437,6 +518,13 @@ const guideSteps: GuideStep[] = [
     ],
     dataSource: 'Comportement site + CRM + Email tracking',
     updateFrequency: 'Temps réel',
+    dependencies: [
+      'Accès Google Analytics 4 (tag manager)',
+      'Export CRM clients existants',
+      'Tracking email (pixel ouverture Brevo)',
+      'Critères de scoring définis par ATN',
+      'Seuils qualification (chaud/tiède/froid)',
+    ],
   },
   // ============ OPERATIONS ============
   {
@@ -468,7 +556,13 @@ const guideSteps: GuideStep[] = [
     ],
     dataSource: 'API GDS (Amadeus/Sabre)',
     updateFrequency: 'Temps réel',
-    dependencies: ['Accès API système de réservation'],
+    dependencies: [
+      'Accès API GDS (Amadeus ou Sabre) - credentials',
+      'Liste codes vols ATN',
+      'Seuils de remplissage pour alertes (ex: <70%)',
+      'Webhook ou API pour statuts vols temps réel',
+      'Contacts équipes opérations pour alertes',
+    ],
   },
   {
     selector: '[data-sidebar-guide="réservations"]',
@@ -499,6 +593,13 @@ const guideSteps: GuideStep[] = [
     ],
     dataSource: 'Formulaires site + emails entrants',
     updateFrequency: 'Temps réel',
+    dependencies: [
+      'Accès boîte email service client ATN',
+      'Webhook formulaires site web',
+      'Catégories de demandes (modif, annul, info)',
+      'SLA par type de demande',
+      'Templates réponses standards',
+    ],
   },
   {
     selector: '[data-sidebar-guide="calendrier"]',
@@ -529,6 +630,12 @@ const guideSteps: GuideStep[] = [
     ],
     dataSource: 'Table Content_Calendar Airtable',
     updateFrequency: 'Temps réel',
+    dependencies: [
+      'Calendrier marketing annuel (événements, promos)',
+      'Liste des campagnes prévues',
+      'Responsables par type de contenu',
+      'Process validation avant publication',
+    ],
   },
   {
     selector: '[data-sidebar-guide="parcours-client"]',
@@ -559,6 +666,13 @@ const guideSteps: GuideStep[] = [
     ],
     dataSource: 'Workflows n8n Build 21-25',
     updateFrequency: 'Événementiel',
+    dependencies: [
+      'Accès API réservations (trigger événements)',
+      'Templates emails par étape du journey',
+      'Règles métier (J-7, J-1, J+1, J+30)',
+      'Contenu personnalisé par segment',
+      'Liens tracking pour mesurer conversions',
+    ],
   },
   // ============ ANALYTICS ============
   {
@@ -590,6 +704,12 @@ const guideSteps: GuideStep[] = [
     ],
     dataSource: 'Workflow Build 7 + Supabase storage',
     updateFrequency: 'Hebdomadaire (lundi 8h) + Mensuel (1er du mois)',
+    dependencies: [
+      'Liste KPIs à inclure dans les rapports',
+      'Destinataires rapports (emails)',
+      'Format souhaité (sections, graphiques)',
+      'Comparaisons à inclure (YoY, MoM)',
+    ],
   },
   {
     selector: '[data-sidebar-guide="attribution"]',
@@ -620,7 +740,13 @@ const guideSteps: GuideStep[] = [
     ],
     dataSource: 'Google Analytics + CRM',
     updateFrequency: 'Quotidien',
-    dependencies: ['Accès Google Analytics'],
+    dependencies: [
+      'Accès Google Analytics 4 (admin)',
+      'Configuration e-commerce GA4',
+      'UTM tracking sur tous les canaux',
+      'Mapping canaux marketing → coûts',
+      'Objectifs de conversion définis dans GA',
+    ],
   },
   {
     selector: '[data-sidebar-guide="a/b-tests"]',
@@ -651,6 +777,12 @@ const guideSteps: GuideStep[] = [
     ],
     dataSource: 'Workflow A/B + Stats',
     updateFrequency: 'Continu',
+    dependencies: [
+      'Éléments à tester (objets email, CTA...)',
+      'Seuil de confiance requis (95% standard)',
+      'Volume minimum par variante',
+      'Process d\'application des gagnants',
+    ],
   },
   {
     selector: '[data-sidebar-guide="roi-dashboard"]',
@@ -682,6 +814,12 @@ const guideSteps: GuideStep[] = [
     ],
     dataSource: 'Agrégation de tous les gains mesurables',
     updateFrequency: 'Temps réel',
+    dependencies: [
+      'Coût horaire moyen employé ATN',
+      'Coût mensuel plateforme PACIFIK\'AI',
+      'Valeurs de référence pré-IA (baseline)',
+      'Méthode de calcul ROI validée par finance',
+    ],
   },
   // ============ CONFIGURATION ============
   {
@@ -713,7 +851,13 @@ const guideSteps: GuideStep[] = [
     ],
     dataSource: 'Configuration locale + API réservation',
     updateFrequency: 'Selon modifications',
-    dependencies: ['Catalogue offres upsell', 'Règles métier ATN'],
+    dependencies: [
+      'Catalogue complet offres upsell (prix, conditions)',
+      'Règles d\'éligibilité par segment client',
+      'Timing des offres (post-résa, J-7, check-in)',
+      'Intégration panier réservation pour ajout direct',
+      'Commissions/marges par offre',
+    ],
   },
 ]
 
