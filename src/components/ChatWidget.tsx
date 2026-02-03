@@ -1,9 +1,10 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import { MessageCircle, X, Send, Sparkles, Loader2, Calendar, Mail, FileText, BarChart3, Settings, Minimize2, Compass } from 'lucide-react'
+import { MessageCircle, X, Send, Sparkles, Loader2, Calendar, Mail, FileText, BarChart3, Settings, Minimize2, Compass, HelpCircle } from 'lucide-react'
 import { sendAssistantMessage, generateReport } from '@/lib/api'
 import SidebarGuide from './SidebarGuide'
+import InteractiveGuide from './InteractiveGuide'
 
 // Set to true to use real n8n webhooks, false for demo mode
 const USE_REAL_API = true
@@ -153,6 +154,7 @@ export default function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false)
   const [isMinimized, setIsMinimized] = useState(false)
   const [showSidebarGuide, setShowSidebarGuide] = useState(false)
+  const [showInteractiveGuide, setShowInteractiveGuide] = useState(false)
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
@@ -238,9 +240,21 @@ export default function ChatWidget() {
           autoPlay={false}
         />
 
+        {/* Interactive Guide (rendered when active) */}
+        {showInteractiveGuide && <InteractiveGuide />}
+
         {/* Floating buttons container */}
         <div className="fixed bottom-6 right-6 flex flex-col gap-3 z-50">
-          {/* Guide Sidebar button - above */}
+          {/* Guide Interactif button - top */}
+          <button
+            onClick={() => setShowInteractiveGuide(!showInteractiveGuide)}
+            className={`w-14 h-14 ${showInteractiveGuide ? 'bg-emerald-600' : 'bg-emerald-500'} text-white rounded-full shadow-lg hover:bg-emerald-600 transition-all hover:scale-105 flex items-center justify-center`}
+            title="Guide Interactif"
+          >
+            <HelpCircle className="w-6 h-6" />
+          </button>
+
+          {/* Guide Sidebar button - middle */}
           <button
             onClick={() => setShowSidebarGuide(true)}
             className="w-14 h-14 bg-violet-600 text-white rounded-full shadow-lg hover:bg-violet-700 transition-all hover:scale-105 flex items-center justify-center"
@@ -249,7 +263,7 @@ export default function ChatWidget() {
             <Compass className="w-6 h-6" />
           </button>
 
-          {/* Assistant button - below */}
+          {/* Assistant button - bottom */}
           <button
             onClick={() => setIsOpen(true)}
             className="w-14 h-14 bg-atn-secondary text-white rounded-full shadow-lg hover:bg-atn-secondary/90 transition-all hover:scale-105 flex items-center justify-center relative"
