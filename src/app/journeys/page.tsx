@@ -270,9 +270,12 @@ export default function JourneysPage() {
             )}
             {syncing ? 'Sync...' : 'Actualiser'}
           </button>
-          <button data-guide="journeys-btn-new" className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-atn-primary to-atn-secondary text-white rounded-xl font-medium text-sm shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100">
+          <button disabled className="relative flex items-center gap-2 px-4 py-2.5 bg-slate-200 text-slate-400 rounded-xl font-medium text-sm cursor-not-allowed opacity-60">
             <Plus className="w-4 h-4" />
             Nouveau Journey
+            <span className="absolute -top-2 -right-2 px-2 py-0.5 bg-amber-100 text-amber-700 text-xs font-medium rounded-full border border-amber-200">
+              Bientôt
+            </span>
           </button>
         </div>
       </div>
